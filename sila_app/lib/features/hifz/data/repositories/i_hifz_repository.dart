@@ -9,7 +9,7 @@ abstract class IHifzRepository {
   Future<void> saveProfile(HifzUserProfile profile);
 
   Future<HifzVerseRecord?> getVerseRecord(int surahIndex, int verseNumber);
-  Future<List<HifzVerseRecord>> getAllRecords();
+  Future<List<HifzVerseRecord>> getAllRecords({int? limit});
   Future<List<HifzVerseRecord>> getDueReviews(DateTime before);
   Future<void> saveVerseRecord(HifzVerseRecord record);
 

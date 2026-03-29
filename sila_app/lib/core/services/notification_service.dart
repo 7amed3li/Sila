@@ -43,10 +43,21 @@ class NotificationService {
 
   // Download notification constants
   static const int downloadNotificationId = 9000;
+  static const int modelDownloadNotificationId = 9001;
   static const String _installApkActionId = 'install_apk';
   static const String _retryDownloadActionId = 'retry_download';
+  static const String _pauseDownloadActionId = 'pause_download';
+  static const String _stopDownloadActionId = 'stop_download';
+
+  // Callbacks
+  VoidCallback? onRetryDownload;
+  VoidCallback? onPauseDownload;
+  VoidCallback? onStopDownload;
   String? _lastDownloadApkPath;
   String? _lastDownloadUrl;
+
+  // Track subscribed topics to avoid duplicate subscription attempts
+  final Set<String> _subscribedTopics = {'all_users', 'updates'};
 
   bool _initialized = false;
 
@@ -83,8 +94,9 @@ class NotificationService {
 
       try {
         await FirebaseMessaging.instance.requestPermission();
-        await FirebaseMessaging.instance.subscribeToTopic('all_users');
-        await FirebaseMessaging.instance.subscribeToTopic('updates');
+
+        // Subscribe to topics only after permissions granted - lazy approach
+        _subscribeToTopics();
 
         FirebaseMessaging.onMessage.listen((message) {
           if (message.data['type'] == 'update') {
@@ -139,12 +151,64 @@ class NotificationService {
 
     // Download channel
     await android?.createNotificationChannel(const AndroidNotificationChannel(
-      'download_channel',
+      'download_controls_v1',
       'التحديثات',
-      description: 'إشعارات تحميل التحديثات',
-      importance: Importance.low,
+      description: 'إشعارات تحميل التحديثات والتحكم بها',
+      importance: Importance.max,
       playSound: false,
     ));
+  }
+
+  Future<void> _subscribeToTopics() async {
+    try {
+      // Only subscribe to essential topics - limit to 2 to avoid TOO_MANY_SUBSCRIBERS error
+      // Other subscriptions should be done on-demand (lazy loading)
+      await Future.delayed(
+          const Duration(milliseconds: 500)); // Delay to avoid rate limiting
+
+      await FirebaseMessaging.instance.subscribeToTopic('all_users');
+      debugPrint('✅ Subscribed to topic: all_users');
+
+      await Future.delayed(
+          const Duration(milliseconds: 200)); // Space out requests
+
+      await FirebaseMessaging.instance.subscribeToTopic('updates');
+      debugPrint('✅ Subscribed to topic: updates');
+    } catch (e) {
+      debugPrint('⚠️ Firebase topic subscription failed: $e');
+      // Don't crash if subscriptions fail - app should still work
+    }
+  }
+
+  /// Subscribe to a topic on-demand (lazy loading)
+  /// Use this for optional/dynamic topics to avoid TOO_MANY_SUBSCRIBERS error
+  /// Example: subscribe to a specific reciter or surah when user explicitly requests it
+  Future<void> subscribeToTopicLazy(String topic) async {
+    if (_subscribedTopics.contains(topic)) {
+      return; // Already subscribed
+    }
+
+    try {
+      await Future.delayed(const Duration(milliseconds: 100)); // Rate limit
+      await FirebaseMessaging.instance.subscribeToTopic(topic);
+      _subscribedTopics.add(topic);
+      debugPrint('✅ Subscribed to optional topic: $topic');
+    } catch (e) {
+      debugPrint('⚠️ Failed to subscribe to topic $topic: $e');
+      // Don't crash - this is optional
+    }
+  }
+
+  /// Unsubscribe from a topic
+  /// Use when user no longer needs updates for this topic
+  Future<void> unsubscribeFromTopic(String topic) async {
+    try {
+      await FirebaseMessaging.instance.unsubscribeFromTopic(topic);
+      _subscribedTopics.remove(topic);
+      debugPrint('✅ Unsubscribed from topic: $topic');
+    } catch (e) {
+      debugPrint('⚠️ Failed to unsubscribe from topic $topic: $e');
+    }
   }
 
   Future<bool> requestPermissions() async {
@@ -443,6 +507,10 @@ class NotificationService {
   static const _dlTexts = {
     'ar': {
       'downloading': 'جاري تحميل التحديث...',
+      'downloading_quran': 'تحميل المصحف الصوتي...',
+      'resuming_download': 'استئناف التحميل...',
+      'pause': 'إيقاف مؤقت',
+      'stop': 'إيقاف',
       'body_pct': 'تم تحميل {}%',
       'complete': '✅ التحديث جاهز',
       'install': 'اضغط للتثبيت',
@@ -456,6 +524,10 @@ class NotificationService {
     },
     'en': {
       'downloading': 'Downloading update...',
+      'downloading_quran': 'Downloading Quran...',
+      'resuming_download': 'Resuming download...',
+      'pause': 'Pause',
+      'stop': 'Stop',
       'body_pct': '{}% downloaded',
       'complete': '✅ Update ready',
       'install': 'Tap to install',
@@ -469,6 +541,10 @@ class NotificationService {
     },
     'tr': {
       'downloading': 'Güncelleme indiriliyor...',
+      'downloading_quran': 'Kuran indiriliyor...',
+      'resuming_download': 'İndirme devam ediyor...',
+      'pause': 'Duraklat',
+      'stop': 'Durdur',
       'body_pct': '%{} indirildi',
       'complete': '✅ Güncelleme hazır',
       'install': 'Yüklemek için dokunun',
@@ -482,6 +558,10 @@ class NotificationService {
     },
     'fr': {
       'downloading': 'Téléchargement en cours...',
+      'downloading_quran': 'Téléchargement du Coran...',
+      'resuming_download': 'Reprise...',
+      'pause': 'Pause',
+      'stop': 'Arrêter',
       'body_pct': '{}% téléchargé',
       'complete': '✅ Mise à jour prête',
       'install': 'Appuyez pour installer',
@@ -496,7 +576,48 @@ class NotificationService {
   };
 
   String _dl(String key, String locale) {
-    return _dlTexts[locale]?[key] ?? _dlTexts['ar']![key]!;
+    try {
+      final lang = _dlTexts[locale] ?? _dlTexts['ar']!;
+      return lang[key] ?? _dlTexts['ar']![key] ?? key;
+    } catch (_) {
+      return key;
+    }
+  }
+
+  Future<void> showModelDownloadProgress({
+    required String locale,
+    required int percent,
+  }) async {
+    if (!_initialized) await initialize();
+
+    final title = locale == 'ar'
+        ? 'جاري تحميل محرك صلة الذكي...'
+        : 'Downloading Sila Smart Engine...';
+    final body = locale == 'ar' ? 'تم تحميل $percent%' : '$percent% downloaded';
+
+    final androidDetails = AndroidNotificationDetails(
+      'download_controls_v1',
+      'التحديثات',
+      channelDescription: 'إشعارات تحميل التحديثات والتحكم بها',
+      importance: Importance.max,
+      priority: Priority.high,
+      playSound: false,
+      showProgress: true,
+      maxProgress: 100,
+      progress: percent,
+      ongoing: true,
+      autoCancel: false,
+      onlyAlertOnce: true,
+      icon: '@drawable/ic_notification',
+    );
+
+    final details = NotificationDetails(android: androidDetails);
+    await _notifications.show(
+        modelDownloadNotificationId, title, body, details);
+  }
+
+  Future<void> hideModelDownloadNotification() async {
+    await _notifications.cancel(modelDownloadNotificationId);
   }
 
   Future<void> showDownloadProgress({
@@ -531,6 +652,63 @@ class NotificationService {
         NotificationDetails(android: androidDetails, iOS: iosDetails);
     await _notifications.show(id, title, body, details,
         payload: 'download_progress');
+  }
+
+  Future<void> showQuranDownloadProgress({
+    required int id,
+    required String locale,
+    required int percent,
+    required String reciterName,
+    bool isPaused = false,
+  }) async {
+    if (!_initialized) await initialize();
+
+    // ✅ تأكد من أن النسبة بين 0 و 100
+    final clampedPercent = percent.clamp(0, 100);
+
+    final title =
+        _dl(isPaused ? 'resuming_download' : 'downloading_quran', locale);
+    final body = '$reciterName: $clampedPercent%';
+
+    final androidDetails = AndroidNotificationDetails(
+      'download_controls_v1',
+      'التحديثات',
+      channelDescription: 'إشعارات تحميل التحديثات والتحكم بها',
+      importance: Importance.max,
+      priority: Priority.high,
+      playSound: false,
+      showProgress: true,
+      maxProgress: 100,
+      progress: clampedPercent, // ✅ استخدم القيمة المصححة
+      ongoing: !isPaused,
+      autoCancel: false,
+      onlyAlertOnce: true,
+      icon: '@drawable/ic_notification',
+      actions: [
+        AndroidNotificationAction(
+          'pause_download',
+          isPaused
+              ? (locale == 'ar' ? 'استكمال' : 'Resume')
+              : _dl('pause', locale),
+          showsUserInterface: true,
+        ),
+        AndroidNotificationAction(
+          'stop_download',
+          _dl('stop', locale),
+          showsUserInterface: true,
+          cancelNotification: true,
+        ),
+      ],
+    );
+    final iosDetails = DarwinNotificationDetails(
+      presentAlert: true,
+      presentBadge: false,
+      presentSound: false,
+    );
+    final details =
+        NotificationDetails(android: androidDetails, iOS: iosDetails);
+    await _notifications.show(id, title, body, details,
+        payload: 'quran_download_progress');
   }
 
   Future<void> showDownloadComplete({
@@ -942,6 +1120,16 @@ class NotificationService {
     if (response.actionId == _stopAdhanActionId ||
         response.payload == _stopAdhanActionId) {
       await stopAdhan();
+      return;
+    }
+
+    if (response.actionId == _pauseDownloadActionId) {
+      onPauseDownload?.call();
+      return;
+    }
+
+    if (response.actionId == _stopDownloadActionId) {
+      onStopDownload?.call();
       return;
     }
 

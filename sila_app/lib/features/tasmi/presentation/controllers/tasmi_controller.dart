@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:quran/quran.dart' as quran;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -20,9 +21,15 @@ import 'package:sila_app/features/tasmi/data/repositories/i_tasmi_error_reposito
 import 'package:sila_app/features/tasmi/data/repositories/isar_tasmi_error_repository.dart';
 import 'package:sila_app/features/tasmi/domain/tajweed_normalizer.dart';
 import 'package:sila_app/features/tasmi/presentation/riverpod/tasmi_preferences_provider.dart';
-import 'package:sila_app/features/tasmi/services/tasmi_speech_service.dart';
 import 'package:sila_app/features/tasmi/services/tasmi_tts_service.dart';
+import 'package:sila_app/features/tasmi/services/tasmi_speech_service.dart';
+import 'package:sila_app/core/services/sherpa_speech_service.dart';
+import 'package:sila_app/core/utils/dialog_utils.dart';
+import 'package:flutter/material.dart';
+import 'package:sila_app/features/ibadah_tracker/presentation/controllers/ibadah_tracker_controller.dart';
+import 'package:sila_app/features/notifications/presentation/controllers/notification_providers.dart';
 import 'package:sila_app/features/vefa/presentation/riverpod/vefa_providers.dart';
+import 'package:sila_app/features/wird/presentation/riverpod/wird_controller.dart';
 
 part 'tasmi_controller.g.dart';
 
@@ -116,6 +123,7 @@ class TasmiController extends _$TasmiController {
   static const String _errorMicFinal = 'error_mic_final';
 
   late final TasmiSpeechService _speechService;
+  late final SherpaSpeechService _sherpaService;
   StreamSubscription<String>? _speechSubscription;
   int? _surahNumber;
   bool _isProcessingWord = false;
@@ -124,9 +132,9 @@ class TasmiController extends _$TasmiController {
   @override
   TasmiState build() {
     _speechService = TasmiSpeechService();
-    _speechService
-        .setActive(true); // FIX 3: Page is active — enable STT watchdog/restart
-    // FIX 1: Wire audio playing check — if audio is playing, STT won't auto-restart
+    _sherpaService = SherpaSpeechService();
+    
+    _speechService.setActive(true);
     _speechService.setAudioPlayingCheck(() {
       try {
         return ref.read(audioControllerProvider).playing;
@@ -134,20 +142,18 @@ class TasmiController extends _$TasmiController {
         return false;
       }
     });
+
     _speechService.initialize().then((available) {
       if (!available) {
-        state = state.copyWith(
-          status: TasmiStatus.error,
-          errorMessage: 'خدمة الصوت غير متاحة. يرجى التحقق من الأذونات.',
-        );
+        _checkSherpaAvailability();
       }
     });
 
     ref.onDispose(() {
       _speechSubscription?.cancel();
-      _speechService
-          .setActive(false); // FIX 3: Page left — disable STT watchdog/restart
+      _speechService.setActive(false);
       _speechService.dispose();
+      _sherpaService.dispose();
     });
 
     return TasmiState.initial();
@@ -157,8 +163,11 @@ class TasmiController extends _$TasmiController {
     required int surahNumber,
     required int fromAya,
     required int toAya,
+    BuildContext? context,
   }) async {
     _surahNumber = surahNumber;
+    final useSherpa = await _sherpaService.isModelAvailable();
+    
     final surahName = quran.getSurahNameArabic(surahNumber);
     await ref.read(analyticsServiceProvider).logTasmiSessionStart(
           surahName: surahName,
@@ -168,7 +177,6 @@ class TasmiController extends _$TasmiController {
     _isProcessingWord = false;
     _sessionErrors.clear();
 
-    // 1. Load verses
     final allWords = <TasmiWordEntry>[];
     for (var i = fromAya; i <= toAya; i++) {
       final verseText = quran.getVerse(surahNumber, i, verseEndSymbol: false);
@@ -200,58 +208,80 @@ class TasmiController extends _$TasmiController {
       sessionStartTime: DateTime.now(),
     );
 
-    // 4. Start support services
     final tts = ref.read(tasmiTtsServiceProvider);
     await tts.initialize();
 
-    // 5. Listen to wordStream
-    await _speechSubscription?.cancel(); // Cancel any previous subscription
-    _speechSubscription = _speechService.wordStream.listen(
-      _onWordSpoken,
-      onError: (error) async {
-        final errorString = error.toString();
-
-        if (errorString.contains(_errorMicFinal)) {
-          state = state.copyWith(warningMessage: _errorMicFinal);
-          return;
-        }
-
-        state = state.copyWith(
-          status: TasmiStatus.error,
-          errorMessage: errorString,
-          isMicListening: false,
-        );
-        await _stopServicesOnly();
-      },
-    );
-
-    final startedListening = await _speechService.startListening();
-    if (!startedListening) {
-      await _stopServicesOnly();
-      state = state.copyWith(
-        words: const [],
-        status: TasmiStatus.error,
-        currentIndex: 0,
-        clearCorrectionWord: true,
-        errorMessage: 'mic_error'.tr(),
-        isMicListening: false,
-        currentWordAttempts: 0,
+    await _speechSubscription?.cancel();
+    
+    if (useSherpa) {
+      await _sherpaService.init();
+      _speechSubscription = _sherpaService.resultStream.listen(
+        _onSherpaResult,
+        onError: _handleSTTError,
       );
+      await _sherpaService.startListening();
+      state = state.copyWith(isMicListening: true);
+    } else {
+      _speechSubscription = _speechService.wordStream.listen(
+        _onWordSpoken,
+        onError: _handleSTTError,
+      );
+      final startedListening = await _speechService.startListening();
+      if (!startedListening) {
+        await _stopServicesOnly();
+        state = state.copyWith(
+          words: const [],
+          status: TasmiStatus.error,
+          currentIndex: 0,
+          clearCorrectionWord: true,
+          errorMessage: 'mic_error'.tr(),
+          isMicListening: false,
+          currentWordAttempts: 0,
+        );
+      }
+    }
+  }
+
+  void _handleSTTError(dynamic error) async {
+    final errorString = error.toString();
+    if (errorString.contains(_errorMicFinal)) {
+      state = state.copyWith(warningMessage: _errorMicFinal);
       return;
     }
 
-    state = state.copyWith(isMicListening: true);
+    state = state.copyWith(
+      status: TasmiStatus.error,
+      errorMessage: errorString,
+      isMicListening: false,
+    );
+    await _stopServicesOnly();
+  }
+
+  void _onSherpaResult(String text) {
+    if (text.isEmpty) return;
+    final lastWord = text.trim().split(' ').last;
+    _onWordSpoken(lastWord);
+  }
+
+  void _checkSherpaAvailability() async {
+    final available = await _sherpaService.isModelAvailable();
+    if (!available) {
+      state = state.copyWith(
+        status: TasmiStatus.error,
+        errorMessage: 'خدمة الصوت غير متاحة. يرجى التحقق من الأذونات.',
+      );
+    }
   }
 
   Future<void> _onWordSpoken(String spokenWord) async {
     if (_isProcessingWord) return;
-    if (state.currentIndex >= state.words.length) return; // Session finished
+    if (state.currentIndex >= state.words.length) return;
 
     _isProcessingWord = true;
     try {
       final prefs = ref.read(tasmiPreferencesNotifierProvider);
-
       final currentEntry = state.words[state.currentIndex];
+      
       final result = TajweedNormalizer.compareWord(
         spoken: spokenWord,
         expected: currentEntry.word,
@@ -259,6 +289,7 @@ class TasmiController extends _$TasmiController {
       );
 
       if (result == WordMatchResult.correct) {
+        HapticFeedback.lightImpact();
         _handleCorrect();
         return;
       }
@@ -274,10 +305,21 @@ class TasmiController extends _$TasmiController {
         state = state.copyWith(currentWordAttempts: newAttempts);
 
         if (prefs.ttsEnabled) {
-          await _speechService.pauseForTts();
+          final useSherpa = await _sherpaService.isModelAvailable();
+          if (useSherpa) {
+            await _sherpaService.stopListening();
+          } else {
+            await _speechService.pauseForTts();
+          }
+          
           state = state.copyWith(isMicListening: false);
           await ref.read(tasmiTtsServiceProvider).speakWord(currentEntry.word);
-          await _speechService.resumeAfterTts();
+          
+          if (useSherpa) {
+            await _sherpaService.startListening();
+          } else {
+            await _speechService.resumeAfterTts();
+          }
           state = state.copyWith(isMicListening: true);
         }
         return;
@@ -325,29 +367,39 @@ class TasmiController extends _$TasmiController {
       correctionWord: entry.word,
     );
 
+    final useSherpa = await _sherpaService.isModelAvailable();
+
     switch (prefs.onErrorBehavior) {
       case OnErrorBehavior.speakAndContinue:
         if (prefs.ttsEnabled) {
-          await _speechService.pauseForTts();
+          if (useSherpa) await _sherpaService.stopListening();
+          else await _speechService.pauseForTts();
+          
           state = state.copyWith(isMicListening: false);
           await ref.read(tasmiTtsServiceProvider).speakWord(entry.word);
-          await _speechService.resumeAfterTts();
+          
+          if (useSherpa) await _sherpaService.startListening();
+          else await _speechService.resumeAfterTts();
+          
           state = state.copyWith(isMicListening: true);
         }
         await Future.delayed(const Duration(seconds: 1));
         state = state.copyWith(clearCorrectionWord: true);
         break;
+        
       case OnErrorBehavior.waitForUser:
+        if (useSherpa) await _sherpaService.stopListening();
+        else await _speechService.pauseForTts();
+        
         if (prefs.ttsEnabled) {
-          await _speechService.pauseForTts();
-          state = state.copyWith(isMicListening: false);
           await ref.read(tasmiTtsServiceProvider).speakWord(entry.word);
-        } else {
-          await _speechService.pauseForTts();
-          state = state.copyWith(isMicListening: false);
         }
-        state = state.copyWith(status: TasmiStatus.waitingForUser);
+        state = state.copyWith(
+          status: TasmiStatus.waitingForUser,
+          isMicListening: false,
+        );
         break;
+        
       case OnErrorBehavior.continueOnly:
         await Future.delayed(const Duration(milliseconds: 800));
         state = state.copyWith(clearCorrectionWord: true);
@@ -363,7 +415,14 @@ class TasmiController extends _$TasmiController {
     if (state.status != TasmiStatus.waitingForUser) return;
     state = state.copyWith(
         status: TasmiStatus.listening, clearCorrectionWord: true);
-    await _speechService.resumeAfterTts();
+    
+    final useSherpa = await _sherpaService.isModelAvailable();
+    if (useSherpa) {
+      await _sherpaService.startListening();
+    } else {
+      await _speechService.resumeAfterTts();
+    }
+    
     state = state.copyWith(isMicListening: true);
 
     if (state.currentIndex >= state.words.length) {
@@ -373,6 +432,8 @@ class TasmiController extends _$TasmiController {
 
   void _saveError(
       String spokenWord, TasmiWordEntry entry, WordMatchResult result) {
+    if (_surahNumber == null) return;
+    
     final errorModel = TasmiWordError()
       ..surahIndex = _surahNumber!
       ..verseNumber = entry.verseNumber
@@ -390,11 +451,10 @@ class TasmiController extends _$TasmiController {
   }
 
   void stopSession() {
-    if (state.status == TasmiStatus.listening) {
-      _finish(); // Also calculate stats if stopped manually
+    if (state.status == TasmiStatus.listening || state.status == TasmiStatus.waitingForUser) {
+      _finish();
       return;
     }
-
     unawaited(_stopServicesOnly());
   }
 
@@ -402,49 +462,44 @@ class TasmiController extends _$TasmiController {
     if (state.status == TasmiStatus.listening) return;
 
     _isProcessingWord = false;
+    final useSherpa = await _sherpaService.isModelAvailable();
 
-    // Re-establish subscription because it's cancelled in _finish/_stop
     await _speechSubscription?.cancel();
-    _speechSubscription = _speechService.wordStream.listen(
-      _onWordSpoken,
-      onError: (error) async {
-        final errorString = error.toString();
-        if (errorString.contains(_errorMicFinal)) {
-          state = state.copyWith(warningMessage: _errorMicFinal);
-          return;
-        }
-        state = state.copyWith(
-          status: TasmiStatus.error,
-          errorMessage: errorString,
-          isMicListening: false,
-        );
-        await _stopServicesOnly();
-      },
-    );
+    if (useSherpa) {
+      await _sherpaService.init();
+      _speechSubscription = _sherpaService.resultStream.listen(
+        _onSherpaResult,
+        onError: _handleSTTError,
+      );
+      await _sherpaService.startListening();
+    } else {
+      _speechSubscription = _speechService.wordStream.listen(
+        _onWordSpoken,
+        onError: _handleSTTError,
+      );
+      await _speechService.startListening();
+    }
 
     state = state.copyWith(
       status: TasmiStatus.listening,
       clearCorrectionWord: true,
       clearErrorMessage: true,
-      isMicListening: false,
+      isMicListening: true,
       sessionStartTime: state.sessionStartTime ?? DateTime.now(),
     );
-
-    final startedListening = await _speechService.startListening();
-    if (!startedListening) {
-      state = state.copyWith(
-        status: TasmiStatus.error,
-        errorMessage: 'mic_error'.tr(),
-      );
-      return;
-    }
-    state = state.copyWith(isMicListening: true);
   }
 
   void _finish() async {
     _isProcessingWord = false;
-    _speechService.stopListening();
-    _speechSubscription?.cancel();
+    
+    final useSherpa = await _sherpaService.isModelAvailable();
+    if (useSherpa) {
+      await _sherpaService.stopListening();
+    } else {
+      await _speechService.stopListening();
+    }
+    
+    await _speechSubscription?.cancel();
     ref.read(tasmiTtsServiceProvider).stop();
 
     var correct = 0;
@@ -492,16 +547,11 @@ class TasmiController extends _$TasmiController {
       ),
     );
 
-    // Save to Hifz history
     try {
       final repository = await ref.read(hifzRepositoryProvider.future);
-
-      // FIX: Skip saving if nothing was attempted
       if (state.currentIndex <= 0 || state.words.isEmpty) return;
 
       final hasFinishedNormally = state.currentIndex >= state.words.length;
-
-      // FIX: Use actual last processed verse, not always the range end
       final actualToVerse = hasFinishedNormally
           ? state.words.last.verseNumber
           : state.words[state.currentIndex - 1].verseNumber;
@@ -514,12 +564,11 @@ class TasmiController extends _$TasmiController {
         ..date = DateTime.now()
         ..correctWords = correct
         ..wrongWords = wrong + close
+        ..hasanat = hasanat
         ..durationSeconds = duration;
 
       await repository.saveSession(session);
-
-      // Refresh Hifz dashboard
-      ref.invalidate(hifzHomeControllerProvider);
+      _refreshGlobalDashboards();
     } catch (e) {
       debugPrint('❌ Error saving tasmi session: $e');
     }
@@ -537,11 +586,24 @@ class TasmiController extends _$TasmiController {
   }
 
   Future<void> _stopServicesOnly() async {
-    await _speechService.stopListening();
+    final useSherpa = await _sherpaService.isModelAvailable();
+    if (useSherpa) {
+      await _sherpaService.stopListening();
+    } else {
+      await _speechService.stopListening();
+    }
+    
     await _speechSubscription?.cancel();
     _speechSubscription = null;
     ref.read(tasmiTtsServiceProvider).stop();
     state = state.copyWith(isMicListening: false);
+  }
+
+  void _refreshGlobalDashboards() {
+    ref.invalidate(hifzHomeControllerProvider);
+    ref.invalidate(ibadahTrackerControllerProvider);
+    ref.invalidate(wirdControllerProvider);
+    ref.invalidate(streakTrackerProvider);
   }
 }
 
@@ -555,7 +617,6 @@ final tasmiErrorRepositoryProvider =
   }
 });
 
-// Fallback no-op repository used while Isar is loading
 class _NoOpTasmiErrorRepository implements ITasmiErrorRepository {
   @override
   Future<void> saveError(TasmiWordError error) async {}

@@ -29,8 +29,8 @@ void main() async {
     FlutterError.presentError(details);
   };
 
-  // PERF: Disable GoogleFonts runtime fetching (fonts are bundled locally)
-  GoogleFonts.config.allowRuntimeFetching = false;
+  // PERF: Allow runtime fetching for now since fonts aren't bundled yet
+  GoogleFonts.config.allowRuntimeFetching = true;
 
   // PERF: Run all init operations in parallel instead of sequentially
   final results = await Future.wait([

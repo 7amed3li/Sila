@@ -4,10 +4,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:sila_app/core/providers/reciter_provider.dart';
 import 'package:sila_app/core/services/reciter_service.dart';
 
-Future<void> showReciterPickerSheet(BuildContext context) {
+Future<ReciterModel?> showReciterPickerSheet(BuildContext context) {
   final isDark = Theme.of(context).brightness == Brightness.dark;
-  return showModalBottomSheet<void>(
+  return showModalBottomSheet<ReciterModel?>(
     context: context,
+    isScrollControlled: true,
     backgroundColor: isDark ? const Color(0xFF1E293B) : Colors.white,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
@@ -113,7 +114,7 @@ class ReciterPickerSheet extends ConsumerWidget {
                 onTap: () async {
                   await ref.read(reciterControllerProvider.notifier).selectReciter(reciter.id);
                   if (context.mounted) {
-                    Navigator.pop(context);
+                    Navigator.pop(context, reciter);
                   }
                 },
               ),

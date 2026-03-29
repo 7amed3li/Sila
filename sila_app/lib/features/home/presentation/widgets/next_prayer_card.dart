@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sila_app/core/utils/time_utils.dart';
+import 'package:sila_app/features/home/presentation/widgets/home_shimmer.dart';
 import 'package:sila_app/features/prayers/presentation/riverpod/prayer_controller.dart';
 
 class NextPrayerCard extends ConsumerStatefulWidget {
@@ -117,21 +118,30 @@ class _NextPrayerCardState extends ConsumerState<NextPrayerCard> {
           ),
         );
       },
-      loading: () => Container(
-        height: 100,
-        decoration: BoxDecoration(
-          color: const Color(0xFF064E3B),
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: const Center(child: CircularProgressIndicator(color: Colors.white)),
-      ),
+      loading: () => HomeShimmer.prayer(),
       error: (e, _) => Container(
-        height: 100,
+        padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.red.shade900,
+          color: Colors.red.withOpacity(0.1),
           borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: Colors.red.withOpacity(0.2)),
         ),
-        child: Center(child: Text(e.toString(), style: const TextStyle(color: Colors.white))),
+        child: Row(
+          children: [
+            const Icon(Icons.error_outline, color: Colors.red),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                'error_loading_prayers'.tr(),
+                style: const TextStyle(color: Colors.red, fontSize: 13),
+              ),
+            ),
+            IconButton(
+              onPressed: () => ref.invalidate(prayerTimesControllerProvider),
+              icon: const Icon(Icons.refresh, color: Colors.red),
+            ),
+          ],
+        ),
       ),
     );
   }

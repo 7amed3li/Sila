@@ -7,7 +7,6 @@ import 'package:sila_app/features/hifz/data/models/hifz_verse_record.dart';
 import 'package:sila_app/features/hifz/data/repositories/i_hifz_repository.dart';
 
 class IsarHifzRepository implements IHifzRepository {
-
   IsarHifzRepository(Isar isar) {
     _isar = isar;
   }
@@ -15,7 +14,10 @@ class IsarHifzRepository implements IHifzRepository {
 
   @override
   Future<HifzUserProfile?> getProfile() async {
-    return await _isar.hifzUserProfiles.where().sortByCreatedAtDesc().findFirst();
+    return await _isar.hifzUserProfiles
+        .where()
+        .sortByCreatedAtDesc()
+        .findFirst();
   }
 
   @override
@@ -26,7 +28,8 @@ class IsarHifzRepository implements IHifzRepository {
   }
 
   @override
-  Future<HifzVerseRecord?> getVerseRecord(int surahIndex, int verseNumber) async {
+  Future<HifzVerseRecord?> getVerseRecord(
+      int surahIndex, int verseNumber) async {
     return await _isar.hifzVerseRecords
         .filter()
         .surahIndexEqualTo(surahIndex)
@@ -35,8 +38,12 @@ class IsarHifzRepository implements IHifzRepository {
   }
 
   @override
-  Future<List<HifzVerseRecord>> getAllRecords() async {
-    return await _isar.hifzVerseRecords.where().findAll();
+  Future<List<HifzVerseRecord>> getAllRecords({int? limit}) async {
+    final query = _isar.hifzVerseRecords.where();
+    if (limit != null && limit > 0) {
+      return await query.limit(limit).findAll();
+    }
+    return await query.limit(500).findAll();
   }
 
   @override
@@ -63,7 +70,11 @@ class IsarHifzRepository implements IHifzRepository {
 
   @override
   Future<List<HifzSession>> getRecentSessions(int limit) async {
-    return await _isar.hifzSessions.where().sortByDateDesc().limit(limit).findAll();
+    return await _isar.hifzSessions
+        .where()
+        .sortByDateDesc()
+        .limit(limit)
+        .findAll();
   }
 
   @override
@@ -75,7 +86,11 @@ class IsarHifzRepository implements IHifzRepository {
 
   @override
   Future<List<HifzMoment>> getRecentMoments(int limit) async {
-    return await _isar.hifzMoments.where().sortByCreatedAtDesc().limit(limit).findAll();
+    return await _isar.hifzMoments
+        .where()
+        .sortByCreatedAtDesc()
+        .limit(limit)
+        .findAll();
   }
 
   @override

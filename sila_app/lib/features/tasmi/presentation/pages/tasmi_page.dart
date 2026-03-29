@@ -16,6 +16,7 @@ import 'package:sila_app/features/tasmi/presentation/pages/widgets/tasmi_stats_r
 import 'package:sila_app/features/tasmi/presentation/riverpod/tasmi_preferences_provider.dart';
 import 'package:sila_app/features/tasmi/services/tasmi_speech_service.dart';
 import 'package:sila_app/features/vefa/presentation/pages/vefa_page.dart';
+import 'package:sila_app/core/presentation/widgets/dynamic_download_button.dart';
 
 class TasmiPage extends ConsumerStatefulWidget {
 
@@ -270,6 +271,11 @@ class _TasmiPageState extends ConsumerState<TasmiPage> {
                                 ),
                               ),
                             ),
+                          const SizedBox(height: 24),
+                          const Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 16),
+                            child: DynamicDownloadButton(),
+                          ),
                         ],
                       ),
                     if (state.status == TasmiStatus.listening ||

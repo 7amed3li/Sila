@@ -7,7 +7,7 @@ part of 'nafahat_audio_controller.dart';
 // **************************************************************************
 
 String _$nafahatAudioControllerHash() =>
-    r'd4520824c5f7b3ef39e0c27392a3f00c6a004e3c';
+    r'd355e2e530354ce2d203293dde1a628719df058a';
 
 /// See also [NafahatAudioController].
 @ProviderFor(NafahatAudioController)

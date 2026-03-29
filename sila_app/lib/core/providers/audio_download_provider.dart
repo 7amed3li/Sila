@@ -1,7 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sila_app/core/services/audio_download_service.dart';
+import 'package:sila_app/core/services/notification_service.dart';
 import 'package:sila_app/core/services/reciter_service.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:intl/intl.dart' as intl;
 
 class AudioDownloadState {
 
@@ -123,6 +126,16 @@ class AudioDownloadController extends StateNotifier<AudioDownloadState> {
               ayah: progress.ayah,
               reciterId: reciter.id,
             );
+
+            // Update system notification
+            final currentLocale = intl.Intl.getCurrentLocale().split('_').first;
+            final overallPercent = ((state.completed / state.total) * 100).toInt();
+            NotificationService().showQuranDownloadProgress(
+              id: NotificationService.downloadNotificationId,
+              locale: currentLocale,
+              percent: overallPercent,
+              reciterName: currentLocale == 'ar' ? reciter.nameArabic : reciter.nameEnglish,
+            );
           },
         );
 
@@ -137,6 +150,9 @@ class AudioDownloadController extends StateNotifier<AudioDownloadState> {
         isCancelled: false,
         completed: state.total,
       );
+      
+      // Clear notification on success
+      NotificationService().hideModelDownloadNotification(); // Reusing or specific
     } on DioException catch (e) {
       if (CancelToken.isCancel(e)) {
         state = state.copyWith(isDownloading: false, isCancelled: true, isCompleted: false);
@@ -165,3 +181,15 @@ final audioDownloadControllerProvider =
     StateNotifierProvider<AudioDownloadController, AudioDownloadState>(
   (ref) => AudioDownloadController(),
 );
+
+final audioAvailabilityProvider = FutureProvider<bool>((ref) async {
+  // We can't easily watch the current reciter here without knowing which one is selected globally.
+  // For now, we'll check the default reciter or all available reciters.
+  const reciters = ReciterService.availableReciters;
+  for (final reciter in reciters) {
+    if (await AudioDownloadService.isAnyAudioDownloaded(reciter)) {
+      return true;
+    }
+  }
+  return false;
+});

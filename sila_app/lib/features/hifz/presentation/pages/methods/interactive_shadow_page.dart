@@ -13,12 +13,16 @@ import 'package:sila_app/core/theme/app_theme.dart';
 import 'package:sila_app/core/utils/surah_utils.dart';
 import 'package:sila_app/features/hifz/data/models/hifz_user_profile.dart';
 import 'package:sila_app/features/hifz/data/repositories/hifz_repository_provider.dart';
+import 'package:sila_app/core/presentation/widgets/dynamic_download_button.dart';
+import 'package:sila_app/features/hifz/presentation/controllers/hifz_settings_controller.dart';
 import 'package:sila_app/features/hifz/presentation/controllers/interactive_shadow_controller.dart';
 import 'package:sila_app/features/tasmi/domain/tajweed_normalizer.dart';
 import 'package:sila_app/features/tasmi/services/tasmi_speech_service.dart';
 import 'package:sila_app/features/quran/domain/entities/quran_settings.dart';
 import 'package:sila_app/features/quran/presentation/riverpod/quran_settings_controller.dart';
 import 'package:sila_app/features/quran/presentation/utils/quran_ui_utils.dart';
+import 'package:sila_app/core/services/sherpa_speech_service.dart';
+import 'package:sila_app/core/utils/dialog_utils.dart';
 
 
 const Color _successColor = AppTheme.successGreen;
@@ -248,8 +252,18 @@ class _InteractiveShadowPageState extends ConsumerState<InteractiveShadowPage>
                           const SizedBox(height: 8),
                           _MicBar(
                             isListening: state.isMicListening,
-                            onToggle: controller.toggleMic,
+                            onToggle: () async {
+                              if (!state.isMicListening) {
+                                final hasSmartEngine = await SherpaSpeechService().isModelAvailable();
+                                if (!hasSmartEngine && mounted) {
+                                  DialogUtils.showSmartEnginePrompt(context);
+                                }
+                              }
+                              controller.toggleMic();
+                            },
                           ),
+                          const SizedBox(height: 12),
+                          DynamicDownloadButton(),
                           if (state.errorMessage != null) ...[
                             const SizedBox(height: 8),
                             _InlineStatusMessage(message: state.errorMessage!),
@@ -312,7 +326,8 @@ class _InteractiveShadowPageState extends ConsumerState<InteractiveShadowPage>
                               ),
                               const SizedBox(width: 10),
                               Expanded(
-                                child: OutlinedButton(
+                                child: Builder(builder: (context) {
+                                  return OutlinedButton(
                                   onPressed: () async {
                                       final confirmed = await showDialog<bool>(
                                         context: context,
@@ -366,8 +381,7 @@ class _InteractiveShadowPageState extends ConsumerState<InteractiveShadowPage>
                                     }
                                   },
                                   style: OutlinedButton.styleFrom(
-                                    side:
-                                        BorderSide(color: Colors.red.withOpacity(isDark ? 0.3 : 0.5), width: 1.5),
+                                    side: BorderSide(color: isDark ? Colors.red.withOpacity(0.3) : Colors.red.withOpacity(0.5), width: 1.5),
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 12),
                                     shape: RoundedRectangleBorder(
@@ -379,10 +393,10 @@ class _InteractiveShadowPageState extends ConsumerState<InteractiveShadowPage>
                                     style: GoogleFonts.cairo(
                                       fontSize: 12,
                                       fontWeight: FontWeight.w700,
-                                      color: Colors.red.withOpacity(isDark ? 0.7 : 0.8),
+                                      color: isDark ? Colors.red.withOpacity(0.7) : Colors.red.withOpacity(0.8),
                                     ),
                                   ),
-                                ),
+                                );}),
                               ),
                             ],
                           ),
@@ -483,18 +497,28 @@ class _TopHeader extends ConsumerWidget {
               Row(
                 children: [
                   ...List.generate(5, (index) {
-                    final current = index + 1;
-                    final color = current < stage
-                        ? Colors.white
-                        : current == stage
-                            ? Colors.white.withOpacity(0.6)
-                            : Colors.white.withOpacity(0.2);
-                    return Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 2),
-                      width: 20,
-                      height: 4,
+                    final step = index + 1;
+                    final isActive = step == stage;
+                    final isCompleted = step < stage;
+                    
+                    Color color;
+                    if (isActive) {
+                      color = Colors.white;
+                    } else if (isCompleted) {
+                      color = Colors.white.withOpacity(0.5);
+                    } else {
+                      color = Colors.white.withOpacity(0.15);
+                    }
+
+                    return AnimatedContainer(
+                      duration: const Duration(milliseconds: 400),
+                      margin: const EdgeInsets.symmetric(horizontal: 2.5),
+                      width: isActive ? 28 : 18,
+                      height: 5,
                       decoration: BoxDecoration(
-                          color: color, borderRadius: BorderRadius.circular(2)),
+                        color: color,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                     );
                   }),
                 ],
@@ -941,11 +965,8 @@ class _AudioWaveform extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final settings = ref.watch(quranSettingsControllerProvider).valueOrNull ??
-        const QuranSettings(
-            fontSize: 26,
-            fontFamily: 'Scheherazade New',
-            themeMode: QuranThemeMode.sepia);
-    final textColor = QuranUIUtils.getTextColor(settings.themeMode);
+        const QuranSettings(fontSize: 26, fontFamily: 'Scheherazade New', themeMode: QuranThemeMode.sepia);
+    final inactiveColor = QuranUIUtils.getTextColor(settings.themeMode).withOpacity(0.25);
     const heights = [4, 8, 14, 10, 18, 12, 20, 16, 22, 14, 10, 18, 12, 8, 6];
     
     return AnimatedBuilder(
@@ -965,9 +986,7 @@ class _AudioWaveform extends ConsumerWidget {
                 width: 2.8,
                 height: h,
                 decoration: BoxDecoration(
-                  color: active
-                      ? AppTheme.accentColor
-                      : textColor.withValues(alpha: 0.25),
+                  color: active ? AppTheme.accentColor : inactiveColor,
                   borderRadius: BorderRadius.circular(5),
                 ),
               ),
@@ -985,20 +1004,24 @@ class _WritingModeBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final settings = ref.watch(quranSettingsControllerProvider).valueOrNull ??
-        const QuranSettings(
-            fontSize: 26,
-            fontFamily: 'Scheherazade New',
-            themeMode: QuranThemeMode.sepia);
+        const QuranSettings(fontSize: 26, fontFamily: 'Scheherazade New', themeMode: QuranThemeMode.sepia);
+    final isDark = settings.themeMode == QuranThemeMode.dark;
     final textColor = QuranUIUtils.getTextColor(settings.themeMode);
+    final accentColor = QuranUIUtils.getAccentColor(settings.themeMode);
+    final containerBg = isDark ? Colors.white.withValues(alpha: 0.05) : accentColor.withOpacity(0.06);
+    final borderColor = isDark ? Colors.white.withValues(alpha: 0.08) : accentColor.withOpacity(0.2);
+    final iconBg = isDark ? Colors.white.withValues(alpha: 0.07) : accentColor.withOpacity(0.1);
+    final iconBorder = isDark ? Colors.white24 : accentColor.withOpacity(0.3);
+    final iconColor = isDark ? Colors.white70 : accentColor;
+    const activeTextColor = Color(0xFF059669); // success green – visible on both
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16),
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
       decoration: BoxDecoration(
-        color: textColor.withValues(alpha: 0.05),
+        color: containerBg,
         borderRadius: BorderRadius.circular(14),
-        border:
-            Border.all(color: textColor.withValues(alpha: 0.08), width: 0.5),
+        border: Border.all(color: borderColor, width: 0.5),
       ),
       child: Row(
         children: [
@@ -1006,12 +1029,11 @@ class _WritingModeBar extends ConsumerWidget {
             width: 42,
             height: 42,
             decoration: BoxDecoration(
-              color: textColor.withValues(alpha: 0.07),
+              color: iconBg,
               shape: BoxShape.circle,
-              border: Border.all(color: textColor.withOpacity(0.2), width: 1.5),
+              border: Border.all(color: iconBorder, width: 1.5),
             ),
-            child: Icon(Icons.edit_note_rounded,
-                color: textColor.withOpacity(0.7), size: 20),
+            child: Icon(Icons.edit_note_rounded, color: iconColor, size: 20),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -1024,7 +1046,7 @@ class _WritingModeBar extends ConsumerWidget {
                   style: GoogleFonts.cairo(
                     fontSize: 11,
                     fontWeight: FontWeight.w700,
-                    color: const Color(0xFF6EE7B7),
+                    color: activeTextColor,
                   ),
                 ),
                 const SizedBox(height: 4),
@@ -1154,8 +1176,10 @@ class _MicBar extends ConsumerWidget {
                 final status = isListening
                     ? (snapshot.data ?? MicHealthStatus.active)
                     : null;
+                final _micSettings = ref.watch(quranSettingsControllerProvider).valueOrNull ?? const QuranSettings(fontSize: 26, fontFamily: 'Scheherazade New', themeMode: QuranThemeMode.sepia);
+                final _micTextColor = QuranUIUtils.getTextColor(_micSettings.themeMode);
                 final statusColor = switch (status) {
-                  null => textColor.withOpacity(0.6),
+                  null => _micTextColor.withOpacity(0.4),
                   MicHealthStatus.active => const Color(0xFF1D9E75),
                   MicHealthStatus.reconnecting => Colors.orange,
                   MicHealthStatus.stalled => Colors.red,
@@ -1205,18 +1229,18 @@ class _MicBar extends ConsumerWidget {
                           ? 'speak_clearly'.tr()
                           : 'tap_to_start_mic'.tr(),
                       style: GoogleFonts.cairo(
-                          fontSize: 9.5, color: textColor.withOpacity(0.4)),
+                          fontSize: 9.5, color: _micTextColor.withOpacity(0.38)),
                     ),
                     const SizedBox(height: 5),
                     ClipRRect(
                       borderRadius: BorderRadius.circular(3),
                       child: LinearProgressIndicator(
                         value: isListening ? null : 0,
-                        backgroundColor: textColor.withValues(alpha: 0.1),
+                        backgroundColor: _micTextColor.withOpacity(0.1),
                         valueColor: AlwaysStoppedAnimation(
                           isListening
                               ? const Color(0xFF6EE7B7)
-                              : textColor.withValues(alpha: 0.25),
+                              : _micTextColor.withOpacity(0.2),
                         ),
                         minHeight: 3,
                       ),
@@ -1275,17 +1299,15 @@ class _StatChip extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final settings = ref.watch(quranSettingsControllerProvider).valueOrNull ??
-        const QuranSettings(
-            fontSize: 26,
-            fontFamily: 'Scheherazade New',
-            themeMode: QuranThemeMode.sepia);
+        const QuranSettings(fontSize: 26, fontFamily: 'Scheherazade New', themeMode: QuranThemeMode.sepia);
+    final isDark = settings.themeMode == QuranThemeMode.dark;
     final textColor = QuranUIUtils.getTextColor(settings.themeMode);
-
+    final chipBg = isDark ? Colors.white.withValues(alpha: 0.05) : textColor.withOpacity(0.06);
     return Expanded(
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 10),
         decoration: BoxDecoration(
-          color: textColor.withValues(alpha: 0.05),
+          color: chipBg,
           borderRadius: BorderRadius.circular(10),
         ),
         child: Column(

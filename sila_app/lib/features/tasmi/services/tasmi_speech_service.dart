@@ -28,6 +28,8 @@ class TasmiSpeechService {
   DateTime? _lastWordReceivedAt;
   bool _isWatchdogHealing = false;
   bool _disposed = false;
+  bool _isUsingOnDevice = true; // Track current mode for fallback
+  String _currentLocale = 'ar-SA'; // Track current locale for fallback
 
   // ─── FIX 1+3: Audio focus conflict prevention ──────────────────────
   bool _isActive = false;
@@ -131,16 +133,23 @@ class TasmiSpeechService {
     try {
       await _speech.listen(
         onResult: _onResult,
-        localeId: 'ar-SA',
+        localeId: _currentLocale,
         listenMode: stt.ListenMode.dictation,
         listenFor: const Duration(seconds: 20),
         pauseFor: const Duration(seconds: 3),
+        onDevice: _isUsingOnDevice,
         cancelOnError: false,
         partialResults: true,
       );
       return true;
     } catch (e) {
       debugPrint('Speech listen error: $e');
+      if (_isUsingOnDevice) {
+        debugPrint('STT: listen() failed, trying network/generic ar...');
+        _isUsingOnDevice = false;
+        _currentLocale = 'ar'; 
+        return _startInternal();
+      }
       _wordController.addError('تعذر بدء الاستماع. حاول مرة أخرى.');
       return false;
     }
@@ -264,6 +273,19 @@ class TasmiSpeechService {
     if (error.errorMsg == 'error_client') {
       _scheduleRestart(delay: const Duration(milliseconds: 1500));
       return;
+    }
+
+    if (error.errorMsg == 'error_language_not_supported') {
+      debugPrint('STT: Language not supported (onDevice=$_isUsingOnDevice, locale=$_currentLocale)');
+      if (_isUsingOnDevice) {
+        _isUsingOnDevice = false;
+        _scheduleRestart(delay: const Duration(milliseconds: 100));
+        return;
+      } else if (_currentLocale != 'ar') {
+        _currentLocale = 'ar'; // Try generic Arabic
+        _scheduleRestart(delay: const Duration(milliseconds: 100));
+        return;
+      }
     }
 
     if (error.permanent && error.errorMsg == 'error_permission') {

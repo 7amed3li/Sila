@@ -7,7 +7,7 @@ part of 'hifz_home_controller.dart';
 // **************************************************************************
 
 String _$hifzHomeControllerHash() =>
-    r'6a9939dbac2a436a06b35b873e283f0d5c038ffc';
+    r'b2d26b8c866cc039e4a82d184645af65fce3aa1f';
 
 /// See also [HifzHomeController].
 @ProviderFor(HifzHomeController)

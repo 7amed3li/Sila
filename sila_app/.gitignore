@@ -18,6 +18,10 @@ migrate_working_dir/
 *.iws
 .idea/
 
+# VS Code related
+.vscode/
+.VSCodeCounter/
+
 # The .vscode folder contains launch configuration and tasks you configure in
 # VS Code which you may wish to be included in version control, so this line
 # is commented out by default.
@@ -49,3 +53,15 @@ android/app/build/
 # Firebase config (keep local / CI secret only)
 android/app/google-services*.json
 !android/app/google-services.example.json
+
+*.apk
+Sila.apk
+
+# IDE/Editor metadata
+*.code-workspace
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+

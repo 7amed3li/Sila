@@ -1,11 +1,12 @@
 import 'dart:ui' as ui;
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:quran/quran.dart' as quran;
 import 'package:sila_app/core/theme/app_theme.dart';
+import 'package:sila_app/features/home/presentation/widgets/home_shimmer.dart';
 import 'package:sila_app/features/vefa/presentation/pages/vefa_page.dart';
 import 'package:sila_app/features/wird/data/models/wird_settings.dart';
 import 'package:sila_app/features/wird/presentation/pages/wird_reader_page.dart';
@@ -29,8 +30,29 @@ class WirdCard extends ConsumerWidget {
                 ],
               );
       },
-      loading: () => const Center(child: CircularProgressIndicator()),
-      error: (e, s) => Center(child: Text('Error: $e')),
+      loading: () => HomeShimmer.wird(),
+      error: (e, s) => Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: Colors.red.withOpacity(0.05),
+          borderRadius: BorderRadius.circular(28),
+          border: Border.all(color: Colors.red.withOpacity(0.1)),
+        ),
+        child: Column(
+          children: [
+            const Icon(Icons.error_outline, color: Colors.red, size: 40),
+            const SizedBox(height: 12),
+            Text('Error: $e', 
+              textAlign: TextAlign.center,
+              style: const TextStyle(color: Colors.red, fontSize: 13)),
+            TextButton.icon(
+              onPressed: () => ref.invalidate(wirdControllerProvider),
+              icon: const Icon(Icons.refresh),
+              label: const Text('Retry'),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -347,6 +369,7 @@ class WirdCard extends ConsumerWidget {
              Expanded(
                child: GestureDetector(
                  onTap: () async {
+                   HapticFeedback.lightImpact();
                    final result = await Navigator.push(
                      context,
                      MaterialPageRoute(
@@ -398,7 +421,10 @@ class WirdCard extends ConsumerWidget {
             // Done Button (Islamic Gold)
              Expanded(
                child: GestureDetector(
-                 onTap: () => _showCompletionDialog(context, ref, state),
+                 onTap: () {
+                   HapticFeedback.mediumImpact();
+                   _showCompletionDialog(context, ref, state);
+                 },
                  child: Container(
                    height: 56,
                    padding: const EdgeInsets.symmetric(horizontal: 12),

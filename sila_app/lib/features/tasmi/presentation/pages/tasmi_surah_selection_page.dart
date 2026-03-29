@@ -1,6 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quran/quran.dart' as quran;
+import 'package:sila_app/features/quran/presentation/riverpod/audio_controller.dart';
 import 'package:sila_app/features/hifz/domain/hifz_selection.dart';
 import 'package:sila_app/features/tasmi/domain/tajweed_normalizer.dart';
 import 'package:sila_app/features/tasmi/presentation/pages/widgets/ayah_range_bottom_sheet.dart';
@@ -125,7 +127,7 @@ const List<bool> _isMakki = [
   true
 ];
 
-class TasmiSurahSelectionPage extends StatefulWidget {
+class TasmiSurahSelectionPage extends ConsumerStatefulWidget {
   const TasmiSurahSelectionPage({
     super.key,
     this.forHifz = false,
@@ -135,7 +137,7 @@ class TasmiSurahSelectionPage extends StatefulWidget {
   final bool showAyahRange;
 
   @override
-  State<TasmiSurahSelectionPage> createState() =>
+  ConsumerState<TasmiSurahSelectionPage> createState() =>
       _TasmiSurahSelectionPageState();
 }
 
@@ -148,7 +150,7 @@ String _toArabicNumber(String input) {
   return input;
 }
 
-class _TasmiSurahSelectionPageState extends State<TasmiSurahSelectionPage> {
+class _TasmiSurahSelectionPageState extends ConsumerState<TasmiSurahSelectionPage> {
   String _searchQuery = '';
   int _filterIndex = 0;
   List<int> _filteredSurahs = [];
@@ -266,13 +268,21 @@ class _TasmiSurahSelectionPageState extends State<TasmiSurahSelectionPage> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                _buildFilterChip(0, 'all_surahs'.tr()),
-                const SizedBox(width: 8),
-                _buildFilterChip(1, 'makki'.tr()),
-                const SizedBox(width: 8),
-                _buildFilterChip(2, 'madani'.tr()),
+                Expanded(
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        _buildFilterChip(0, 'all_surahs'.tr()),
+                        const SizedBox(width: 8),
+                        _buildFilterChip(1, 'makki'.tr()),
+                        const SizedBox(width: 8),
+                        _buildFilterChip(2, 'madani'.tr()),
+                      ],
+                    ),
+                  ),
+                ),
               ],
             ),
           ),

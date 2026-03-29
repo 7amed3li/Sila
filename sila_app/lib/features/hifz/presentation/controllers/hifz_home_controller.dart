@@ -229,8 +229,12 @@ class HifzHomeController extends _$HifzHomeController {
   int _calculateTodayHasanat(List<HifzSession> sessions) {
     var hasanat = 0;
     for (final session in sessions) {
-      final charsApprox = session.correctWords + session.wrongWords;
-      hasanat += HasanatCalculator.calculate('ا' * charsApprox);
+      if (session.hasanat > 0) {
+        hasanat += session.hasanat;
+      } else {
+        final charsApprox = session.correctWords + session.wrongWords;
+        hasanat += HasanatCalculator.calculate('ا' * charsApprox);
+      }
     }
     return hasanat;
   }

@@ -43,23 +43,61 @@
 - **Framework**: Flutter (Dart)
 - **State Management**: Riverpod (Codegen)
 - **Persistence**: Isar (Local-first)
-- **Audio**: just_audio + audioplayers (بحسب الحالة)
+- **Audio**: just_audio + audioplayers
 - **Notifications**: flutter_local_notifications
 - **Speech**: speech_to_text
 - **Localization**: easy_localization
 
 ## Repository Structure
 
-```text
-.
-|- sila_app/
-|  |- lib/
-|  |  |- core/                # Services, shared widgets, providers
-|  |  |- features/            # Feature-first modules (quran, hifz, tasmi...)
-|  |- assets/                 # Fonts, audio, images
-|  |- scripts/                # Automation scripts
-|- README.md                  # Project overview (this file)
 ```
+.
+├── sila_app/
+│   ├── lib/
+│   │   ├── core/                # Services, shared widgets, providers
+│   │   ├── features/            # Feature-first modules (quran, hifz, tasmi...)
+│   │   └── ...
+│   ├── assets/                  # Fonts, audio, images
+│   ├── scripts/                 # Automation scripts
+│   └── pubspec.yaml
+├── docs/                        # Documentation & guides
+├── README.md                    # Project overview (this file)
+├── LICENSE                      # MIT License
+└── .gitignore
+```
+
+## Documentation
+
+جميع ملفات التوثيق والأدلة موجودة في مجلد `docs/`:
+
+### Implementation & Architecture
+- `implementation_plan.md` - خطة التنفيذ الشاملة
+- `IMPLEMENTATION_STEPS.md` - خطوات التنفيذ التفصيلية
+- `IMPLEMENTATION_REPORT.md` - تقرير التنفيذ
+
+### Audio System & Fixes
+- `COMPLETE_AUDIO_ERROR_HANDLING.md` - نظام معالجة أخطاء الصوت الشامل
+- `CONNECTION_ABORTED_COMPLETE_FIX.md` - حل مشكلة انقطاع الاتصال
+- `CONNECTION_ABORTED_FIX.md` - تحليل وحل مفصل
+
+### Localization & Language Support
+- `README_LOCALIZATION.md` - دليل نظام التعريب
+- `HOW_LOCALIZATION_WORKS.md` - شرح كيف يعمل التعريب
+- `LANGUAGE_ADDITION_GUIDE.md` - دليل إضافة لغة جديدة
+- `TURKISH_LOCALIZATION_COMPLETE.md` - دليل التركية
+- `TURKISH_SUPPORT_STATUS.md` - حالة دعم اللغة التركية
+
+### Best Practices & Guides
+- `BEST_PRACTICES_GUIDE.md` - أفضل الممارسات البرمجية
+- `PRACTICAL_EXAMPLES.md` - أمثلة عملية
+- `PRODUCTION_LEVEL_EXAMPLES.md` - أمثلة على مستوى الإنتاج
+- `QUICK_REFERENCE.txt` - مرجع سريع
+
+### Analysis & Planning
+- `COMPLETE_ANALYSIS_AND_PLAN.md` - تحليل شامل وخطة عمل
+- `AUTO_PLAY_FIX_SUMMARY.md` - ملخص إصلاح التشغيل التلقائي
+- `IMPROVEMENTS_SUMMARY.md` - ملخص التحسينات
+- `LOCALIZATION_SUMMARY.md` - ملخص التعريب
 
 ## Getting Started
 
@@ -97,6 +135,10 @@ flutter test
 - توسيع التخصيص في رحلات الحفظ والتسميع.
 - تحسينات إضافية على الأداء وإدارة الوسائط على الأجهزة محدودة الموارد.
 
+## License
+
+هذا المشروع مرخص تحت رخصة MIT. انظر `LICENSE` للمزيد من التفاصيل.
+
 ## Contribution
 
 - افتح Issue واضح مع خطوات إعادة إنتاج للمشكلات.
@@ -114,4 +156,3 @@ flutter test
 - **وجميع موتانا المنسيين الذين انقطع عملهم ولا يجدون من يدعو لهم**
 
 اللهم اجعل هذا العمل نورا وبشرى لهم في قبورهم، وثقّل به موازينهم، واجمعنا بهم في مستقر رحمتك.
-

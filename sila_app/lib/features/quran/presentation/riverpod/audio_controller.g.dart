@@ -6,12 +6,12 @@ part of 'audio_controller.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$audioControllerHash() => r'6c1db114721dc5cb8db947d2527a93ae5a1c7f7a';
+String _$audioControllerHash() => r'361a0408b0a216d504ca99e7ddb3fb5fcef64248';
 
 /// See also [AudioController].
 @ProviderFor(AudioController)
 final audioControllerProvider =
-    AutoDisposeNotifierProvider<AudioController, Raw<AudioPlayer>>.internal(
+    AutoDisposeNotifierProvider<AudioController, AudioState>.internal(
   AudioController.new,
   name: r'audioControllerProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -21,7 +21,7 @@ final audioControllerProvider =
   allTransitiveDependencies: null,
 );
 
-typedef _$AudioController = AutoDisposeNotifier<Raw<AudioPlayer>>;
+typedef _$AudioController = AutoDisposeNotifier<AudioState>;
 String _$playingAyahIdHash() => r'60f143ffc65d6a86e8c7f20a5cde8dfe379b2e05';
 
 /// See also [PlayingAyahId].

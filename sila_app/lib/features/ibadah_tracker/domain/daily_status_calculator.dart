@@ -86,11 +86,11 @@ class DailyStatusCalculator {
     if (texts.isEmpty) return '';
 
     final dayKey = record.date.year * 10000 + record.date.month * 100 + record.date.day;
-    final cacheKey = '${dayKey}_$languageCode';
+    final cacheKey = '${dayKey}_${languageCode}_${completedCount(record, isMale: isMale)}';
     final cached = _dailyTextCache[cacheKey];
     if (cached != null && texts.contains(cached)) return cached;
 
-    final baseSeed = record.date.millisecondsSinceEpoch ~/ Duration.millisecondsPerDay;
+    final baseSeed = (record.date.millisecondsSinceEpoch ~/ Duration.millisecondsPerDay) + completedCount(record, isMale: isMale);
     final idx = (baseSeed + (baseSeed % 13) + _random.nextInt(texts.length)) % texts.length;
     final selected = texts[idx];
     _dailyTextCache[cacheKey] = selected;

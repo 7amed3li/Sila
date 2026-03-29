@@ -1,1 +1,14 @@
 implementation_plan.md
+
+# IDE and Editor metadata
+.VSCodeCounter/
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.iml
+
+# OS files
+.DS_Store
+Thumbs.db

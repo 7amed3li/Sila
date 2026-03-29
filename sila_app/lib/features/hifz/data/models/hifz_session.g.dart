@@ -37,23 +37,28 @@ const HifzSessionSchema = CollectionSchema(
       name: r'fromVerse',
       type: IsarType.long,
     ),
-    r'method': PropertySchema(
+    r'hasanat': PropertySchema(
       id: 4,
+      name: r'hasanat',
+      type: IsarType.long,
+    ),
+    r'method': PropertySchema(
+      id: 5,
       name: r'method',
       type: IsarType.string,
     ),
     r'surahIndex': PropertySchema(
-      id: 5,
+      id: 6,
       name: r'surahIndex',
       type: IsarType.long,
     ),
     r'toVerse': PropertySchema(
-      id: 6,
+      id: 7,
       name: r'toVerse',
       type: IsarType.long,
     ),
     r'wrongWords': PropertySchema(
-      id: 7,
+      id: 8,
       name: r'wrongWords',
       type: IsarType.long,
     )
@@ -92,10 +97,11 @@ void _hifzSessionSerialize(
   writer.writeDateTime(offsets[1], object.date);
   writer.writeLong(offsets[2], object.durationSeconds);
   writer.writeLong(offsets[3], object.fromVerse);
-  writer.writeString(offsets[4], object.method);
-  writer.writeLong(offsets[5], object.surahIndex);
-  writer.writeLong(offsets[6], object.toVerse);
-  writer.writeLong(offsets[7], object.wrongWords);
+  writer.writeLong(offsets[4], object.hasanat);
+  writer.writeString(offsets[5], object.method);
+  writer.writeLong(offsets[6], object.surahIndex);
+  writer.writeLong(offsets[7], object.toVerse);
+  writer.writeLong(offsets[8], object.wrongWords);
 }
 
 HifzSession _hifzSessionDeserialize(
@@ -109,11 +115,12 @@ HifzSession _hifzSessionDeserialize(
   object.date = reader.readDateTime(offsets[1]);
   object.durationSeconds = reader.readLong(offsets[2]);
   object.fromVerse = reader.readLong(offsets[3]);
+  object.hasanat = reader.readLong(offsets[4]);
   object.id = id;
-  object.method = reader.readString(offsets[4]);
-  object.surahIndex = reader.readLong(offsets[5]);
-  object.toVerse = reader.readLong(offsets[6]);
-  object.wrongWords = reader.readLong(offsets[7]);
+  object.method = reader.readString(offsets[5]);
+  object.surahIndex = reader.readLong(offsets[6]);
+  object.toVerse = reader.readLong(offsets[7]);
+  object.wrongWords = reader.readLong(offsets[8]);
   return object;
 }
 
@@ -133,12 +140,14 @@ P _hifzSessionDeserializeProp<P>(
     case 3:
       return (reader.readLong(offset)) as P;
     case 4:
-      return (reader.readString(offset)) as P;
-    case 5:
       return (reader.readLong(offset)) as P;
+    case 5:
+      return (reader.readString(offset)) as P;
     case 6:
       return (reader.readLong(offset)) as P;
     case 7:
+      return (reader.readLong(offset)) as P;
+    case 8:
       return (reader.readLong(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -451,6 +460,60 @@ extension HifzSessionQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
         property: r'fromVerse',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<HifzSession, HifzSession, QAfterFilterCondition> hasanatEqualTo(
+      int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'hasanat',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<HifzSession, HifzSession, QAfterFilterCondition>
+      hasanatGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'hasanat',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<HifzSession, HifzSession, QAfterFilterCondition> hasanatLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'hasanat',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<HifzSession, HifzSession, QAfterFilterCondition> hasanatBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'hasanat',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -871,6 +934,18 @@ extension HifzSessionQuerySortBy
     });
   }
 
+  QueryBuilder<HifzSession, HifzSession, QAfterSortBy> sortByHasanat() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'hasanat', Sort.asc);
+    });
+  }
+
+  QueryBuilder<HifzSession, HifzSession, QAfterSortBy> sortByHasanatDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'hasanat', Sort.desc);
+    });
+  }
+
   QueryBuilder<HifzSession, HifzSession, QAfterSortBy> sortByMethod() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'method', Sort.asc);
@@ -972,6 +1047,18 @@ extension HifzSessionQuerySortThenBy
     });
   }
 
+  QueryBuilder<HifzSession, HifzSession, QAfterSortBy> thenByHasanat() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'hasanat', Sort.asc);
+    });
+  }
+
+  QueryBuilder<HifzSession, HifzSession, QAfterSortBy> thenByHasanatDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'hasanat', Sort.desc);
+    });
+  }
+
   QueryBuilder<HifzSession, HifzSession, QAfterSortBy> thenById() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.asc);
@@ -1060,6 +1147,12 @@ extension HifzSessionQueryWhereDistinct
     });
   }
 
+  QueryBuilder<HifzSession, HifzSession, QDistinct> distinctByHasanat() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'hasanat');
+    });
+  }
+
   QueryBuilder<HifzSession, HifzSession, QDistinct> distinctByMethod(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -1115,6 +1208,12 @@ extension HifzSessionQueryProperty
   QueryBuilder<HifzSession, int, QQueryOperations> fromVerseProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'fromVerse');
+    });
+  }
+
+  QueryBuilder<HifzSession, int, QQueryOperations> hasanatProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'hasanat');
     });
   }
 

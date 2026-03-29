@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:quran/quran.dart' as quran;
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -20,7 +21,13 @@ import 'package:sila_app/features/hifz/services/hifz_audio_session_manager.dart'
 import 'package:sila_app/features/quran/presentation/riverpod/audio_controller.dart';
 import 'package:sila_app/features/tasmi/domain/tajweed_normalizer.dart';
 import 'package:sila_app/features/tasmi/services/tasmi_speech_service.dart';
+import 'package:sila_app/core/services/sherpa_speech_service.dart';
+import 'package:sila_app/core/utils/dialog_utils.dart';
 import 'package:sila_app/features/vefa/presentation/pages/vefa_page.dart';
+import 'package:sila_app/features/ibadah_tracker/presentation/controllers/ibadah_tracker_controller.dart';
+import 'package:sila_app/features/wird/presentation/riverpod/wird_controller.dart';
+import 'package:sila_app/features/hifz/presentation/controllers/hifz_home_controller.dart';
+import 'package:sila_app/features/notifications/presentation/controllers/notification_providers.dart';
 
 part 'interactive_shadow_controller.g.dart';
 
@@ -178,6 +185,7 @@ class InteractiveShadowState {
 @riverpod
 class InteractiveShadowController extends _$InteractiveShadowController {
   TasmiSpeechService? _speechService;
+  SherpaSpeechService? _sherpaService;
   StreamSubscription<String>? _speechSubscription;
   HifzAudioSessionManager? _audioSessionManager;
   final List<HifzSession> _sessionRows = [];
@@ -190,14 +198,16 @@ class InteractiveShadowController extends _$InteractiveShadowController {
   bool _isEvaluatingRecitation = false;
   final Map<int, bool?> _inlineValidation = {};
   final Map<int, int> _wordAttempts = {};
+  Timer? _timer;
 
   @override
   InteractiveShadowState build() {
     ref.onDispose(() async {
       await _speechSubscription?.cancel();
       await _audioSessionManager?.dispose();
-      _speechService?.setActive(false); // FIX 3: Hifz shadow page left
+      _speechService?.setActive(false); 
       _speechService?.dispose();
+      _sherpaService?.dispose();
     });
     return InteractiveShadowState.initial();
   }
@@ -332,6 +342,7 @@ class InteractiveShadowController extends _$InteractiveShadowController {
       await _stopMic();
       return;
     }
+
     await _startMicDetailed();
   }
 
@@ -589,6 +600,14 @@ class InteractiveShadowController extends _$InteractiveShadowController {
     await _ensureAudioSessionManager();
     state = state.copyWith(clearErrorMessage: true);
 
+    _sherpaService = SherpaSpeechService();
+    final useSherpa = await _sherpaService!.isModelAvailable();
+
+    if (useSherpa) {
+      await _startSherpaMic();
+      return;
+    }
+
     final available = await _speechService!.initialize();
     if (!available) {
       state = state.copyWith(
@@ -641,6 +660,36 @@ class InteractiveShadowController extends _$InteractiveShadowController {
     }
 
     state = state.copyWith(errorMessage: 'error_mic_final'.tr());
+  }
+
+  Future<void> _startSherpaMic() async {
+    state = state.copyWith(isMicListening: true, clearErrorMessage: true);
+    try {
+      await _sherpaService!.init();
+      await _speechSubscription?.cancel();
+      
+      String lastResult = '';
+      _speechSubscription = _sherpaService!.resultStream.listen((text) {
+        lastResult = text;
+        state = state.copyWith(clearErrorMessage: true);
+      });
+
+      await _sherpaService!.startListening();
+      
+      // Listen for a fixed duration or until result is stable
+      await Future<void>.delayed(const Duration(seconds: 8));
+      
+      await _sherpaService!.stopListening();
+      state = state.copyWith(isMicListening: false);
+
+      if (lastResult.isNotEmpty) {
+        await onUserRecited(lastResult);
+      } else {
+        state = state.copyWith(errorMessage: 'error_mic_retry'.tr());
+      }
+    } catch (e) {
+      state = state.copyWith(isMicListening: false, errorMessage: e.toString());
+    }
   }
 
   Future<void> _stopMic() async {
@@ -749,12 +798,24 @@ class InteractiveShadowController extends _$InteractiveShadowController {
           ..date = DateTime.now()
           ..correctWords = _stageCorrect
           ..wrongWords = _stageWrong
+          ..hasanat = state.sessionHashanat // Persist accurate character-based hasanat
           ..durationSeconds = duration.inSeconds,
       );
     }
+    
+    // Refresh global dashboards
+    _refreshGlobalDashboards();
+  }
+
+  void _refreshGlobalDashboards() {
+    ref.invalidate(hifzHomeControllerProvider);
+    ref.invalidate(ibadahTrackerControllerProvider);
+    ref.invalidate(wirdControllerProvider);
+    ref.invalidate(streakTrackerProvider);
   }
 
   Future<void> _finishSession() async {
+    HapticFeedback.mediumImpact();
     final repository = await ref.read(hifzRepositoryProvider.future);
     var totalCorrect = 0;
     var totalWrong = 0;

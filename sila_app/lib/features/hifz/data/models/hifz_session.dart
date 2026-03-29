@@ -14,4 +14,5 @@ class HifzSession {
   late int correctWords;
   late int wrongWords;
   late int durationSeconds;
+  int hasanat = 0;
 }

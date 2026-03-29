@@ -10,7 +10,7 @@ abstract class INotificationRepository {
   Future<void> saveContent(NotificationContent content);
 
   Future<NotificationSettings> getSettings(String featureKey);
-  Future<List<NotificationSettings>> getAllSettings();
+  Future<List<NotificationSettings>> getAllSettings({int? limit});
   Future<void> saveSettings(NotificationSettings settings);
 
   Future<UserActivityLog> getActivityLog(String featureKey);

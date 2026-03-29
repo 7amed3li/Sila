@@ -5,6 +5,9 @@ import 'package:sila_app/features/ibadah_tracker/data/repositories/i_ibadah_repo
 import 'package:sila_app/features/ibadah_tracker/data/repositories/isar_ibadah_repository.dart';
 import 'package:sila_app/features/ibadah_tracker/domain/daily_status_calculator.dart';
 import 'package:sila_app/features/vefa/presentation/riverpod/vefa_providers.dart';
+import 'package:sila_app/features/hifz/presentation/controllers/hifz_home_controller.dart';
+import 'package:sila_app/features/notifications/presentation/controllers/notification_providers.dart';
+import 'package:sila_app/features/wird/presentation/riverpod/wird_controller.dart';
 
 class IbadahTrackerState {
 
@@ -34,13 +37,17 @@ final ibadahRepositoryProvider = FutureProvider<IIbadahRepository>((ref) async {
 });
 
 class IbadahTrackerController extends StateNotifier<AsyncValue<IbadahTrackerState>> {
-  IbadahTrackerController({required Future<IIbadahRepository> repositoryFuture})
-    : _repositoryFuture = repositoryFuture,
-      super(const AsyncValue.loading()) {
+  IbadahTrackerController({
+    required Future<IIbadahRepository> repositoryFuture,
+    required Ref ref,
+  })  : _repositoryFuture = repositoryFuture,
+        _ref = ref,
+        super(const AsyncValue.loading()) {
     load();
   }
 
   final Future<IIbadahRepository> _repositoryFuture;
+  final Ref _ref;
 
   DateTime _normalize(DateTime date) => DateTime(date.year, date.month, date.day);
 
@@ -114,6 +121,7 @@ class IbadahTrackerController extends StateNotifier<AsyncValue<IbadahTrackerStat
     final repository = await _repositoryFuture;
     await repository.setGenderPrefs(isMale: isMale);
     await load();
+    _refreshGlobalDashboards();
   }
 
   Future<void> updatePrayerStatus({required String prayer, required int status}) async {
@@ -122,6 +130,7 @@ class IbadahTrackerController extends StateNotifier<AsyncValue<IbadahTrackerStat
     final repository = await _repositoryFuture;
     await repository.updatePrayerStatus(date: current.today.date, prayer: prayer, status: status);
     await load();
+    _refreshGlobalDashboards();
   }
 
   Future<void> updateMasjidStatus({required String prayer, required bool inMasjid}) async {
@@ -134,6 +143,7 @@ class IbadahTrackerController extends StateNotifier<AsyncValue<IbadahTrackerStat
       inMasjid: inMasjid,
     );
     await load();
+    _refreshGlobalDashboards();
   }
 
   Future<void> updateBoolStatus({required String key, required bool value}) async {
@@ -142,6 +152,7 @@ class IbadahTrackerController extends StateNotifier<AsyncValue<IbadahTrackerStat
     final repository = await _repositoryFuture;
     await repository.updateBoolStatus(date: current.today.date, key: key, value: value);
     await load();
+    _refreshGlobalDashboards();
   }
 
   Future<void> updatePersonalNote(String note) async {
@@ -150,6 +161,13 @@ class IbadahTrackerController extends StateNotifier<AsyncValue<IbadahTrackerStat
     final repository = await _repositoryFuture;
     await repository.updatePersonalNote(date: current.today.date, note: note);
     await load();
+    _refreshGlobalDashboards();
+  }
+
+  void _refreshGlobalDashboards() {
+    _ref.invalidate(streakTrackerProvider);
+    _ref.invalidate(hifzHomeControllerProvider);
+    _ref.invalidate(wirdControllerProvider);
   }
 }
 
@@ -158,5 +176,5 @@ final ibadahTrackerControllerProvider = StateNotifierProvider<
   AsyncValue<IbadahTrackerState>
 >((ref) {
   final repoFuture = ref.watch(ibadahRepositoryProvider.future);
-  return IbadahTrackerController(repositoryFuture: repoFuture);
+  return IbadahTrackerController(repositoryFuture: repoFuture, ref: ref);
 });

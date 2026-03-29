@@ -12,6 +12,8 @@ class PrefsService {
   static const String _keyAdhanSound = 'adhan_sound';
   static const String _keyNeverShowNotificationPrompt =
       'never_show_notification_prompt';
+  static const String _keyPrayerTimesCache = 'prayer_times_cache';
+  static const String _keyPrayerTimesLastFetch = 'prayer_times_last_fetch';
 
   // PERF FIX 4: Cache SharedPreferences instance to avoid re-fetching on every call
   static SharedPreferences? _prefs;
@@ -35,6 +37,7 @@ class PrefsService {
   Future<void> setAutoLocation(bool value) async {
     final prefs = await _instance; // PERF FIX 4
     await prefs.setBool(_keyIsAutoLocation, value);
+    await clearPrayerTimesCache();
   }
 
   Future<bool> isAutoLocation() async {
@@ -54,6 +57,7 @@ class PrefsService {
     await prefs.setString(_keyCity, cityName);
     await prefs.setString(_keyCountryCode, countryCode);
     await prefs.setBool(_keyIsAutoLocation, false);
+    await clearPrayerTimesCache();
   }
 
   Future<Map<String, dynamic>?> getStoredLocation() async {
@@ -87,6 +91,7 @@ class PrefsService {
   Future<void> setCalculationMethod(String method) async {
     final prefs = await _instance; // PERF FIX 4
     await prefs.setString(_keyCalculationMethod, method);
+    await clearPrayerTimesCache();
   }
 
   // ─── Adhan Settings ───────────────────────────────────────────────────────
@@ -133,5 +138,30 @@ class PrefsService {
   Future<String?> getPlannedNotifications() async {
     final prefs = await _instance; // PERF FIX 4
     return prefs.getString(_keyPlannedNotifications);
+  }
+
+  // ─── Prayer Times Cache ───────────────────────────────────────────────────
+
+  Future<void> savePrayerTimesCache(String json) async {
+    final prefs = await _instance;
+    await prefs.setString(_keyPrayerTimesCache, json);
+    await prefs.setString(_keyPrayerTimesLastFetch, DateTime.now().toIso8601String());
+  }
+
+  Future<String?> getPrayerTimesCache() async {
+    final prefs = await _instance;
+    return prefs.getString(_keyPrayerTimesCache);
+  }
+
+  Future<DateTime?> getPrayerTimesLastFetch() async {
+    final prefs = await _instance;
+    final iso = prefs.getString(_keyPrayerTimesLastFetch);
+    return iso != null ? DateTime.parse(iso) : null;
+  }
+
+  Future<void> clearPrayerTimesCache() async {
+    final prefs = await _instance;
+    await prefs.remove(_keyPrayerTimesCache);
+    await prefs.remove(_keyPrayerTimesLastFetch);
   }
 }

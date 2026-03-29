@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:adhan/adhan.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:sila_app/core/services/location_service.dart';
@@ -13,8 +14,31 @@ class PrayerRepositoryImpl extends PrayerRepository {
 
   @override
   Future<PrayerTimesEntity> getPrayerTimes() async {
-    final locService = LocationService();
     final prefs = PrefsService();
+    
+    // 1. Try to get from cache first
+    try {
+      final cachedJson = await prefs.getPrayerTimesCache();
+      final lastFetch = await prefs.getPrayerTimesLastFetch();
+      final now = DateTime.now();
+      
+      if (cachedJson != null && lastFetch != null) {
+        // Cache is valid if it's the same day AND less than 12 hours old
+        final isSameDay = lastFetch.year == now.year && 
+                          lastFetch.month == now.month && 
+                          lastFetch.day == now.day;
+        final isRecent = now.difference(lastFetch).inHours < 12;
+        
+        if (isSameDay && isRecent) {
+          return PrayerTimesEntity.fromJson(jsonDecode(cachedJson));
+        }
+      }
+    } catch (e) {
+      print('Cache Read Error: $e');
+    }
+
+    // 2. If no valid cache, fetch fresh
+    final locService = LocationService();
 
     var lat = _defaultLat;
     var long = _defaultLong;
@@ -34,8 +58,6 @@ class PrayerRepositoryImpl extends PrayerRepository {
         city = locationInfo['city'] ?? _defaultCity;
         countryCode = locationInfo['countryCode'] ?? 'TR';
 
-        // ONLY Auto-select calculation method if the country actually changed
-        // This prevents overwriting the user's manual method choice on every reload
         if (oldCountryCode != countryCode) {
           final autoMethod = _getMethodForCountry(countryCode);
           await prefs.setCalculationMethod(autoMethod);
@@ -60,15 +82,10 @@ class PrayerRepositoryImpl extends PrayerRepository {
       print('Location Error: $e');
     }
 
-    // Get calculation method from preferences
     final methodString = await prefs.getCalculationMethod();
     final params = _getCalculationParams(methodString);
-
     final myCoordinates = Coordinates(lat, long);
     final date = DateComponents.from(DateTime.now());
-
-    // Use the device's local timezone offset — this is the most reliable way
-    // to ensure prayer times align with what the user sees on their clock.
     final utcOffset = DateTime.now().timeZoneOffset;
 
     final prayerTimes = PrayerTimes(
@@ -78,15 +95,11 @@ class PrayerRepositoryImpl extends PrayerRepository {
       utcOffset: utcOffset,
     );
 
-    // The adhan library with utcOffset returns DateTime objects where:
-    //   - isUtc = true  (the kind is UTC)
-    //   - but the hour/minute values are already LOCAL (shifted by utcOffset)
-    // So we must read the hour/minute/second directly and create a LOCAL DateTime.
     DateTime toLocal(DateTime dt) {
       return DateTime(dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second);
     }
 
-    return PrayerTimesEntity(
+    final entity = PrayerTimesEntity(
       fajr: toLocal(prayerTimes.fajr),
       sunrise: toLocal(prayerTimes.sunrise),
       dhuhr: toLocal(prayerTimes.dhuhr),
@@ -99,44 +112,38 @@ class PrayerRepositoryImpl extends PrayerRepository {
       countryCode: countryCode,
       calculationMethod: methodString,
     );
+
+    // 3. Save to cache
+    try {
+      await prefs.savePrayerTimesCache(jsonEncode(entity.toJson()));
+    } catch (e) {
+      print('Cache Save Error: $e');
+    }
+
+    return entity;
   }
 
   @override
   Future<Prayer> getNextPrayer() async {
-    final prefs = PrefsService();
-    final locService = LocationService();
+    final times = await getPrayerTimes();
+    final now = DateTime.now();
 
-    var lat = _defaultLat;
-    var long = _defaultLong;
+    final prayers = [
+      (prayer: Prayer.fajr, time: times.fajr),
+      (prayer: Prayer.sunrise, time: times.sunrise),
+      (prayer: Prayer.dhuhr, time: times.dhuhr),
+      (prayer: Prayer.asr, time: times.asr),
+      (prayer: Prayer.maghrib, time: times.maghrib),
+      (prayer: Prayer.isha, time: times.isha),
+    ];
 
-    try {
-      final isAuto = await prefs.isAutoLocation();
-      if (isAuto) {
-        final position = await locService.determinePosition();
-        lat = position.latitude;
-        long = position.longitude;
-      } else {
-        final stored = await prefs.getStoredLocation();
-        if (stored != null) {
-          lat = stored['lat'] as double;
-          long = stored['long'] as double;
-        }
+    for (final p in prayers) {
+      if (p.time.isAfter(now)) {
+        return p.prayer;
       }
-    } catch (e) {
-      print('Location Error in getNextPrayer: $e');
     }
 
-    final methodString = await prefs.getCalculationMethod();
-    final params = _getCalculationParams(methodString);
-
-    final myCoordinates = Coordinates(lat, long);
-    final date = DateComponents.from(DateTime.now());
-
-    // Use same utcOffset as getPrayerTimes for consistency
-    final utcOffset = DateTime.now().timeZoneOffset;
-    final prayerTimes = PrayerTimes(myCoordinates, date, params, utcOffset: utcOffset);
-
-    return prayerTimes.nextPrayer();
+    return Prayer.fajr; // For tomorrow
   }
 
   /// Automatically pick the correct calculation method for a given country.
