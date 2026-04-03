@@ -198,7 +198,7 @@
     "shadow_hint_text": "يمكنك إكمال المخفي بالكتابة أو اختبار نفسك بالمايك",
     "stage_1_title": "المرحلة ١ — السماع والتركيز",
     "stage_2_title": "المرحلة ٢ — التظليل والمحاكاة",
-    "stage_3_title": "المرحلة ٣ — اختبار جزئي (٣٠٪)",
+    "stage_3_title": "المرحلة ٣ — اختبار جزئي (٢٠٪)",
     "stage_4_title": "المرحلة ٤ — اختبار متقدم (٦٠٪)",
     "stage_5_title": "المرحلة ٥ — التسميع من الذاكرة",
     "stage_generic": "المرحلة",
@@ -891,6 +891,11 @@
     "update_retry": "إعادة المحاولة",
     "update_install": "تثبيت",
     "update_dialog_title": "تحديث جديد متاح ⬆️",
-    "update_dialog_message": "يوجد إصدار جديد من التطبيق. حدّث الآن للحصول على آخر المميزات."
+    "update_dialog_message": "يوجد إصدار جديد من التطبيق. حدّث الآن للحصول على آخر المميزات.",
+    "recitation_mode_title": "كيف تريد المراجعة؟",
+    "recitation_mode_full_verse_title": "اقرأ الآية كاملة",
+    "recitation_mode_full_verse_subtitle": "قل الآية من أولها لآخرها",
+    "recitation_mode_missing_only_title": "أكمل الناقص فقط",
+    "recitation_mode_missing_only_subtitle": "قل الكلمات المخفية فقط بالترتيب"
 
 }

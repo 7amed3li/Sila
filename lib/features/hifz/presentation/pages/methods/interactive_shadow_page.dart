@@ -9,11 +9,13 @@ import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:quran/quran.dart' as quran;
 import 'package:sila_app/core/presentation/widgets/reciter_picker_sheet.dart';
 import 'package:sila_app/core/providers/reciter_provider.dart';
+import 'package:sila_app/core/services/device_permission_service.dart';
 import 'package:sila_app/core/theme/app_theme.dart';
 import 'package:sila_app/core/utils/surah_utils.dart';
 import 'package:sila_app/features/hifz/data/models/hifz_user_profile.dart';
 import 'package:sila_app/features/hifz/data/repositories/hifz_repository_provider.dart';
 import 'package:sila_app/features/hifz/presentation/controllers/interactive_shadow_controller.dart';
+import 'package:sila_app/features/hifz/presentation/services/hifz_onboarding_check.dart';
 import 'package:sila_app/features/quran/domain/entities/quran_settings.dart';
 import 'package:sila_app/features/quran/presentation/riverpod/quran_settings_controller.dart';
 import 'package:sila_app/features/quran/presentation/utils/quran_ui_utils.dart';
@@ -27,9 +29,9 @@ const Color _errorColor = Color(0xFFF87171);
 class InteractiveShadowPage extends ConsumerStatefulWidget {
   const InteractiveShadowPage({
     super.key,
-    this.surahNumber = 1,
-    this.fromVerse = 1,
-    this.toVerse = 5,
+    required this.surahNumber,
+    required this.fromVerse,
+    required this.toVerse,
   });
   final int surahNumber;
   final int fromVerse;
@@ -47,8 +49,10 @@ class _InteractiveShadowPageState extends ConsumerState<InteractiveShadowPage>
   final Map<int, FocusNode> _inlineFocusNodes = {};
   late final AnimationController _flashController;
   late final AnimationController _waveController;
+  late Future<bool> _showMiuiBatteryBannerFuture;
   bool _isNextBusy = false;
   int _lastInputsStateHash = 0;
+  bool _sessionBootstrapped = false;
 
   @override
   void initState() {
@@ -58,14 +62,158 @@ class _InteractiveShadowPageState extends ConsumerState<InteractiveShadowPage>
     _waveController = AnimationController(
         vsync: this, duration: const Duration(milliseconds: 1100));
     _waveController.repeat(reverse: true);
+    _showMiuiBatteryBannerFuture = _shouldShowMiuiBatteryBanner();
 
-    Future<void>.microtask(() {
-      ref.read(interactiveShadowControllerProvider.notifier).startSession(
-            surahNumber: widget.surahNumber,
-            fromVerse: widget.fromVerse,
-            toVerse: widget.toVerse,
-          );
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await _bootstrapSession();
     });
+  }
+
+  Future<void> _bootstrapSession() async {
+    if (_sessionBootstrapped || !mounted) {
+      return;
+    }
+
+    _sessionBootstrapped = true;
+
+    try {
+      await HifzOnboardingCheck.checkAndRequest(context);
+    } catch (e) {
+      debugPrint('HifzOnboardingCheck failed: $e');
+    }
+
+    if (!mounted) {
+      return;
+    }
+
+    setState(() {
+      _showMiuiBatteryBannerFuture = _shouldShowMiuiBatteryBanner();
+    });
+
+    await _startSessionWithMode();
+  }
+
+  Future<bool> _shouldShowMiuiBatteryBanner() async {
+    final isMiui = await DevicePermissionService.isMiuiDevice();
+    if (!isMiui) {
+      return false;
+    }
+    return !(await DevicePermissionService.isBatteryExempted());
+  }
+
+  Widget _buildMiuiBatteryBanner() {
+    return FutureBuilder<bool>(
+      future: _showMiuiBatteryBannerFuture,
+      builder: (context, snapshot) {
+        if (snapshot.data != true) {
+          return const SizedBox.shrink();
+        }
+
+        return Container(
+          margin: const EdgeInsets.fromLTRB(12, 0, 12, 8),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          decoration: BoxDecoration(
+            color: Colors.orange.shade50,
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: Colors.orange.shade200),
+          ),
+          child: Row(
+            children: [
+              const Icon(Icons.mic_off, color: Colors.orange, size: 20),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  'الميكروفون يحتاج إذنا إضافيا',
+                  style: GoogleFonts.cairo(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.orange.shade900,
+                  ),
+                ),
+              ),
+              TextButton(
+                onPressed: () async {
+                  await DevicePermissionService.requestBatteryExemption();
+                  if (!mounted) {
+                    return;
+                  }
+                  setState(() {
+                    _showMiuiBatteryBannerFuture = _shouldShowMiuiBatteryBanner();
+                  });
+                },
+                child: Text(
+                  'تفعيل',
+                  style: GoogleFonts.cairo(fontWeight: FontWeight.w700),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _startSessionWithMode() async {
+    final controller = ref.read(interactiveShadowControllerProvider.notifier);
+    RecitationCompletionMode selectedMode = RecitationCompletionMode.fullVerse;
+    try {
+      selectedMode =
+          await _showCompletionModeDialog(context) ?? RecitationCompletionMode.fullVerse;
+    } catch (e) {
+      debugPrint('Recitation mode dialog failed: $e');
+    }
+
+    controller.setRecitationCompletionMode(selectedMode);
+    await controller.startSession(
+      surahNumber: widget.surahNumber,
+      fromVerse: widget.fromVerse,
+      toVerse: widget.toVerse,
+    );
+  }
+
+  Future<RecitationCompletionMode?> _showCompletionModeDialog(
+      BuildContext context) {
+    return showDialog<RecitationCompletionMode>(
+      context: context,
+      barrierDismissible: true,
+      builder: (ctx) => AlertDialog(
+        title: Text(
+          'recitation_mode_title'.tr(),
+          style: GoogleFonts.cairo(fontWeight: FontWeight.w700),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.mic_rounded),
+              title: Text(
+                'recitation_mode_full_verse_title'.tr(),
+                style: GoogleFonts.cairo(fontWeight: FontWeight.w700),
+              ),
+              subtitle: Text(
+                'recitation_mode_full_verse_subtitle'.tr(),
+                style: GoogleFonts.cairo(fontSize: 12),
+              ),
+              onTap: () =>
+                  Navigator.pop(ctx, RecitationCompletionMode.fullVerse),
+            ),
+            ListTile(
+              leading: const Icon(Icons.edit_note_rounded),
+              title: Text(
+                'recitation_mode_missing_only_title'.tr(),
+                style: GoogleFonts.cairo(fontWeight: FontWeight.w700),
+              ),
+              subtitle: Text(
+                'recitation_mode_missing_only_subtitle'.tr(),
+                style: GoogleFonts.cairo(fontSize: 12),
+              ),
+              onTap: () =>
+                  Navigator.pop(ctx, RecitationCompletionMode.missingOnly),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   @override
@@ -209,6 +357,7 @@ class _InteractiveShadowPageState extends ConsumerState<InteractiveShadowPage>
                             );
                           },
                         ),
+                        _buildMiuiBatteryBanner(),
                         _StageBanner(stage: state.currentStage),
                         Expanded(
                           child: AnimatedSwitcher(
@@ -617,6 +766,19 @@ class _StageContent extends ConsumerWidget {
     final pageState =
         context.findAncestorStateOfType<_InteractiveShadowPageState>();
     final controller = ref.read(interactiveShadowControllerProvider.notifier);
+    final settings = ref.watch(quranSettingsControllerProvider).valueOrNull ??
+        const QuranSettings(
+            fontSize: 26,
+            fontFamily: 'Scheherazade New',
+            themeMode: QuranThemeMode.sepia);
+    final textColor = QuranUIUtils.getTextColor(settings.themeMode);
+
+    final fallbackAyah = state.fromVerse + state.currentVerseIndex;
+    final fallbackVerse = quran.getVerse(
+      state.surahNumber,
+      fallbackAyah,
+      verseEndSymbol: false,
+    );
 
     final color = ColorTween(
       begin: Colors.transparent,
@@ -630,13 +792,36 @@ class _StageContent extends ConsumerWidget {
           width: double.infinity,
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           color: color.value,
-          child: Directionality(
-            textDirection: ui.TextDirection.rtl,
-            child: Wrap(
-              spacing: 6,
-              runSpacing: 8,
-              alignment: WrapAlignment.center,
-              children: state.words.asMap().entries.map((entry) {
+          child: state.words.isEmpty
+              ? Directionality(
+                  textDirection: ui.TextDirection.rtl,
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: textColor.withValues(alpha: 0.04),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Text(
+                      fallbackVerse,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 24,
+                        color: textColor,
+                        height: 1.6,
+                        fontFamily: settings.fontFamily,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                )
+              : Directionality(
+                  textDirection: ui.TextDirection.rtl,
+                  child: Wrap(
+                    spacing: 6,
+                    runSpacing: 8,
+                    alignment: WrapAlignment.center,
+                    children: state.words.asMap().entries.map((entry) {
                 final index = entry.key;
                 final word = entry.value;
 
@@ -671,7 +856,7 @@ class _StageContent extends ConsumerWidget {
                 );
               }).toList(),
             ),
-          ),
+                ),
         );
       },
     );

@@ -62,6 +62,11 @@ class StageResult {
   final int wrongWords;
 }
 
+enum RecitationCompletionMode {
+  fullVerse,
+  missingOnly,
+}
+
 class InteractiveShadowState {
   const InteractiveShadowState({
     required this.surahNumber,
@@ -177,6 +182,15 @@ class InteractiveShadowState {
 
 @riverpod
 class InteractiveShadowController extends _$InteractiveShadowController {
+  static const int _maxStages = 5;
+  static const Map<int, double> _stageHideRatio = {
+    1: 0.0,
+    2: 0.0,
+    3: 0.20,
+    4: 0.60,
+    5: 1.00,
+  };
+
   TasmiSpeechService? _speechService;
   StreamSubscription<String>? _speechSubscription;
   HifzAudioSessionManager? _audioSessionManager;
@@ -188,8 +202,13 @@ class InteractiveShadowController extends _$InteractiveShadowController {
   DateTime? _stageStartedAt;
   bool _isAdvancing = false;
   bool _isEvaluatingRecitation = false;
+  RecitationCompletionMode _completionMode = RecitationCompletionMode.fullVerse;
   final Map<int, bool?> _inlineValidation = {};
   final Map<int, int> _wordAttempts = {};
+
+  void setRecitationCompletionMode(RecitationCompletionMode mode) {
+    _completionMode = mode;
+  }
 
   @override
   InteractiveShadowState build() {
@@ -207,6 +226,10 @@ class InteractiveShadowController extends _$InteractiveShadowController {
     required int fromVerse,
     required int toVerse,
   }) async {
+    final maxVerse = quran.getVerseCount(surahNumber);
+    final safeFrom = fromVerse.clamp(1, maxVerse);
+    final safeTo = toVerse.clamp(safeFrom, maxVerse);
+
     unawaited(
       ref
           .read(analyticsServiceProvider)
@@ -219,8 +242,8 @@ class InteractiveShadowController extends _$InteractiveShadowController {
 
     state = state.copyWith(
       surahNumber: surahNumber,
-      fromVerse: fromVerse,
-      toVerse: toVerse,
+      fromVerse: safeFrom,
+      toVerse: safeTo,
       currentVerseIndex: 0,
       currentStage: 1,
       sessionHashanat: 0,
@@ -234,6 +257,10 @@ class InteractiveShadowController extends _$InteractiveShadowController {
       clearErrorMessage: true,
       sessionMoments: const [],
     );
+    debugPrint(
+      'InteractiveShadow startSession surah=$surahNumber from=$safeFrom to=$safeTo',
+    );
+
     _sessionRows.clear();
     _alreadyHidden.clear();
     _inlineValidation.clear();
@@ -253,8 +280,9 @@ class InteractiveShadowController extends _$InteractiveShadowController {
     _isAdvancing = true;
     try {
       _captureStageStats();
-      if (state.currentStage < 5) {
+      if (state.currentStage < _maxStages) {
         state = state.copyWith(currentStage: state.currentStage + 1);
+        debugPrint('InteractiveShadow move to stage=${state.currentStage}');
         await _applyHidingForStage();
         await _runCurrentStage();
         return;
@@ -377,6 +405,7 @@ class InteractiveShadowController extends _$InteractiveShadowController {
         hiddenWords: hiddenWords,
         mode: _settings.readVerificationMode(),
         ignoreDiacritics: _settings.hideVisibleDiacritics,
+        orderedMatch: _completionMode == RecitationCompletionMode.missingOnly,
       );
 
       var correct = 0;
@@ -391,7 +420,16 @@ class InteractiveShadowController extends _$InteractiveShadowController {
               words[idx].copyWith(isHidden: false, revealedCorrectly: true);
           correct++;
         } else {
-          wrong++;
+          final wasAbsent = _isWordAbsentFromSpoken(hiddenWords[i], recitedText);
+          if (!wasAbsent) {
+            // The user spoke it but incorrectly.
+            wrong++;
+          }
+          if (wasAbsent &&
+              _completionMode == RecitationCompletionMode.missingOnly) {
+            // In missing-only mode, absent hidden words are counted as wrong.
+            wrong++;
+          }
         }
       }
 
@@ -583,6 +621,14 @@ class InteractiveShadowController extends _$InteractiveShadowController {
       }
       return;
     }
+
+    // Stages 3-5 are progressive hidden-word stages.
+    await _applyHidingForStage();
+    state = state.copyWith(
+      isMicListening: false,
+      isPlaying: false,
+      clearErrorMessage: true,
+    );
   }
 
   Future<void> _startMicDetailed() async {
@@ -676,8 +722,17 @@ class InteractiveShadowController extends _$InteractiveShadowController {
 
   Future<void> _loadCurrentVerseWords() async {
     final ayah = state.fromVerse + state.currentVerseIndex;
-    final verse =
-        quran.getVerse(state.surahNumber, ayah, verseEndSymbol: false);
+    String verse;
+    try {
+      verse = quran.getVerse(state.surahNumber, ayah, verseEndSymbol: false);
+    } catch (_) {
+      state = state.copyWith(
+        words: const [],
+        errorMessage: 'تعذر تحميل نص الآية الحالية',
+      );
+      return;
+    }
+
     final words = verse
         .split(' ')
         .where((w) => w.trim().isNotEmpty)
@@ -690,6 +745,15 @@ class InteractiveShadowController extends _$InteractiveShadowController {
           ),
         )
         .toList();
+
+    if (words.isEmpty) {
+      state = state.copyWith(
+        words: const [],
+        errorMessage: 'تعذر تجهيز كلمات الآية الحالية',
+      );
+      return;
+    }
+
     state = state.copyWith(words: words);
     _inlineValidation.clear();
     _wordAttempts.clear();
@@ -698,16 +762,28 @@ class InteractiveShadowController extends _$InteractiveShadowController {
 
   Future<void> _applyHidingForStage() async {
     final base = List<ShadowWordEntry>.from(state.words);
-    if (state.currentStage <= 2) {
+    final target = _stageHideRatio[state.currentStage] ?? 0.0;
+
+    if (target <= 0) {
       state = state.copyWith(
-          words: base.map((e) => e.copyWith(isHidden: false)).toList());
+        words: base
+            .map(
+              (e) => e.copyWith(
+                isHidden: false,
+                revealedCorrectly: false,
+              ),
+            )
+            .toList(),
+      );
       return;
     }
 
-    final percentages = {3: 0.30, 4: 0.60, 5: 1.0};
-    final target = percentages[state.currentStage] ?? 0.30;
     final plainWords = base.map((e) => e.word).toList();
     final hidden = selectWordsToHide(plainWords, target, _alreadyHidden);
+    if (hidden.isEmpty && base.isNotEmpty) {
+      hidden.add(0);
+    }
+
     _alreadyHidden
       ..clear()
       ..addAll(hidden);
@@ -717,12 +793,18 @@ class InteractiveShadowController extends _$InteractiveShadowController {
     final next = <ShadowWordEntry>[];
     for (var i = 0; i < base.length; i++) {
       final prev = base[i];
-      if (prev.revealedCorrectly) {
-        next.add(prev.copyWith(isHidden: false));
-        continue;
-      }
-      next.add(prev.copyWith(isHidden: hidden.contains(i)));
+      next.add(
+        prev.copyWith(
+          isHidden: hidden.contains(i),
+          // Reveal state is per-stage only; reset when advancing stage.
+          revealedCorrectly: false,
+        ),
+      );
     }
+
+    debugPrint(
+      'InteractiveShadow stage=${state.currentStage} hidden=${hidden.length}/${base.length} target=${(target * 100).toStringAsFixed(0)}%',
+    );
 
     state = state.copyWith(words: next);
   }
@@ -850,6 +932,18 @@ class InteractiveShadowController extends _$InteractiveShadowController {
   bool _looksLikeSuffixWord(String word) {
     const suffixes = ['ون', 'ين', 'ات', 'ان', 'هم', 'كم', 'نا', 'ه'];
     return suffixes.any(word.endsWith);
+  }
+
+  bool _isWordAbsentFromSpoken(String hiddenWord, String spokenText) {
+    final normalizedHidden = TajweedNormalizer.normalizeForComparison(
+      hiddenWord,
+      ignoreDiacritics: _settings.hideVisibleDiacritics,
+    );
+    final normalizedSpoken = TajweedNormalizer.normalizeForComparison(
+      spokenText,
+      ignoreDiacritics: _settings.hideVisibleDiacritics,
+    );
+    return !normalizedSpoken.contains(normalizedHidden);
   }
 
   String get _verseText {

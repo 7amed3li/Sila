@@ -125,6 +125,12 @@ class AudioController extends _$AudioController {
 
   Future<void> stopAudio() async {
     await _singleton.player.stop();
+    try {
+      final session = await AudioSession.instance;
+      await session.setActive(false);
+    } catch (_) {
+      // Keep stop resilient even if session release fails.
+    }
     _singleton.currentUrl = null;
     _singleton.isLoading = false;
   }

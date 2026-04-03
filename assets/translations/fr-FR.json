@@ -178,7 +178,7 @@
   "shadow_hint_text": "Complétez les mots cachés en écrivant ou avec le micro",
   "stage_1_title": "Étape 1 — Écoute",
   "stage_2_title": "Étape 2 — Ombre",
-  "stage_3_title": "Étape 3 — 30% Caché",
+  "stage_3_title": "Étape 3 — 20% Caché",
   "stage_4_title": "Étape 4 — 60% Caché",
   "stage_5_title": "Étape 5 — 100% de Mémoire",
   "stage_generic": "Étape",
@@ -867,6 +867,11 @@
   "update_install": "Installer",
   "update_dialog_title": "Nouvelle mise à jour disponible ⬆️",
   "update_dialog_message": "Une nouvelle version est disponible. Mettez à jour maintenant pour obtenir les dernières fonctionnalités.",
+  "recitation_mode_title": "Comment voulez-vous réviser ?",
+  "recitation_mode_full_verse_title": "Réciter le verset complet",
+  "recitation_mode_full_verse_subtitle": "Dites le verset du début à la fin",
+  "recitation_mode_missing_only_title": "Compléter seulement les mots manquants",
+  "recitation_mode_missing_only_subtitle": "Dites uniquement les mots cachés dans l'ordre",
   "tafsir_label": "Tafsir",
   "translation_label": "Traduction"
 }

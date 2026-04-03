@@ -29,13 +29,27 @@ class HifzHomePage extends ConsumerStatefulWidget {
 }
 
 class _HifzHomePageState extends ConsumerState<HifzHomePage> {
+  Future<HifzSelection?> _pickSurahSelectionFlow({
+    required bool showAyahRange,
+  }) {
+    return Navigator.push<HifzSelection>(
+      context,
+      MaterialPageRoute(
+        builder: (_) => import_tasmi.TasmiSurahSelectionPage(
+          forHifz: true,
+          showAyahRange: showAyahRange,
+        ),
+      ),
+    );
+  }
+
   Future<HifzSelection?> _showHifzSelectionDialog(HifzHomeState state) async {
     final plan = state.plan;
-    return showModalBottomSheet<HifzSelection>(
+    final mode = await showModalBottomSheet<_HifzSelectionMode>(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (_) {
+      builder: (sheetContext) {
         return Container(
           decoration: BoxDecoration(
             color: Colors.white,
@@ -65,19 +79,8 @@ class _HifzHomePageState extends ConsumerState<HifzHomePage> {
                         : 'hifz_start'.tr(),
                     recommended: true,
                     onTap: () {
-                      const surahNumber = 1;
-                      final maxAyahs = quran.getVerseCount(surahNumber);
-                      final target =
-                          (plan?.newAyahsTarget ?? 5).clamp(1, maxAyahs);
                       Navigator.pop(
-                        context,
-                        HifzSelection(
-                          surahNumber: surahNumber,
-                          fromVerse: 1,
-                          toVerse: target,
-                          type: HifzSelectionType.dailyPlan,
-                        ),
-                      );
+                          sheetContext, _HifzSelectionMode.dailyPlan);
                     },
                   ),
                   const SizedBox(height: 10),
@@ -85,29 +88,9 @@ class _HifzHomePageState extends ConsumerState<HifzHomePage> {
                     icon: '📖',
                     title: 'complete_surah'.tr(),
                     subtitle: 'complete_surah_subtitle'.tr(),
-                    onTap: () async {
-                      Navigator.pop(context);
-                      final result = await Navigator.push<HifzSelection>(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) =>
-                              const import_tasmi.TasmiSurahSelectionPage(
-                            forHifz: true,
-                            showAyahRange: false,
-                          ),
-                        ),
-                      );
-                      if (!mounted || result == null) return;
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => InteractiveShadowPage(
-                            surahNumber: result.surahNumber,
-                            fromVerse: result.fromVerse,
-                            toVerse: result.toVerse,
-                          ),
-                        ),
-                      );
+                    onTap: () {
+                      Navigator.pop(
+                          sheetContext, _HifzSelectionMode.fullSurah);
                     },
                   ),
                   const SizedBox(height: 10),
@@ -115,29 +98,9 @@ class _HifzHomePageState extends ConsumerState<HifzHomePage> {
                     icon: '✂️',
                     title: 'verse_range'.tr(),
                     subtitle: 'verse_range_subtitle'.tr(args: ['X', 'Y']),
-                    onTap: () async {
-                      Navigator.pop(context);
-                      final result = await Navigator.push<HifzSelection>(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) =>
-                              const import_tasmi.TasmiSurahSelectionPage(
-                            forHifz: true,
-                            showAyahRange: true,
-                          ),
-                        ),
-                      );
-                      if (!mounted || result == null) return;
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => InteractiveShadowPage(
-                            surahNumber: result.surahNumber,
-                            fromVerse: result.fromVerse,
-                            toVerse: result.toVerse,
-                          ),
-                        ),
-                      );
+                    onTap: () {
+                      Navigator.pop(
+                          sheetContext, _HifzSelectionMode.ayahRange);
                     },
                   ),
                 ],
@@ -147,6 +110,28 @@ class _HifzHomePageState extends ConsumerState<HifzHomePage> {
         );
       },
     );
+
+    if (mode == null) {
+      return null;
+    }
+
+    if (mode == _HifzSelectionMode.dailyPlan) {
+      const surahNumber = 1;
+      final maxAyahs = quran.getVerseCount(surahNumber);
+      final target = (plan?.newAyahsTarget ?? 5).clamp(1, maxAyahs);
+      return HifzSelection(
+        surahNumber: surahNumber,
+        fromVerse: 1,
+        toVerse: target,
+        type: HifzSelectionType.dailyPlan,
+      );
+    }
+
+    if (mode == _HifzSelectionMode.fullSurah) {
+      return _pickSurahSelectionFlow(showAyahRange: false);
+    }
+
+    return _pickSurahSelectionFlow(showAyahRange: true);
   }
 
   void _showComingSoon(String featureName) {
@@ -413,7 +398,9 @@ class _HifzHomePageState extends ConsumerState<HifzHomePage> {
                     onInteractiveShadow: () async {
                       final selection = await _showHifzSelectionDialog(state);
                       if (selection == null || !mounted) return;
-                      controller.startSession('interactive_shadow');
+                      debugPrint(
+                        'Hifz selection -> surah=${selection.surahNumber}, from=${selection.fromVerse}, to=${selection.toVerse}, type=${selection.type}',
+                      );
                       Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (_) => InteractiveShadowPage(
@@ -485,6 +472,12 @@ class _HifzHomePageState extends ConsumerState<HifzHomePage> {
       ),
     );
   }
+}
+
+enum _HifzSelectionMode {
+  dailyPlan,
+  fullSurah,
+  ayahRange,
 }
 
 class _Header extends StatelessWidget {

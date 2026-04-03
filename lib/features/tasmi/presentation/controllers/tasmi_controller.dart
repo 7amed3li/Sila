@@ -119,6 +119,7 @@ class TasmiController extends _$TasmiController {
   StreamSubscription<String>? _speechSubscription;
   int? _surahNumber;
   bool _isProcessingWord = false;
+  bool _isStartingListening = false;
   Future<bool>? _startListeningFuture;
   final List<TasmiWordError> _sessionErrors = [];
 
@@ -551,17 +552,27 @@ class TasmiController extends _$TasmiController {
   }
 
   Future<bool> _safeStartListening() async {
+    if (_isStartingListening) {
+      final inFlight = _startListeningFuture;
+      if (inFlight != null) {
+        return await inFlight;
+      }
+      return false;
+    }
+
     final inFlight = _startListeningFuture;
     if (inFlight != null) {
       debugPrint('⚠️ startListening joined — already in progress');
       return await inFlight;
     }
 
+    _isStartingListening = true;
     final startFuture = _speechService.startListening();
     _startListeningFuture = startFuture;
     try {
       return await startFuture;
     } finally {
+      _isStartingListening = false;
       if (identical(_startListeningFuture, startFuture)) {
         _startListeningFuture = null;
       }

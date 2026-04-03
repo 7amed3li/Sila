@@ -30,6 +30,7 @@ class SmartWordMatcher {
     required List<String> hiddenWords,
     required HifzVerificationMode mode,
     bool ignoreDiacritics = true,
+    bool orderedMatch = false,
   }) {
     final normalizedSpoken = TajweedNormalizer.normalizeForComparison(
       spokenText,
@@ -48,6 +49,54 @@ class SmartWordMatcher {
       HifzVerificationMode.strict => 0.93,
     };
 
+    HifzWordMatchResult evaluatePair(String spokenWord, String hiddenWord) {
+      final exactMatch = TajweedNormalizer.compareWithMode(
+        spoken: spokenWord,
+        expected: hiddenWord,
+        ignoreDiacritics: false,
+        minSimilarity: 1.0,
+      );
+      if (exactMatch) {
+        return HifzWordMatchResult.correct;
+      }
+
+      if (spokenWord.contains(hiddenWord) || hiddenWord.contains(spokenWord)) {
+        return HifzWordMatchResult.partialCorrect;
+      }
+
+      if (mode != HifzVerificationMode.strict) {
+        final score = similarity(spokenWord, hiddenWord);
+        if (score >= strictMinSimilarity) {
+          return HifzWordMatchResult.fuzzyCorrect;
+        }
+      }
+
+      return HifzWordMatchResult.incorrect;
+    }
+
+    if (orderedMatch) {
+      for (var i = 0; i < hiddenWords.length; i++) {
+        final normalizedHidden = TajweedNormalizer.normalizeForComparison(
+          hiddenWords[i],
+          ignoreDiacritics: ignoreDiacritics,
+        );
+
+        if (normalizedHidden.isEmpty) {
+          results.add(HifzWordMatchResult.correct);
+          continue;
+        }
+
+        if (i >= spokenWords.length) {
+          results.add(HifzWordMatchResult.incorrect);
+          continue;
+        }
+
+        results.add(evaluatePair(spokenWords[i], normalizedHidden));
+      }
+
+      return HifzMatchResult(wordResults: results);
+    }
+
     for (final hidden in hiddenWords) {
       final normalizedHidden = TajweedNormalizer.normalizeForComparison(
         hidden,
@@ -59,14 +108,10 @@ class SmartWordMatcher {
         continue;
       }
 
-      final exactMatch = spokenWords.any(
-        (spokenWord) => TajweedNormalizer.compareWithMode(
-          spoken: spokenWord,
-          expected: normalizedHidden,
-          ignoreDiacritics: false,
-          minSimilarity: 1.0,
-        ),
-      );
+      final exactMatch = spokenWords.any((spokenWord) {
+        return evaluatePair(spokenWord, normalizedHidden) ==
+            HifzWordMatchResult.correct;
+      });
 
       if (exactMatch) {
         results.add(HifzWordMatchResult.correct);
@@ -74,7 +119,9 @@ class SmartWordMatcher {
       }
 
       if (spokenWords.any(
-        (w) => w.contains(normalizedHidden) || normalizedHidden.contains(w),
+        (w) =>
+            evaluatePair(w, normalizedHidden) ==
+            HifzWordMatchResult.partialCorrect,
       )) {
         results.add(HifzWordMatchResult.partialCorrect);
         continue;

@@ -193,7 +193,7 @@
   "shadow_hint_text": "You can complete the hidden by typing or test yourself with the mic",
   "stage_1_title": "Stage 1 — Listening & Focus",
   "stage_2_title": "Stage 2 — Shadowing & Echo",
-  "stage_3_title": "Stage 3 — Partial Recall (30%)",
+  "stage_3_title": "Stage 3 — Partial Recall (20%)",
   "stage_4_title": "Stage 4 — Advanced Recall (60%)",
   "stage_5_title": "Stage 5 — Full Recitation",
   "stage_generic": "Stage",
@@ -883,6 +883,11 @@
   "update_install": "Install",
   "update_dialog_title": "New Update Available ⬆️",
   "update_dialog_message": "A new version is available. Update now to get the latest features.",
+  "recitation_mode_title": "How do you want to review?",
+  "recitation_mode_full_verse_title": "Recite the full verse",
+  "recitation_mode_full_verse_subtitle": "Say the verse from beginning to end",
+  "recitation_mode_missing_only_title": "Complete only the missing words",
+  "recitation_mode_missing_only_subtitle": "Say only the hidden words in order",
   "tafsir_label": "Tafsir",
   "translation_label": "Translation"
 }

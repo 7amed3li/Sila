@@ -179,7 +179,7 @@
     "shadow_hint_text": "Gizli kelimeleri yazarak veya mikrofonla kendinizi test ederek tamamlayabilirsiniz",
     "stage_1_title": "Aşama 1 — Dinleme",
     "stage_2_title": "Aşama 2 — Gölgelendirme",
-    "stage_3_title": "Aşama 3 — %30 Gizli",
+    "stage_3_title": "Aşama 3 — %20 Gizli",
     "stage_4_title": "Aşama 4 — %60 Gizli",
     "stage_5_title": "Aşama 5 — Hafızadan Tamamı",
     "stage_generic": "Aşama",
@@ -860,6 +860,11 @@
       "update_install": "Yükle",
       "update_dialog_title": "Yeni Güncelleme Mevcut ⬆️",
       "update_dialog_message": "Yeni bir sürüm mevcut. En son özellikleri almak için şimdi güncelleyin.",
+      "recitation_mode_title": "Nasıl tekrar etmek istersiniz?",
+      "recitation_mode_full_verse_title": "Ayeti tam oku",
+      "recitation_mode_full_verse_subtitle": "Ayeti baştan sona oku",
+      "recitation_mode_missing_only_title": "Sadece eksikleri tamamla",
+      "recitation_mode_missing_only_subtitle": "Sadece gizli kelimeleri sırayla oku",
       "tafsir_label": "Tefsir",
       "translation_label": "Çeviri"
 }

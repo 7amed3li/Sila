@@ -207,6 +207,9 @@ class _TasmiSurahSelectionPageState extends State<TasmiSurahSelectionPage> {
   void _onSurahTapped(int surahNumber) {
     if (widget.forHifz && !widget.showAyahRange) {
       final toVerse = quran.getVerseCount(surahNumber);
+      debugPrint(
+        'TasmiSurahSelection (hifz full) tapped surah=$surahNumber toVerse=$toVerse',
+      );
       Navigator.pop(
         context,
         HifzSelection(
@@ -231,6 +234,9 @@ class _TasmiSurahSelectionPageState extends State<TasmiSurahSelectionPage> {
         ),
       ).then((result) {
         if (result != null && mounted) {
+          debugPrint(
+            'TasmiSurahSelection (hifz range) returning surah=${result.surahNumber}, from=${result.fromVerse}, to=${result.toVerse}',
+          );
           Navigator.pop(context, result);
         }
       });

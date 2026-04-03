@@ -29,6 +29,7 @@ dependencies:
   dio: ^5.9.2
   open_file: ^3.3.2
   package_info_plus: ^8.0.0
+  device_info_plus: ^10.1.2
 
   # UI & Localization
   easy_localization: ^3.0.3

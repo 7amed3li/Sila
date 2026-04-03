@@ -33,6 +33,10 @@ class TasmiSpeechService {
   Completer<void>? _ttsReleaseCompleter;
   Timer? _ttsResumeTimer;
   bool _isTtsExoPlayerActive = false;
+  bool _audioFocusGranted = false;
+  StreamSubscription<dynamic>? _audioFocusSubscription;
+  DateTime? _lastFocusInterruptionAt;
+  bool _focusRecoveryInProgress = false;
   bool _disposed = false;
 
   // ─── FIX 1+3: Audio focus conflict prevention ──────────────────────
@@ -49,11 +53,27 @@ class TasmiSpeechService {
     _isActive = active;
     debugPrint('STT setActive: $active');
     if (!active) {
+      _isManuallyStopped = true;
       // Page left — stop watchdog and restart timers immediately
       _restartTimer?.cancel();
       _watchdogTimer?.cancel();
       _watchdogTimer = null;
+      _ttsResumeTimer?.cancel();
       _isRestarting = false;
+      unawaited(_speech.cancel().catchError((_) {}));
+      _audioFocusGranted = false;
+      final subscription = _audioFocusSubscription;
+      _audioFocusSubscription = null;
+      if (subscription != null) {
+        unawaited(subscription.cancel());
+      }
+      unawaited(
+        AudioSession.instance
+            .then((session) => session.setActive(false))
+            .catchError((_) {}),
+      );
+    } else {
+      _isManuallyStopped = false;
     }
   }
 
@@ -61,6 +81,88 @@ class TasmiSpeechService {
   /// When audio is playing, STT will not auto-restart (avoids Audio Focus conflict).
   void setAudioPlayingCheck(bool Function() check) {
     _isAudioPlayingCheck = check;
+  }
+
+  Future<bool> _requestAudioFocusPermanent() async {
+    try {
+      final session = await AudioSession.instance;
+      await session.configure(
+        const AudioSessionConfiguration(
+          androidAudioAttributes: AndroidAudioAttributes(
+            contentType: AndroidAudioContentType.speech,
+            usage: AndroidAudioUsage.voiceCommunication,
+            flags: AndroidAudioFlags.none,
+          ),
+          androidAudioFocusGainType: AndroidAudioFocusGainType.gain,
+          androidWillPauseWhenDucked: false,
+        ),
+      );
+      _audioFocusGranted = await session.setActive(true);
+      return _audioFocusGranted;
+    } catch (e) {
+      debugPrint('Audio focus request failed: $e');
+      _audioFocusGranted = false;
+      return false;
+    }
+  }
+
+  Future<void> _listenToAudioFocus() async {
+    if (_disposed || !_isActive) {
+      return;
+    }
+
+    final session = await AudioSession.instance;
+    await _audioFocusSubscription?.cancel();
+    _audioFocusSubscription = session.interruptionEventStream.listen((event) {
+      if (!event.begin) {
+        return;
+      }
+
+      // Duck interruptions are transient by design and should not force reset.
+      if (event.type == AudioInterruptionType.duck) {
+        return;
+      }
+
+      final now = DateTime.now();
+      final last = _lastFocusInterruptionAt;
+      if (last != null && now.difference(last) < const Duration(seconds: 2)) {
+        return;
+      }
+      _lastFocusInterruptionAt = now;
+
+      if (_focusRecoveryInProgress) {
+        return;
+      }
+
+      _focusRecoveryInProgress = true;
+
+      Future<void>.delayed(const Duration(milliseconds: 700), () async {
+        try {
+          if (!_isActive ||
+              _isPausedForTts ||
+              _isManuallyStopped ||
+              _wordController.isClosed ||
+              _disposed) {
+            return;
+          }
+
+          // If recognition recovered naturally, skip forced recovery.
+          if (_speech.isListening) {
+            return;
+          }
+
+          if (_isAudioPlayingCheck?.call() == true) {
+            return;
+          }
+
+          _audioFocusGranted = false;
+          await _requestAudioFocusPermanent();
+          await _hardReset();
+        } finally {
+          _focusRecoveryInProgress = false;
+        }
+      });
+    });
   }
 
   /// Returns true if STT should be allowed to auto-restart right now.
@@ -110,6 +212,11 @@ class TasmiSpeechService {
       return false;
     }
 
+    if (!_isActive) {
+      debugPrint('TasmiSpeechService: startListening ignored while inactive');
+      return false;
+    }
+
     if (!_speech.isAvailable) {
       final available = await initialize();
       if (!available) {
@@ -122,6 +229,17 @@ class TasmiSpeechService {
     _isRestarting = false;
     _autoRestartEnabled = autoRestart;
     _restartTimer?.cancel();
+
+    var focusGranted = await _requestAudioFocusPermanent();
+    if (!focusGranted) {
+      await Future<void>.delayed(const Duration(seconds: 1));
+      focusGranted = await _requestAudioFocusPermanent();
+    }
+    if (!focusGranted) {
+      debugPrint('TasmiSpeechService: audio focus not granted');
+    }
+
+    await _listenToAudioFocus();
     _startWatchdog();
     final started = await _startInternal();
     if (started && !_micHealthController.isClosed) {
@@ -151,8 +269,12 @@ class TasmiSpeechService {
   }
 
   Future<bool> _doStartInternal() async {
+    if (!_isActive) {
+      return false;
+    }
+
     if (_engineOpInFlight) {
-      return _speech.isListening;
+      return false;
     }
 
     _engineOpInFlight = true;
@@ -160,7 +282,12 @@ class TasmiSpeechService {
       if (_isManuallyStopped || _wordController.isClosed) return false;
       if (_speech.isListening) return true;
 
+      if (!_audioFocusGranted) {
+        await _requestAudioFocusPermanent();
+      }
+
       _lastRecognizedWords = '';
+      _lastWordReceivedAt = DateTime.now();
 
       try {
         await _speech.listen(
@@ -190,6 +317,7 @@ class TasmiSpeechService {
     _ttsResumeTimer?.cancel();
     _watchdogTimer?.cancel();
     _watchdogTimer = null;
+    _focusRecoveryInProgress = false;
     await _speech.stop();
   }
 
@@ -278,6 +406,7 @@ class TasmiSpeechService {
       return;
     }
 
+    await _requestAudioFocusPermanent();
     final started = await _startInternal();
     if (started) {
       _startWatchdog();
@@ -346,7 +475,6 @@ class TasmiSpeechService {
     // Only restart on done to avoid duplicate scheduling with notListening.
     if (_canAutoRestart() && status == 'done') {
       if (!_isRestarting && !_isWatchdogHealing) {
-        _isRestarting = false;
         _scheduleRestart();
       }
     }
@@ -358,31 +486,36 @@ class TasmiSpeechService {
       return;
     }
 
-    final isBusy = error.errorMsg.contains('busy');
-    if (isBusy) {
+    final errorMsg = error.errorMsg.toLowerCase();
+    final isBusy = errorMsg.contains('busy');
+    final isNetwork = errorMsg.contains('network');
+    if (isBusy || isNetwork) {
       if (!_canAutoRestart()) {
         return;
       }
 
       _restartTimer?.cancel();
       _isRestarting = true;
-      _restartTimer = Timer(const Duration(seconds: 3), () async {
-        _restartTimer = null;
-        if (_isManuallyStopped ||
-            _isPausedForTts ||
-            _isWatchdogHealing ||
-            !_canAutoRestart() ||
-            _wordController.isClosed) {
-          _isRestarting = false;
-          return;
-        }
+      _restartTimer = Timer(
+        isBusy ? const Duration(seconds: 3) : const Duration(seconds: 5),
+        () async {
+          _restartTimer = null;
+          if (_isManuallyStopped ||
+              _isPausedForTts ||
+              _isWatchdogHealing ||
+              !_canAutoRestart() ||
+              _wordController.isClosed) {
+            _isRestarting = false;
+            return;
+          }
 
-        try {
-          await _hardReset();
-        } finally {
-          _isRestarting = false;
-        }
-      });
+          try {
+            await _hardReset();
+          } finally {
+            _isRestarting = false;
+          }
+        },
+      );
       return;
     }
 
@@ -442,7 +575,7 @@ class TasmiSpeechService {
     }
   }
 
-  void _scheduleRestart({Duration delay = const Duration(milliseconds: 350)}) {
+  void _scheduleRestart({Duration delay = const Duration(milliseconds: 800)}) {
     // FIX 1+3: Check all conditions before scheduling restart
     if (_isManuallyStopped ||
         _isPausedForTts ||
@@ -464,6 +597,11 @@ class TasmiSpeechService {
           _speech.isListening) {
         return;
       }
+
+      if (!_audioFocusGranted) {
+        await _requestAudioFocusPermanent();
+      }
+
       await _startInternal();
     });
   }
@@ -488,7 +626,11 @@ class TasmiSpeechService {
     }
 
     // FIX 1+3: Skip watchdog entirely if page is not active or audio is playing
-    if (!_isActive) return;
+    if (!_isActive) {
+      _watchdogTimer?.cancel();
+      _watchdogTimer = null;
+      return;
+    }
     if (_isAudioPlayingCheck?.call() == true) return;
     if (_isManuallyStopped || _isPausedForTts || _wordController.isClosed) {
       return;
@@ -533,6 +675,7 @@ class TasmiSpeechService {
     _restartTimer?.cancel();
     _restartTimer = null;
     _isRestarting = false;
+    _focusRecoveryInProgress = false;
     _engineOpInFlight = false;
     _engineOpFuture = null;
 
@@ -545,7 +688,11 @@ class TasmiSpeechService {
       debugPrint('_hardReset cancel error: $e\n$st');
     }
 
-    if (!_isManuallyStopped && !_isPausedForTts && !_wordController.isClosed) {
+    if (_isActive &&
+      !_isManuallyStopped &&
+      !_isPausedForTts &&
+      !_wordController.isClosed) {
+      await _requestAudioFocusPermanent();
       _lastRecognizedWords = '';
       _lastWordReceivedAt = DateTime.now();
       final restarted = await _startInternal();
@@ -572,17 +719,33 @@ class TasmiSpeechService {
     }
   }
 
-  void dispose() {
+  Future<void> dispose() async {
     if (_disposed) {
       return;
     }
+
+    _isActive = false;
+    _isManuallyStopped = true;
 
     _restartTimer?.cancel();
     _ttsResumeTimer?.cancel();
     _watchdogTimer?.cancel();
     _watchdogTimer = null;
     _isWatchdogHealing = false;
-    _speech.cancel();
+    _focusRecoveryInProgress = false;
+
+    await _audioFocusSubscription?.cancel();
+    _audioFocusSubscription = null;
+    _audioFocusGranted = false;
+
+    try {
+      await _speech.cancel();
+    } catch (_) {}
+
+    try {
+      final session = await AudioSession.instance;
+      await session.setActive(false);
+    } catch (_) {}
 
     if (!_wordController.isClosed) {
       _wordController.close();

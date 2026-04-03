@@ -56,7 +56,7 @@ class HifzAudioSessionManager {
               surahName: surahName,
               surahNumber: surahNumber,
               ayahNumber: ayahNumber,
-            useDuckingFocus: true,
+              useDuckingFocus: true,
             );
         try {
           await completer.future.timeout(timeout);
@@ -64,6 +64,7 @@ class HifzAudioSessionManager {
           await stopAudio();
         }
       } finally {
+        await stopAudio();
         await sub.cancel();
       }
     } finally {
@@ -79,16 +80,28 @@ class HifzAudioSessionManager {
 
   Future<bool> startMic({bool autoRestart = false}) async {
     if (_switching) {
-      debugPrint('⚠️ startMic skipped — transition already in progress');
-      return false;
+      var tries = 0;
+      while (_switching && tries < 20) {
+        await Future<void>.delayed(const Duration(milliseconds: 100));
+        tries++;
+      }
+      if (_switching) {
+        debugPrint('⚠️ startMic aborted — transition did not settle in time');
+        return false;
+      }
     }
 
     _switching = true;
     try {
       await stopAudio();
       await _waitForAudioRelease();
-      final started =
-          await _speechService.startListening(autoRestart: autoRestart);
+      var started = await _speechService.startListening(autoRestart: autoRestart);
+      if (!started) {
+        await Future<void>.delayed(const Duration(milliseconds: 700));
+        await stopAudio();
+        await _waitForAudioRelease();
+        started = await _speechService.startListening(autoRestart: autoRestart);
+      }
       _micActive = started;
       return started;
     } finally {
