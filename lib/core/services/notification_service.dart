@@ -159,10 +159,16 @@ class NotificationService {
   };
 
   Future<void> initialize() async {
-    if (_initialized) return;
+    final notifyInitStart = DateTime.now();
+    debugPrint('[${notifyInitStart.toIso8601String()}][NotificationService] initialize() START');
+    if (_initialized) {
+      debugPrint('[${DateTime.now().toIso8601String()}][NotificationService] Already initialized, SKIP');
+      return;
+    }
 
     final inFlight = _initializationFuture;
     if (inFlight != null) {
+      debugPrint('[${DateTime.now().toIso8601String()}][NotificationService] Initialization already in-flight, await...');
       return await inFlight;
     }
 
@@ -171,6 +177,8 @@ class NotificationService {
 
     try {
       await initFuture;
+      final end = DateTime.now();
+      debugPrint('[${end.toIso8601String()}][NotificationService] initialize() END, duration: ${end.difference(notifyInitStart).inMilliseconds} ms');
     } finally {
       if (identical(_initializationFuture, initFuture)) {
         _initializationFuture = null;
@@ -179,9 +187,11 @@ class NotificationService {
   }
 
   Future<void> _doInitialize() async {
+    final doInitStart = DateTime.now();
     _initializing = true;
-
+    debugPrint('[${doInitStart.toIso8601String()}][NotificationService] _doInitialize START');
     try {
+      debugPrint('[${DateTime.now().toIso8601String()}][NotificationService] FlutterLocalNotificationsPlugin.initialize...');
       const androidSettings =
           AndroidInitializationSettings('@mipmap/ic_launcher');
       const iosSettings = DarwinInitializationSettings(
@@ -199,25 +209,31 @@ class NotificationService {
         onDidReceiveNotificationResponse: _onNotificationTap,
         onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
       );
+      debugPrint('[${DateTime.now().toIso8601String()}][NotificationService] FlutterLocalNotificationsPlugin.initialize DONE');
 
+      debugPrint('[${DateTime.now().toIso8601String()}][NotificationService] Creating notification channels...');
       await _createNotificationChannel();
+      debugPrint('[${DateTime.now().toIso8601String()}][NotificationService] Notification channels created');
 
-      // ✅ ADD: Migration للمستخدمين القدامى
+      debugPrint('[${DateTime.now().toIso8601String()}][NotificationService] Migrating and rescheduling if needed...');
       await _migrateChannelsIfNeeded();
       await _rescheduleAfterMigration();
-      // ─────────────────────────────────────
+      debugPrint('[${DateTime.now().toIso8601String()}][NotificationService] Migration/reschedule done');
 
       final launchDetails =
           await _notifications.getNotificationAppLaunchDetails();
       final launchResponse = launchDetails?.notificationResponse;
       if (launchResponse != null) {
+        debugPrint('[${DateTime.now().toIso8601String()}][NotificationService] Handling launch payload...');
         await _handleNotificationTap(launchResponse);
       }
 
       try {
+        debugPrint('[${DateTime.now().toIso8601String()}][NotificationService] Setting up FCM permissions and topics...');
         await FirebaseMessaging.instance.requestPermission();
         await FirebaseMessaging.instance.subscribeToTopic('all_users');
         await FirebaseMessaging.instance.subscribeToTopic('updates');
+        debugPrint('[${DateTime.now().toIso8601String()}][NotificationService] FCM perms/subscription done');
 
         FirebaseMessaging.onMessage.listen((message) {
           if (message.data['type'] == 'update') {
@@ -235,13 +251,14 @@ class NotificationService {
       }
 
       _initialized = true;
-      debugPrint('NotificationService: Initialized');
+      debugPrint('[${DateTime.now().toIso8601String()}][NotificationService] Initialized');
     } catch (e, st) {
-      debugPrint('NotificationService initialization error: $e');
+      debugPrint('[${DateTime.now().toIso8601String()}][NotificationService] initialization ERROR: $e');
       _initialized = false;
       Error.throwWithStackTrace(e, st);
     } finally {
       _initializing = false;
+      debugPrint('[${DateTime.now().toIso8601String()}][NotificationService] _doInitialize END (duration: ${DateTime.now().difference(doInitStart).inMilliseconds} ms)');
     }
   }
 

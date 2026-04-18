@@ -15,6 +15,7 @@ import 'package:sila_app/features/notifications/presentation/widgets/streak_badg
 import 'package:sila_app/features/prayers/presentation/pages/prayer_settings_page.dart';
 import 'package:sila_app/features/prayers/presentation/pages/qiblah_page.dart';
 import 'package:sila_app/features/prayers/presentation/riverpod/prayer_controller.dart';
+import 'package:sila_app/features/prayers/domain/entities/prayer_times_entity.dart';
 
 class PrayersPage extends ConsumerStatefulWidget {
   const PrayersPage({super.key, this.initialTabIndex = 0});
@@ -26,6 +27,42 @@ class PrayersPage extends ConsumerStatefulWidget {
 }
 
 class _PrayersPageState extends ConsumerState<PrayersPage> {
+  Widget _buildStaleIndicator(PrayerTimesEntity entity) {
+    // Placeholder = لا بيانات نهائياً (أول تشغيل ـ أو التحميل لم ينجح)
+    if (entity.lastUpdated.millisecondsSinceEpoch == 0) {
+      return Padding(
+        padding: const EdgeInsets.only(top: 6.0),
+        child: Row(children:[
+          Icon(Icons.sync_rounded, color: Colors.amber, size: 17),
+          SizedBox(width: 6),
+          Text('جاري تحميل المواقيت...', style: TextStyle(color: Colors.amber, fontSize: 13)),
+        ]),
+      );
+    }
+    // قديمة (>24 ساعة)
+    if (entity.isStale) {
+      final diff = DateTime.now().difference(entity.lastUpdated);
+      String ago;
+      if (diff.inDays > 0) {
+        ago = '${diff.inDays} يوم';
+      } else if (diff.inHours > 0) {
+        ago = '${diff.inHours} ساعة';
+      } else {
+        ago = '${diff.inMinutes} دقيقة';
+      }
+      return Padding(
+        padding: const EdgeInsets.only(top: 6.0),
+        child: Row(children:[
+          Icon(Icons.info_outline_rounded, color: Colors.orange, size: 17),
+          SizedBox(width: 6),
+          Text('المواقيت قديمة (آخر تحديث منذ $ago)', style: TextStyle(color: Colors.orange, fontSize: 13)),
+        ]),
+      );
+    }
+    // جديدة
+    return SizedBox.shrink();
+  }
+
   Timer? _timer;
   bool _screenLogged = false;
 
@@ -239,6 +276,7 @@ class _PrayersPageState extends ConsumerState<PrayersPage> {
                                               color: Colors.white60,
                                             ),
                                           ),
+                                          _buildStaleIndicator(entity),
                                         ],
                                       ),
                                       // Settings icon
