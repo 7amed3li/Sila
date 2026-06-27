@@ -319,6 +319,12 @@ class TasmiSpeechService {
     _watchdogTimer = null;
     _focusRecoveryInProgress = false;
     await _speech.stop();
+    try {
+      final session = await AudioSession.instance;
+      await session.setActive(false);
+    } catch (e) {
+      debugPrint('AudioSession release after stopListening failed: $e');
+    }
   }
 
   void notifyTtsCompleted() {
@@ -491,6 +497,9 @@ class TasmiSpeechService {
     final isNetwork = errorMsg.contains('network');
     if (isBusy || isNetwork) {
       if (!_canAutoRestart()) {
+        if (isNetwork && !_wordController.isClosed) {
+          _wordController.addError('يرجى التحقق من الاتصال بالإنترنت');
+        }
         return;
       }
 
@@ -523,12 +532,6 @@ class TasmiSpeechService {
         error.errorMsg != 'error_speech_timeout' &&
         error.errorMsg != 'error_no_match') {
       debugPrint('STT Error: ${error.errorMsg}, permanent: ${error.permanent}');
-    }
-
-    if (!_autoRestartEnabled &&
-        error.errorMsg == 'error_network' &&
-        !_wordController.isClosed) {
-      _wordController.addError('يرجى التحقق من الاتصال بالإنترنت');
     }
 
     if (error.errorMsg == 'error_no_match' && !_wordController.isClosed) {
@@ -564,11 +567,6 @@ class TasmiSpeechService {
         break;
       case 'error_busy':
         _scheduleRestart(delay: const Duration(milliseconds: 1200));
-        break;
-      case 'error_network':
-        if (!_wordController.isClosed) {
-          _wordController.addError('يرجى التحقق من الاتصال بالإنترنت');
-        }
         break;
       default:
         _scheduleRestart(delay: const Duration(milliseconds: 1000));

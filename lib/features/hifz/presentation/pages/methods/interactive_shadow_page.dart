@@ -123,7 +123,7 @@ class _InteractiveShadowPageState extends ConsumerState<InteractiveShadowPage>
               const SizedBox(width: 8),
               Expanded(
                 child: Text(
-                  'الميكروفون يحتاج إذنا إضافيا',
+                  'miui_mic_exemption'.tr(),
                   style: AppFonts.cairo(
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
@@ -142,7 +142,7 @@ class _InteractiveShadowPageState extends ConsumerState<InteractiveShadowPage>
                   });
                 },
                 child: Text(
-                  'تفعيل',
+                  'activate'.tr(),
                   style: AppFonts.cairo(fontWeight: FontWeight.w700),
                 ),
               ),
@@ -162,6 +162,8 @@ class _InteractiveShadowPageState extends ConsumerState<InteractiveShadowPage>
     } catch (e) {
       debugPrint('Recitation mode dialog failed: $e');
     }
+
+    if (!mounted) return;
 
     controller.setRecitationCompletionMode(selectedMode);
     await controller.startSession(
@@ -774,11 +776,16 @@ class _StageContent extends ConsumerWidget {
     final textColor = QuranUIUtils.getTextColor(settings.themeMode);
 
     final fallbackAyah = state.fromVerse + state.currentVerseIndex;
-    final fallbackVerse = quran.getVerse(
-      state.surahNumber,
-      fallbackAyah,
-      verseEndSymbol: false,
-    );
+    String fallbackVerse = '';
+    try {
+      fallbackVerse = quran.getVerse(
+        state.surahNumber,
+        fallbackAyah,
+        verseEndSymbol: false,
+      );
+    } catch (_) {
+      fallbackVerse = 'تعذر تحميل الآية';
+    }
 
     final color = ColorTween(
       begin: Colors.transparent,

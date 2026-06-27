@@ -115,6 +115,8 @@ class _HifzHomePageState extends ConsumerState<HifzHomePage> {
       return null;
     }
 
+    if (!mounted) return null;
+
     if (mode == _HifzSelectionMode.dailyPlan) {
       const surahNumber = 1;
       final maxAyahs = quran.getVerseCount(surahNumber);

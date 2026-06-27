@@ -66,10 +66,7 @@
             android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver"
             android:exported="false"/>
 
-        <service
-            android:name=".MicrophoneForegroundService"
-            android:foregroundServiceType="microphone"
-            android:exported="false"/>
+
 
         <provider
             android:name="androidx.core.content.FileProvider"

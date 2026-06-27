@@ -227,8 +227,8 @@ class InteractiveShadowController extends _$InteractiveShadowController {
     required int toVerse,
   }) async {
     final maxVerse = quran.getVerseCount(surahNumber);
-    final safeFrom = fromVerse.clamp(1, maxVerse);
-    final safeTo = toVerse.clamp(safeFrom, maxVerse);
+    final safeFrom = fromVerse.clamp(1, maxVerse).toInt();
+    final safeTo = toVerse.clamp(safeFrom, maxVerse).toInt();
 
     unawaited(
       ref
@@ -271,7 +271,8 @@ class InteractiveShadowController extends _$InteractiveShadowController {
     _settings =
         ref.read(hifzSettingsControllerProvider).valueOrNull ?? _settings;
 
-    await _loadCurrentVerseWords();
+    final loaded = await _loadCurrentVerseWords();
+    if (!loaded) return;
     await _runCurrentStage();
   }
 
@@ -303,7 +304,8 @@ class InteractiveShadowController extends _$InteractiveShadowController {
         isPlaying: false,
       );
       _alreadyHidden.clear();
-      await _loadCurrentVerseWords();
+      final loaded = await _loadCurrentVerseWords();
+      if (!loaded) return;
       await _runCurrentStage();
     } finally {
       _isAdvancing = false;
@@ -426,8 +428,8 @@ class InteractiveShadowController extends _$InteractiveShadowController {
             wrong++;
           }
           if (wasAbsent &&
-              _completionMode == RecitationCompletionMode.missingOnly) {
-            // In missing-only mode, absent hidden words are counted as wrong.
+              _completionMode == RecitationCompletionMode.fullVerse) {
+            // In full-verse mode, absent hidden words are counted as wrong.
             wrong++;
           }
         }
@@ -720,7 +722,7 @@ class InteractiveShadowController extends _$InteractiveShadowController {
     _audioSessionManager ??= HifzAudioSessionManager(ref, _speechService!);
   }
 
-  Future<void> _loadCurrentVerseWords() async {
+  Future<bool> _loadCurrentVerseWords() async {
     final ayah = state.fromVerse + state.currentVerseIndex;
     String verse;
     try {
@@ -730,7 +732,7 @@ class InteractiveShadowController extends _$InteractiveShadowController {
         words: const [],
         errorMessage: 'تعذر تحميل نص الآية الحالية',
       );
-      return;
+      return false;
     }
 
     final words = verse
@@ -751,13 +753,14 @@ class InteractiveShadowController extends _$InteractiveShadowController {
         words: const [],
         errorMessage: 'تعذر تجهيز كلمات الآية الحالية',
       );
-      return;
+      return false;
     }
 
     state = state.copyWith(words: words);
     _inlineValidation.clear();
     _wordAttempts.clear();
     await _applyHidingForStage();
+    return true;
   }
 
   Future<void> _applyHidingForStage() async {

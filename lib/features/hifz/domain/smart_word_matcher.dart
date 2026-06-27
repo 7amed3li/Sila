@@ -75,6 +75,7 @@ class SmartWordMatcher {
     }
 
     if (orderedMatch) {
+      int spokenIdx = 0;
       for (var i = 0; i < hiddenWords.length; i++) {
         final normalizedHidden = TajweedNormalizer.normalizeForComparison(
           hiddenWords[i],
@@ -86,12 +87,13 @@ class SmartWordMatcher {
           continue;
         }
 
-        if (i >= spokenWords.length) {
+        if (spokenIdx >= spokenWords.length) {
           results.add(HifzWordMatchResult.incorrect);
           continue;
         }
 
-        results.add(evaluatePair(spokenWords[i], normalizedHidden));
+        results.add(evaluatePair(spokenWords[spokenIdx], normalizedHidden));
+        spokenIdx++;
       }
 
       return HifzMatchResult(wordResults: results);

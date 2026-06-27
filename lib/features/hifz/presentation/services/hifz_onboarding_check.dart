@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:sila_app/core/services/device_permission_service.dart';
 
@@ -23,29 +24,25 @@ class HifzOnboardingCheck {
       context: context,
       barrierDismissible: false,
       builder: (ctx) => AlertDialog(
-        title: const Row(
+        title: Row(
           children: [
-            Icon(Icons.battery_alert, color: Colors.orange),
-            SizedBox(width: 8),
-            Text('تفعيل الميكروفون'),
+            const Icon(Icons.battery_alert, color: Colors.orange),
+            const SizedBox(width: 8),
+            Text('activate_mic'.tr()),
           ],
         ),
-        content: const Text(
-          'لضمان عمل الميكروفون بشكل صحيح أثناء الحفظ، '
-          'نحتاج إذنا واحدا بسيطا.\n\n'
-          'اضغط "موافق" في الشاشة التالية.',
-        ),
+        content: Text('mic_battery_exemption_desc'.tr()),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('لاحقا'),
+            child: Text('later'.tr()),
           ),
           ElevatedButton(
             onPressed: () async {
               Navigator.pop(ctx);
               await DevicePermissionService.requestBatteryExemption();
             },
-            child: const Text('موافق ✓'),
+            child: Text('ok_check'.tr()),
           ),
         ],
       ),

@@ -31,7 +31,7 @@ class PrayerTimesEntity extends Equatable {
   final DateTime lastUpdated;
   
   // محسوبة: تعتبر المواقيت قديمة إذا مضى على آخر تحديث أكثر من 24 ساعة
-  bool get isStale => DateTime.now().difference(lastUpdated).inHours >= 24;
+  bool isStaleAt(DateTime now) => now.difference(lastUpdated).inHours >= 24;
 
   @override
   List<Object?> get props => [
@@ -46,5 +46,6 @@ class PrayerTimesEntity extends Equatable {
         longitude,
         countryCode,
         calculationMethod,
+        lastUpdated,
       ];
 }

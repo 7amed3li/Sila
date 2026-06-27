@@ -64,8 +64,11 @@ class HifzAudioSessionManager {
           await stopAudio();
         }
       } finally {
-        await stopAudio();
-        await sub.cancel();
+        try {
+          await stopAudio();
+        } finally {
+          await sub.cancel();
+        }
       }
     } finally {
       _audioActive = false;
