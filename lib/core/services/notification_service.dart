@@ -532,7 +532,7 @@ class NotificationService {
     String? soundFile,
     bool silent = false,
   }) async {
-    if (!_initialized) {
+    if (!_initialized && !_initializing) {
       await initializeLocal();
       if (!_initialized) {
         debugPrint('❌ NotificationService not initialized');
@@ -625,7 +625,7 @@ class NotificationService {
     required String body,
     required DateTime dateTime,
   }) async {
-    if (!_initialized) await initializeLocal();
+    if (!_initialized && !_initializing) await initializeLocal();
 
     // Timezone safety check: ensure local timezone object is accessible.
     late final tz.Location location;
@@ -710,7 +710,7 @@ class NotificationService {
     String? payload,
     String channelKey = 'reminder',
   }) async {
-    if (!_initialized) await initializeLocal();
+    if (!_initialized && !_initializing) await initializeLocal();
     final scheduledTime = tz.TZDateTime.from(dateTime, tz.local);
 
     final channelId = _channels[channelKey] ?? _channels['reminder']!;
@@ -1061,7 +1061,7 @@ class NotificationService {
   String? get lastDownloadUrl => _lastDownloadUrl;
 
   Future<void> rescheduleAllOnBoot() async {
-    if (!_initialized) await initializeLocal();
+    if (!_initialized && !_initializing) await initializeLocal();
     try {
       final isar = await IsarService().db;
       final repo = IsarNotificationRepository(isar);
