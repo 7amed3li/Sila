@@ -22,6 +22,7 @@ void main() async {
   final totalSw = Stopwatch()..start();
   final phaseSw = Stopwatch();
   WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
 
   // ── Phase 1: Timezone ──
   phaseSw
