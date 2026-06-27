@@ -707,7 +707,7 @@ class MujahadahSection extends ConsumerWidget {
             border: Border.all(color: const Color(0xFFE2E8F0)),
             boxShadow: [
               BoxShadow(
-                  color: Colors.black.withOpacity(0.02),
+                  color: Colors.black.withValues(alpha: 0.02),
                   blurRadius: 10,
                   offset: const Offset(0, 4))
             ],
@@ -717,7 +717,7 @@ class MujahadahSection extends ConsumerWidget {
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF064E3B).withOpacity(0.1),
+                  color: const Color(0xFF064E3B).withValues(alpha: 0.1),
                   shape: BoxShape.circle,
                 ),
                 child: const Text('🛡️', style: TextStyle(fontSize: 24)),

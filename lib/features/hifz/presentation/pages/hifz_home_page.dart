@@ -306,7 +306,7 @@ class _HifzHomePageState extends ConsumerState<HifzHomePage> {
                         borderRadius: BorderRadius.circular(20),
                         boxShadow: [
                           BoxShadow(
-                            color: AppTheme.primaryColor.withOpacity(0.3),
+                            color: AppTheme.primaryColor.withValues(alpha: 0.3),
                             blurRadius: 12,
                             offset: const Offset(0, 6),
                           ),
@@ -322,7 +322,7 @@ class _HifzHomePageState extends ConsumerState<HifzHomePage> {
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 10, vertical: 4),
                                   decoration: BoxDecoration(
-                                    color: AppTheme.goldLight.withOpacity(0.2),
+                                    color: AppTheme.goldLight.withValues(alpha: 0.2),
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   child: Text(
@@ -349,7 +349,7 @@ class _HifzHomePageState extends ConsumerState<HifzHomePage> {
                                   'ai_tasmi_desc'.tr(),
                                   style: GoogleFonts.cairo(
                                     fontSize: 12,
-                                    color: Colors.white.withOpacity(0.8),
+                                    color: Colors.white.withValues(alpha: 0.8),
                                     height: 1.5,
                                   ),
                                 ),
@@ -365,7 +365,7 @@ class _HifzHomePageState extends ConsumerState<HifzHomePage> {
                               shape: BoxShape.circle,
                               boxShadow: [
                                 BoxShadow(
-                                  color: AppTheme.accentColor.withOpacity(0.3),
+                                  color: AppTheme.accentColor.withValues(alpha: 0.3),
                                   blurRadius: 10,
                                   offset: const Offset(0, 4),
                                 ),
@@ -830,7 +830,7 @@ class _MethodsGrid extends StatelessWidget {
               borderRadius: BorderRadius.circular(14),
               border: Border.all(
                 color: c.featured
-                    ? AppTheme.accentColor.withOpacity(0.5)
+                    ? AppTheme.accentColor.withValues(alpha: 0.5)
                     : (isDark ? Colors.white12 : const Color(0xFFE2E8F0)),
                 width: c.featured ? 1.5 : 0.5,
               ),

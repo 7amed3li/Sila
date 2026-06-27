@@ -184,7 +184,7 @@ class _MainLayoutState extends ConsumerState<MainLayout> {
             OutlinedButton(
               style: OutlinedButton.styleFrom(
                 foregroundColor: Colors.white,
-                side: BorderSide(color: Colors.white.withOpacity(0.2)),
+                side: BorderSide(color: Colors.white.withValues(alpha: 0.2)),
                 minimumSize: const Size(double.infinity, 45),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12)),

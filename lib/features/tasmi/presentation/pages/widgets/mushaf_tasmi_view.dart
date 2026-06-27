@@ -117,8 +117,8 @@ class MushafTasmiView extends ConsumerWidget {
       return TextStyle(
         color: isDark ? accentColor : primaryColor, // Highlight color
         backgroundColor: isDark
-            ? accentColor.withOpacity(0.2)
-            : primaryColor.withOpacity(0.15),
+            ? accentColor.withValues(alpha: 0.2)
+            : primaryColor.withValues(alpha: 0.15),
         fontWeight: FontWeight.bold,
       );
     }
@@ -134,8 +134,8 @@ class MushafTasmiView extends ConsumerWidget {
         return TextStyle(
           color: isDark ? const Color(0xFFE57373) : const Color(0xFFA32D2D),
           backgroundColor: isDark
-              ? const Color(0xFFE57373).withOpacity(0.15)
-              : const Color(0xFFA32D2D).withOpacity(0.1),
+              ? const Color(0xFFE57373).withValues(alpha: 0.15)
+              : const Color(0xFFA32D2D).withValues(alpha: 0.1),
         );
       case WordEntryStatus.skipped:
         return TextStyle(color: isDark ? Colors.grey[600] : Colors.grey[400]);

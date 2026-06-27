@@ -21,25 +21,6 @@ class PrayerRepositoryImpl extends PrayerRepository {
   static DateTime? _cachedPrayerTimesAt;
   static String? _cachedPrayerTimesKey;
 
-  /// Public getter for the cached prayer times (for use by providers)
-  static PrayerTimesEntity? get cachedPrayerTimes {
-  if (_cachedPrayerTimes == null || _cachedPrayerTimesAt == null) return null;
-  // أعد نسخة مع lastUpdated: وقت آخر تحديث من الكاش
-  return PrayerTimesEntity(
-    fajr: _cachedPrayerTimes!.fajr,
-    sunrise: _cachedPrayerTimes!.sunrise,
-    dhuhr: _cachedPrayerTimes!.dhuhr,
-    asr: _cachedPrayerTimes!.asr,
-    maghrib: _cachedPrayerTimes!.maghrib,
-    isha: _cachedPrayerTimes!.isha,
-    locationName: _cachedPrayerTimes!.locationName,
-    latitude: _cachedPrayerTimes!.latitude,
-    longitude: _cachedPrayerTimes!.longitude,
-    countryCode: _cachedPrayerTimes!.countryCode,
-    calculationMethod: _cachedPrayerTimes!.calculationMethod,
-    lastUpdated: _cachedPrayerTimesAt!,
-  );
-}
 
   static Prayer? _cachedNextPrayer;
   static DateTime? _cachedNextPrayerAt;
@@ -133,14 +114,9 @@ class PrayerRepositoryImpl extends PrayerRepository {
           city = _lastResolvedCity ?? _defaultCity;
           countryCode = _lastResolvedCountryCode ?? oldCountryCode;
         } else {
-           Position? position;
-           try {
-             position = await locService.determinePosition().timeout(const Duration(seconds: 1));
-           } catch (_) {
-             position = null;
-           }
-           final newLat = position?.latitude ?? _defaultLat;
-           final newLong = position?.longitude ?? _defaultLong;
+          final position = await locService.determinePosition();
+          final newLat = position.latitude;
+          final newLong = position.longitude;
 
           if (_lastResolvedLat != null && _lastResolvedLong != null) {
             final movedMeters = Geolocator.distanceBetween(
@@ -160,14 +136,9 @@ class PrayerRepositoryImpl extends PrayerRepository {
             } else {
               lat = newLat;
               long = newLong;
-               Map<String, dynamic> locationInfo = {};
-               try {
-                 locationInfo = await locService.getLocationInfo(lat, long).timeout(const Duration(seconds: 1));
-               } catch (_) {
-                 locationInfo = {};
-               }
-               city = locationInfo['city'] ?? _defaultCity;
-               countryCode = locationInfo['countryCode'] ?? 'TR';
+              final locationInfo = await locService.getLocationInfo(lat, long);
+              city = locationInfo['city'] ?? _defaultCity;
+              countryCode = locationInfo['countryCode'] ?? 'TR';
             }
           } else {
             lat = newLat;
@@ -218,22 +189,10 @@ class PrayerRepositoryImpl extends PrayerRepository {
       long: long,
     );
 
-    // INSTANT CACHE FIRST RETURN (even if stale, as long as same day/location/method)
+    // Return cached data only if still fresh
     if (_cachedPrayerTimes != null &&
         _cachedPrayerTimesKey == resolvedCacheKey &&
-        _isSameDay(now, _cachedPrayerTimes!.fajr)) {
-      // Schedule background update if cache is stale (older than TTL)
-      if (!_isFresh(_cachedPrayerTimesAt, _prayerTimesTtl)) {
-        // ignore: unawaited_futures
-        _backgroundRefresh(
-          lat: lat,
-          long: long,
-          city: city,
-          countryCode: countryCode,
-          methodString: methodString,
-          resolvedCacheKey: resolvedCacheKey,
-        );
-      }
+        _isFresh(_cachedPrayerTimesAt, _prayerTimesTtl)) {
       return _cachedPrayerTimes!;
     }
 
@@ -276,52 +235,6 @@ class PrayerRepositoryImpl extends PrayerRepository {
     return result;
   }
 
-  /// Performs background refresh (async, does NOT block UI)
-  Future<void> _backgroundRefresh({
-    required double lat,
-    required double long,
-    required String city,
-    required String countryCode,
-    required String methodString,
-    required String resolvedCacheKey,
-  }) async {
-    try {
-      final params = _getCalculationParams(methodString);
-      final myCoordinates = Coordinates(lat, long);
-      final date = DateComponents.from(DateTime.now());
-      final utcOffset = DateTime.now().timeZoneOffset;
-      final prayerTimes = PrayerTimes(
-        myCoordinates,
-        date,
-        params,
-        utcOffset: utcOffset,
-      );
-      DateTime toLocal(DateTime dt) {
-        return DateTime(dt.year, dt.month, dt.day, dt.hour, dt.minute, dt.second);
-      }
-      final result = PrayerTimesEntity(
-        fajr: toLocal(prayerTimes.fajr),
-        sunrise: toLocal(prayerTimes.sunrise),
-        dhuhr: toLocal(prayerTimes.dhuhr),
-        asr: toLocal(prayerTimes.asr),
-        maghrib: toLocal(prayerTimes.maghrib),
-        isha: toLocal(prayerTimes.isha),
-        locationName: city,
-        latitude: lat,
-        longitude: long,
-        countryCode: countryCode,
-        calculationMethod: methodString,
-        lastUpdated: DateTime.now(),
-      );
-      _cachedPrayerTimes = result;
-      _cachedPrayerTimesAt = DateTime.now();
-      _cachedPrayerTimesKey = resolvedCacheKey;
-      // Optional: notify listeners/UI here if you want
-      print('Prayer times background-refreshed at [32m[1m"+DateTime.now().toString()+"\u001b[0m');
-    } catch (e) {
-      print('Background refresh error: $e');
-    }
-  }
 
   @override
   Future<Prayer> getNextPrayer() async {

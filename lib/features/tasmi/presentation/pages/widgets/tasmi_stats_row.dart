@@ -93,7 +93,7 @@ class _StatCard extends StatelessWidget {
           ),
         ],
         border: Border.all(
-          color: isDark ? Colors.white10 : Colors.black.withOpacity(0.05),
+          color: isDark ? Colors.white10 : Colors.black.withValues(alpha: 0.05),
           width: 1,
         ),
       ),
@@ -102,7 +102,7 @@ class _StatCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(icon, size: 14, color: displayColor.withOpacity(0.8)),
+              Icon(icon, size: 14, color: displayColor.withValues(alpha: 0.8)),
               const SizedBox(width: 4),
               Text(
                 label,

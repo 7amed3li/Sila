@@ -66,7 +66,7 @@ class _LanguageSwitcherState extends ConsumerState<LanguageSwitcher> {
                 color: isSelected
                     ? (isDark
                         ? LanguageSwitcher.primaryColor
-                        : LanguageSwitcher.primaryColor.withOpacity(0.05))
+                        : LanguageSwitcher.primaryColor.withValues(alpha: 0.05))
                     : Colors.transparent,
                 border: isSelected
                     ? const Border(
@@ -123,7 +123,7 @@ class _LanguageSwitcherState extends ConsumerState<LanguageSwitcher> {
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: LanguageSwitcher.primaryColor.withOpacity(0.3),
+              color: LanguageSwitcher.primaryColor.withValues(alpha: 0.3),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),

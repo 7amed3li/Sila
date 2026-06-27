@@ -108,7 +108,7 @@ class _PrayerSettingsPageState extends ConsumerState<PrayerSettingsPage> {
                   : 'auto_detect_disabled'.tr(),
               trailing: Switch(
                 value: _isAuto,
-                activeThumbColor: const Color(0xFF43A047),
+                activeColor: const Color(0xFF43A047),
                 onChanged: (v) async {
                   await _prefs.setAutoLocation(v);
                   setState(() => _isAuto = v);
@@ -292,9 +292,9 @@ class _Section extends StatelessWidget {
         ),
         Container(
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.05),
+            color: Colors.white.withValues(alpha: 0.05),
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: Colors.white.withOpacity(0.07)),
+            border: Border.all(color: Colors.white.withValues(alpha: 0.07)),
           ),
           child: Column(children: children),
         ),
@@ -325,7 +325,7 @@ class _Tile extends StatelessWidget {
         width: 40,
         height: 40,
         decoration: BoxDecoration(
-          color: const Color(0xFF43A047).withOpacity(0.15),
+          color: const Color(0xFF43A047).withValues(alpha: 0.15),
           borderRadius: BorderRadius.circular(10),
         ),
         child: Icon(icon, color: const Color(0xFF66BB6A), size: 20),

@@ -61,7 +61,7 @@ class _WirdSetupPageState extends ConsumerState<WirdSetupPage> {
               height: 300,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: const Color(0xFF064E3B).withOpacity(0.3),
+                color: const Color(0xFF064E3B).withValues(alpha: 0.3),
               ),
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 50, sigmaY: 50),
@@ -145,7 +145,7 @@ class _WirdSetupPageState extends ConsumerState<WirdSetupPage> {
                         borderRadius: BorderRadius.circular(16),
                       ),
                       elevation: 8,
-                      shadowColor: const Color(0xFFD97706).withOpacity(0.5),
+                      shadowColor: const Color(0xFFD97706).withValues(alpha: 0.5),
                     ),
                     child: Text(
                       'ابدأ الورد الآن',
@@ -175,8 +175,8 @@ class _WirdSetupPageState extends ConsumerState<WirdSetupPage> {
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: isSelected
-              ? Colors.white.withOpacity(0.15)
-              : Colors.white.withOpacity(0.05),
+              ? Colors.white.withValues(alpha: 0.15)
+              : Colors.white.withValues(alpha: 0.05),
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
             color: isSelected ? const Color(0xFFD97706) : Colors.white10,
@@ -189,7 +189,7 @@ class _WirdSetupPageState extends ConsumerState<WirdSetupPage> {
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
                 color: isSelected
-                    ? const Color(0xFFD97706).withOpacity(0.2)
+                    ? const Color(0xFFD97706).withValues(alpha: 0.2)
                     : Colors.white10,
                 borderRadius: BorderRadius.circular(12),
               ),
@@ -248,7 +248,7 @@ class _WirdSetupPageState extends ConsumerState<WirdSetupPage> {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.05),
+        color: Colors.white.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(

@@ -43,7 +43,7 @@ class WirdCard extends ConsumerWidget {
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.06),
+            color: Colors.black.withValues(alpha: 0.06),
             blurRadius: 24,
             offset: const Offset(0, 8),
           ),
@@ -54,7 +54,7 @@ class WirdCard extends ConsumerWidget {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: const Color(0xFFD97706).withOpacity(0.1),
+              color: const Color(0xFFD97706).withValues(alpha: 0.1),
               shape: BoxShape.circle,
             ),
             child: const Icon(Icons.auto_stories_rounded,
@@ -75,7 +75,7 @@ class WirdCard extends ConsumerWidget {
             textAlign: TextAlign.center,
             style: GoogleFonts.cairo(
               fontSize: 14,
-              color: AppTheme.primaryColor.withOpacity(0.6),
+              color: AppTheme.primaryColor.withValues(alpha: 0.6),
               height: 1.5,
             ),
           ),
@@ -151,7 +151,7 @@ class WirdCard extends ConsumerWidget {
         borderRadius: BorderRadius.circular(28),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF0F172A).withOpacity(0.3),
+            color: const Color(0xFF0F172A).withValues(alpha: 0.3),
             blurRadius: 20,
             offset: const Offset(0, 10),
           ),
@@ -175,7 +175,7 @@ class WirdCard extends ConsumerWidget {
                     child: Container(
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.1),
+                        color: Colors.white.withValues(alpha: 0.1),
                         shape: BoxShape.circle,
                       ),
                       child: const Icon(Icons.settings_rounded,
@@ -197,10 +197,10 @@ class WirdCard extends ConsumerWidget {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFD97706).withOpacity(0.2),
+                  color: const Color(0xFFD97706).withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
-                      color: const Color(0xFFD97706).withOpacity(0.3)),
+                      color: const Color(0xFFD97706).withValues(alpha: 0.3)),
                 ),
                 child: Text(
                   'juz_number'.tr(args: ['$juz']),
@@ -252,7 +252,7 @@ class WirdCard extends ConsumerWidget {
                 child: LinearProgressIndicator(
                   value: progress,
                   minHeight: 10,
-                  backgroundColor: Colors.white.withOpacity(0.05),
+                  backgroundColor: Colors.white.withValues(alpha: 0.05),
                   valueColor: const AlwaysStoppedAnimation<Color>(
                       Color(0xFF10B981)), // Success Green
                 ),
@@ -266,16 +266,16 @@ class WirdCard extends ConsumerWidget {
           Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.03),
+              color: Colors.white.withValues(alpha: 0.03),
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: Colors.white.withOpacity(0.05)),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
             ),
             child: Column(
               children: [
                 Text(
                   'from_quran_saying'.tr(),
                   style: GoogleFonts.amiri(
-                    color: Colors.white.withOpacity(0.5),
+                    color: Colors.white.withValues(alpha: 0.5),
                     fontSize: 14,
                   ),
                 ),
@@ -299,7 +299,7 @@ class WirdCard extends ConsumerWidget {
                     '$safeStartPage'
                   ]),
                   style: GoogleFonts.cairo(
-                    color: const Color(0xFFD97706).withOpacity(0.8),
+                    color: const Color(0xFFD97706).withValues(alpha: 0.8),
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
                   ),
@@ -356,7 +356,7 @@ class WirdCard extends ConsumerWidget {
                     borderRadius: BorderRadius.circular(12),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
+                        color: Colors.black.withValues(alpha: 0.1),
                         blurRadius: 8,
                         offset: const Offset(0, 4),
                       ),
@@ -395,7 +395,7 @@ class WirdCard extends ConsumerWidget {
                     borderRadius: BorderRadius.circular(12),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
+                        color: Colors.black.withValues(alpha: 0.1),
                         blurRadius: 8,
                         offset: const Offset(0, 4),
                       ),
@@ -431,7 +431,7 @@ class WirdCard extends ConsumerWidget {
         ),
 
         const SizedBox(height: 24),
-        Divider(color: Colors.white.withOpacity(0.1), height: 1),
+        Divider(color: Colors.white.withValues(alpha: 0.1), height: 1),
         const SizedBox(height: 20),
 
         // Statistics Section
@@ -456,7 +456,7 @@ class WirdCard extends ConsumerWidget {
                           style: GoogleFonts.cairo(
                             color: isLate
                                 ? const Color(0xFFEF4444)
-                                : Colors.white.withOpacity(0.7),
+                                : Colors.white.withValues(alpha: 0.7),
                             fontSize: 12,
                             fontWeight: FontWeight.w500,
                           ),
@@ -471,7 +471,7 @@ class WirdCard extends ConsumerWidget {
                 Text(
                   'current_khatma'.tr(),
                   style: GoogleFonts.cairo(
-                    color: Colors.white.withOpacity(0.9),
+                    color: Colors.white.withValues(alpha: 0.9),
                     fontSize: 13,
                     fontWeight: FontWeight.bold,
                   ),
@@ -484,7 +484,7 @@ class WirdCard extends ConsumerWidget {
               borderRadius: BorderRadius.circular(10),
               child: LinearProgressIndicator(
                 value: state.khatmaProgress,
-                backgroundColor: Colors.white.withOpacity(0.1),
+                backgroundColor: Colors.white.withValues(alpha: 0.1),
                 valueColor:
                     const AlwaysStoppedAnimation<Color>(Color(0xFF4B5563)),
                 minHeight: 8,
@@ -498,7 +498,7 @@ class WirdCard extends ConsumerWidget {
                   child: Text(
                     'upcoming_wirds'.tr(args: ['${state.remainingWirdsCount}']),
                     style: GoogleFonts.cairo(
-                      color: Colors.white.withOpacity(0.6),
+                      color: Colors.white.withValues(alpha: 0.6),
                       fontSize: 11,
                     ),
                     overflow: TextOverflow.ellipsis,
@@ -510,7 +510,7 @@ class WirdCard extends ConsumerWidget {
                     'completed_wirds'
                         .tr(args: ['${state.completedWirdsCount}']),
                     style: GoogleFonts.cairo(
-                      color: Colors.white.withOpacity(0.6),
+                      color: Colors.white.withValues(alpha: 0.6),
                       fontSize: 11,
                     ),
                     overflow: TextOverflow.ellipsis,
@@ -697,7 +697,7 @@ class _CelebrationWidgetState extends State<_CelebrationWidget>
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.black.withOpacity(0.4),
+      color: Colors.black.withValues(alpha: 0.4),
       child: Center(
         child: AnimatedBuilder(
           animation: _controller,
@@ -713,7 +713,7 @@ class _CelebrationWidgetState extends State<_CelebrationWidget>
                     borderRadius: BorderRadius.circular(30),
                     boxShadow: [
                       BoxShadow(
-                        color: const Color(0xFFD97706).withOpacity(0.4),
+                        color: const Color(0xFFD97706).withValues(alpha: 0.4),
                         blurRadius: 40,
                         spreadRadius: 10,
                       ),
@@ -740,7 +740,7 @@ class _CelebrationWidgetState extends State<_CelebrationWidget>
                         'completed_wird_daily'.tr(),
                         style: GoogleFonts.cairo(
                           fontSize: 18,
-                          color: AppTheme.primaryColor.withOpacity(0.8),
+                          color: AppTheme.primaryColor.withValues(alpha: 0.8),
                         ),
                       ),
                     ],

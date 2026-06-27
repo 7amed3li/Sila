@@ -87,7 +87,7 @@ class _AyahRangeBottomSheetState extends State<AyahRangeBottomSheet> {
         borderRadius: const BorderRadius.vertical(top: Radius.circular(32)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color: Colors.black.withValues(alpha: 0.2),
             blurRadius: 20,
             offset: const Offset(0, -5),
           ),
@@ -189,12 +189,12 @@ class _AyahRangeBottomSheetState extends State<AyahRangeBottomSheet> {
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color:
-                      isDark ? Colors.white.withOpacity(0.05) : Colors.grey[50],
+                      isDark ? Colors.white.withValues(alpha: 0.05) : Colors.grey[50],
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(
                       color: isDark
                           ? Colors.white10
-                          : Colors.black.withOpacity(0.05)),
+                          : Colors.black.withValues(alpha: 0.05)),
                 ),
                 child: Column(
                   children: [
@@ -210,7 +210,7 @@ class _AyahRangeBottomSheetState extends State<AyahRangeBottomSheet> {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 12, vertical: 4),
                           decoration: BoxDecoration(
-                            color: primaryColor.withOpacity(0.1),
+                            color: primaryColor.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Text(
@@ -226,9 +226,9 @@ class _AyahRangeBottomSheetState extends State<AyahRangeBottomSheet> {
                     SliderTheme(
                       data: SliderThemeData(
                         activeTrackColor: primaryColor,
-                        inactiveTrackColor: primaryColor.withOpacity(0.2),
+                        inactiveTrackColor: primaryColor.withValues(alpha: 0.2),
                         thumbColor: accentColor,
-                        overlayColor: accentColor.withOpacity(0.2),
+                        overlayColor: accentColor.withValues(alpha: 0.2),
                         valueIndicatorColor: accentColor,
                       ),
                       child: Slider(
@@ -261,7 +261,7 @@ class _AyahRangeBottomSheetState extends State<AyahRangeBottomSheet> {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 12, vertical: 4),
                           decoration: BoxDecoration(
-                            color: primaryColor.withOpacity(0.1),
+                            color: primaryColor.withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Text(
@@ -277,9 +277,9 @@ class _AyahRangeBottomSheetState extends State<AyahRangeBottomSheet> {
                     SliderTheme(
                       data: SliderThemeData(
                         activeTrackColor: primaryColor,
-                        inactiveTrackColor: primaryColor.withOpacity(0.2),
+                        inactiveTrackColor: primaryColor.withValues(alpha: 0.2),
                         thumbColor: accentColor,
-                        overlayColor: accentColor.withOpacity(0.2),
+                        overlayColor: accentColor.withValues(alpha: 0.2),
                         valueIndicatorColor: accentColor,
                       ),
                       child: Slider(
@@ -358,7 +358,7 @@ class _AyahRangeBottomSheetState extends State<AyahRangeBottomSheet> {
           border: Border.all(
             color: isSelected
                 ? primaryColor
-                : (isDark ? Colors.white10 : Colors.black.withOpacity(0.05)),
+                : (isDark ? Colors.white10 : Colors.black.withValues(alpha: 0.05)),
             width: isSelected ? 2 : 1,
           ),
         ),

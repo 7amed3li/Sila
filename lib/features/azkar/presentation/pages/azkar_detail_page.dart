@@ -81,7 +81,7 @@ class _AzkarDetailPageState extends ConsumerState<AzkarDetailPage> {
               'cancel'.tr(),
               style: TextStyle(
                 fontFamily: 'Cairo',
-                color: textColor.withOpacity(0.7),
+                color: textColor.withValues(alpha: 0.7),
               ),
             ),
           ),
@@ -151,7 +151,7 @@ class _AzkarDetailPageState extends ConsumerState<AzkarDetailPage> {
               boxShadow: [
                 if (!isDark)
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.05),
+                    color: Colors.black.withValues(alpha: 0.05),
                     blurRadius: 10,
                     offset: const Offset(0, 4),
                   ),
@@ -184,7 +184,7 @@ class _AzkarDetailPageState extends ConsumerState<AzkarDetailPage> {
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 16, vertical: 8),
                             decoration: BoxDecoration(
-                              color: primaryColor.withOpacity(0.1),
+                              color: primaryColor.withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(20),
                             ),
                             child: Text(
@@ -252,7 +252,7 @@ class _AzkarDetailPageState extends ConsumerState<AzkarDetailPage> {
                         ),
                         const SizedBox(height: 24),
                       ],
-                      Divider(color: subtitleColor.withOpacity(0.2)),
+                      Divider(color: subtitleColor.withValues(alpha: 0.2)),
                       const SizedBox(height: 16),
                       // Progress Ring
                       CircularPercentIndicator(
@@ -269,7 +269,7 @@ class _AzkarDetailPageState extends ConsumerState<AzkarDetailPage> {
                           ),
                         ),
                         progressColor: primaryColor,
-                        backgroundColor: primaryColor.withOpacity(0.1),
+                        backgroundColor: primaryColor.withValues(alpha: 0.1),
                         circularStrokeCap: CircularStrokeCap.round,
                         animation: true,
                         animateFromLastPercent: true,
@@ -332,7 +332,7 @@ class _AzkarDetailPageState extends ConsumerState<AzkarDetailPage> {
                     Icon(
                       Icons.schedule_outlined,
                       size: 80,
-                      color: const Color(0xFF064E3B).withOpacity(0.3),
+                      color: const Color(0xFF064E3B).withValues(alpha: 0.3),
                     ),
                     const SizedBox(height: 24),
                     Text(

@@ -22,37 +22,7 @@ class PrayerTimesController extends _$PrayerTimesController {
     _scheduleStaleCheck();
     ref.onDispose(() => _staleCheckTimer?.cancel());
 
-    // جلب بيانات cache فوراً (حتى لو قديمة)
-    final cached = PrayerRepositoryImpl.cachedPrayerTimes;
-    if (cached != null) {
-      // في الخلفية: حدث المواقيت، عند نجاح التحديث invalidation ليتم rebuild تلقائي
-      unawaited(_refreshInBackground(repository));
-      return cached;
-    } else {
-      // لا بيانات cache إطلاقاً، اعرض placeholder (بيانات افتراضية مكان إسطنبول)
-      final now = DateTime.now();
-      final placeholder = PrayerTimesEntity(
-        fajr: now,
-        sunrise: now.add(const Duration(hours: 6)),
-        dhuhr: now.add(const Duration(hours: 12)),
-        asr: now.add(const Duration(hours: 15)),
-        maghrib: now.add(const Duration(hours: 18)),
-        isha: now.add(const Duration(hours: 19, minutes: 30)),
-        locationName: "…جاري التحميل",
-        latitude: 41.0082,
-        longitude: 28.9784,
-        countryCode: "TR",
-        calculationMethod: "turkey",
-        lastUpdated: DateTime.fromMillisecondsSinceEpoch(0), // يعتبر أقدم شيء
-      );
-      unawaited(_refreshInBackground(repository));
-      return placeholder;
-    }
-  }
-
-  Future<void> _refreshInBackground(PrayerRepositoryImpl repository) async {
-    await repository.getPrayerTimes();
-    ref.invalidateSelf();
+    return await repository.getPrayerTimes();
   }
 
   void _scheduleStaleCheck() {

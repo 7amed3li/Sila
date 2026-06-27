@@ -29,13 +29,13 @@ class StreakSummaryCard extends ConsumerWidget {
         borderRadius: BorderRadius.circular(28),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF0F172A).withOpacity(0.35),
+            color: const Color(0xFF0F172A).withValues(alpha: 0.35),
             blurRadius: 20,
             offset: const Offset(0, 10),
           ),
           // Subtle outer glow
           BoxShadow(
-            color: const Color(0xFFD97706).withOpacity(0.04),
+            color: const Color(0xFFD97706).withValues(alpha: 0.04),
             blurRadius: 40,
             spreadRadius: 2,
           ),
@@ -52,7 +52,7 @@ class StreakSummaryCard extends ConsumerWidget {
                   Container(
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.08),
+                      color: Colors.white.withValues(alpha: 0.08),
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(Icons.flash_on_rounded,
@@ -73,7 +73,7 @@ class StreakSummaryCard extends ConsumerWidget {
                 'weekly_activity'.tr(),
                 style: GoogleFonts.cairo(
                   fontSize: 11,
-                  color: Colors.white.withOpacity(0.5),
+                  color: Colors.white.withValues(alpha: 0.5),
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -91,12 +91,12 @@ class StreakSummaryCard extends ConsumerWidget {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.06),
+                  color: Colors.white.withValues(alpha: 0.06),
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(
                     color: hasStreak
-                        ? const Color(0xFFD97706).withOpacity(0.2)
-                        : Colors.white.withOpacity(0.05),
+                        ? const Color(0xFFD97706).withValues(alpha: 0.2)
+                        : Colors.white.withValues(alpha: 0.05),
                     width: 1,
                   ),
                 ),
@@ -118,7 +118,7 @@ class StreakSummaryCard extends ConsumerWidget {
                           style: GoogleFonts.cairo(
                             fontSize: 13,
                             fontWeight: FontWeight.w600,
-                            color: Colors.white.withOpacity(0.9),
+                            color: Colors.white.withValues(alpha: 0.9),
                           ),
                         ),
                         Text(

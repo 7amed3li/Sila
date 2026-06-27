@@ -326,7 +326,7 @@ class _TasmiSurahSelectionPageState extends State<TasmiSurahSelectionPage> {
         side: BorderSide(
           color: isActive
               ? theme.primaryColor
-              : theme.dividerColor.withOpacity(0.5),
+              : theme.dividerColor.withValues(alpha: 0.5),
           width: isActive ? 1.5 : 1,
         ),
       ),

@@ -188,7 +188,7 @@ class _SurahDetailPageState extends ConsumerState<SurahDetailPage> {
                   : juz.toString()
             ]),
             style: GoogleFonts.cairo(
-              color: iconColor.withOpacity(0.7),
+              color: iconColor.withValues(alpha: 0.7),
               fontSize: 12,
               fontWeight: FontWeight.normal,
             ),
@@ -234,7 +234,7 @@ class _SurahDetailPageState extends ConsumerState<SurahDetailPage> {
                 max: 604,
                 activeColor: QuranUIUtils.getAccentColor(settings.themeMode),
                 inactiveColor: QuranUIUtils.getTextColor(settings.themeMode)
-                    .withOpacity(0.2),
+                    .withValues(alpha: 0.2),
                 onChanged: (val) {
                   final newPage = val.toInt();
                   if (newPage != _currentPage) {
@@ -271,12 +271,12 @@ class _SurahDetailPageState extends ConsumerState<SurahDetailPage> {
               decoration: BoxDecoration(
                 color: isDark
                     ? const Color(0xFF1E293B)
-                    : const Color(0xFF064E3B).withOpacity(0.1),
+                    : const Color(0xFF064E3B).withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(24),
                 border: Border.all(
                   color: isDark
                       ? Colors.white10
-                      : const Color(0xFFD97706).withOpacity(0.3),
+                      : const Color(0xFFD97706).withValues(alpha: 0.3),
                   width: 2,
                 ),
               ),
@@ -305,7 +305,7 @@ class _SurahDetailPageState extends ConsumerState<SurahDetailPage> {
                   border: Border.all(
                     color: isDark
                         ? Colors.white10
-                        : const Color(0xFFD97706).withOpacity(0.1),
+                        : const Color(0xFFD97706).withValues(alpha: 0.1),
                     width: 1,
                   ),
                 ),
@@ -326,7 +326,7 @@ class _SurahDetailPageState extends ConsumerState<SurahDetailPage> {
                             horizontal: BorderSide(
                               color: QuranUIUtils.getAccentColor(
                                       settings.themeMode)
-                                  .withOpacity(0.2),
+                                  .withValues(alpha: 0.2),
                               width: 1,
                             ),
                           ),
@@ -339,7 +339,7 @@ class _SurahDetailPageState extends ConsumerState<SurahDetailPage> {
                             fontFamily: 'Amiri',
                             fontSize: 14,
                             color: QuranUIUtils.getTextColor(settings.themeMode)
-                                .withOpacity(0.7),
+                                .withValues(alpha: 0.7),
                             letterSpacing: 2,
                             fontWeight: FontWeight.bold,
                           ),
@@ -407,7 +407,7 @@ class _SurahDetailPageState extends ConsumerState<SurahDetailPage> {
     final selectedStyle = isSelected
         ? baseStyle.copyWith(
             backgroundColor: QuranUIUtils.getAccentColor(settings.themeMode)
-                .withOpacity(0.15))
+                .withValues(alpha: 0.15))
         : baseStyle;
 
     final tajweedSpans = QuranUIUtils.buildTajweedSpans(
@@ -422,7 +422,7 @@ class _SurahDetailPageState extends ConsumerState<SurahDetailPage> {
             style: s.style?.copyWith(
                 backgroundColor: isSelected
                     ? QuranUIUtils.getAccentColor(settings.themeMode)
-                        .withOpacity(0.15)
+                        .withValues(alpha: 0.15)
                     : s.style?.backgroundColor),
             recognizer: TapGestureRecognizer()
               ..onTap = () => setState(() {
@@ -494,13 +494,13 @@ class _SurahDetailPageState extends ConsumerState<SurahDetailPage> {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
         ],
         border: Border.all(
-          color: const Color(0xFFD97706).withOpacity(0.5),
+          color: const Color(0xFFD97706).withValues(alpha: 0.5),
           width: 1,
         ),
       ),
@@ -708,7 +708,7 @@ class _SurahDetailPageState extends ConsumerState<SurahDetailPage> {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
           color: isSelected
-              ? QuranUIUtils.getAccentColor(settings.themeMode).withOpacity(0.1)
+              ? QuranUIUtils.getAccentColor(settings.themeMode).withValues(alpha: 0.1)
               : Colors.transparent,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(

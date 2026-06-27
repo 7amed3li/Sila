@@ -140,7 +140,7 @@ class _TasbihPageState extends ConsumerState<TasbihPage>
                         boxShadow: [
                           BoxShadow(
                             color: (isSelected ? primaryColor : Colors.black)
-                                .withOpacity(0.08),
+                                .withValues(alpha: 0.08),
                             blurRadius: 10,
                             offset: const Offset(0, 4),
                           ),
@@ -148,7 +148,7 @@ class _TasbihPageState extends ConsumerState<TasbihPage>
                         border: Border.all(
                           color: isSelected
                               ? primaryColor
-                              : primaryColor.withOpacity(0.1),
+                              : primaryColor.withValues(alpha: 0.1),
                           width: 1.5,
                         ),
                       ),
@@ -182,7 +182,7 @@ class _TasbihPageState extends ConsumerState<TasbihPage>
                               fontSize: 12,
                               fontWeight: FontWeight.bold,
                               color: isSelected
-                                  ? Colors.white.withOpacity(0.9)
+                                  ? Colors.white.withValues(alpha: 0.9)
                                   : primaryColor,
                             ),
                           ),
@@ -201,9 +201,9 @@ class _TasbihPageState extends ConsumerState<TasbihPage>
                 width: double.infinity,
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: primaryColor.withOpacity(0.05),
+                  color: primaryColor.withValues(alpha: 0.05),
                   borderRadius: BorderRadius.circular(25),
-                  border: Border.all(color: primaryColor.withOpacity(0.1)),
+                  border: Border.all(color: primaryColor.withValues(alpha: 0.1)),
                 ),
                 child: Text(
                   tasbihState.activeZikrKey.tr(),
@@ -232,7 +232,7 @@ class _TasbihPageState extends ConsumerState<TasbihPage>
                       lineWidth: 14.0,
                       percent: progress == 0 && count > 0 ? 1.0 : progress,
                       progressColor: accentColor,
-                      backgroundColor: primaryColor.withOpacity(0.1),
+                      backgroundColor: primaryColor.withValues(alpha: 0.1),
                       circularStrokeCap: CircularStrokeCap.round,
                       center: Container(
                         width: 220,
@@ -242,7 +242,7 @@ class _TasbihPageState extends ConsumerState<TasbihPage>
                           color: surfaceColor,
                           boxShadow: [
                             BoxShadow(
-                              color: primaryColor.withOpacity(0.15),
+                              color: primaryColor.withValues(alpha: 0.15),
                               blurRadius: 35,
                               spreadRadius: 3,
                             ),
@@ -256,7 +256,7 @@ class _TasbihPageState extends ConsumerState<TasbihPage>
                               style: TextStyle(
                                 fontFamily: 'Cairo',
                                 fontSize: 13,
-                                color: primaryColor.withOpacity(0.5),
+                                color: primaryColor.withValues(alpha: 0.5),
                               ),
                             ),
                             Text(
@@ -265,7 +265,7 @@ class _TasbihPageState extends ConsumerState<TasbihPage>
                                 fontFamily: 'Cairo',
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
-                                color: primaryColor.withOpacity(0.8),
+                                color: primaryColor.withValues(alpha: 0.8),
                               ),
                             ),
                             const SizedBox(height: 5),

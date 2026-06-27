@@ -94,7 +94,7 @@ class _NotificationSettingsSheetState
                         SwitchListTile(
                           contentPadding: EdgeInsets.zero,
                           value: settings.isEnabled,
-                          activeThumbColor: const Color(0xFF064E3B),
+                          activeColor: const Color(0xFF064E3B),
                           title: Text(
                             'enable_reminder'.tr(),
                             style: GoogleFonts.getFont('Cairo',
@@ -136,7 +136,7 @@ class _NotificationSettingsSheetState
                               )),
                           const SizedBox(height: 8),
                           DropdownButtonFormField<String>(
-                            initialValue: settings.frequency,
+                            value: settings.frequency,
                             decoration: InputDecoration(
                               filled: true,
                               fillColor: isDark
@@ -212,7 +212,7 @@ class _NotificationSettingsSheetState
                             SwitchListTile(
                               contentPadding: EdgeInsets.zero,
                               value: settings.endTimeReminderEnabled,
-                              activeThumbColor: const Color(0xFF064E3B),
+                              activeColor: const Color(0xFF064E3B),
                               title: Text(
                                 'reminder_before_end'.tr(),
                                 style: GoogleFonts.getFont('Cairo',

@@ -9,7 +9,7 @@ plugins {
 android {
     namespace = "com.sila.app.sila_app"
     compileSdk = 35
-    ndkVersion = flutter.ndkVersion
+    ndkVersion = "27.0.12077973"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17

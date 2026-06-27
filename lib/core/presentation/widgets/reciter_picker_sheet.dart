@@ -57,7 +57,7 @@ class ReciterPickerSheet extends ConsumerWidget {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF064E3B).withOpacity(0.1),
+                      color: const Color(0xFF064E3B).withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(
@@ -81,8 +81,8 @@ class ReciterPickerSheet extends ConsumerWidget {
                   height: 44,
                   decoration: BoxDecoration(
                     color: reciter.isRecommendedForHifz
-                        ? const Color(0xFF064E3B).withOpacity(0.1)
-                        : Colors.grey.withOpacity(0.1),
+                        ? const Color(0xFF064E3B).withValues(alpha: 0.1)
+                        : Colors.grey.withValues(alpha: 0.1),
                     shape: BoxShape.circle,
                   ),
                   child: Icon(
@@ -140,7 +140,7 @@ class _StyleBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
       decoration: BoxDecoration(
-        color: Colors.grey.withOpacity(0.12),
+        color: Colors.grey.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Text(
@@ -160,7 +160,7 @@ class _RecommendedBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
       decoration: BoxDecoration(
-        color: const Color(0xFF064E3B).withOpacity(0.12),
+        color: const Color(0xFF064E3B).withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Text(

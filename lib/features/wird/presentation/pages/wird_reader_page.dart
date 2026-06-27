@@ -63,7 +63,7 @@ class _WirdReaderPageState extends ConsumerState<WirdReaderPage> {
               ],
             ),
             behavior: SnackBarBehavior.floating,
-            backgroundColor: AppTheme.primaryColor.withOpacity(0.9),
+            backgroundColor: AppTheme.primaryColor.withValues(alpha: 0.9),
             duration: const Duration(seconds: 4),
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -260,7 +260,7 @@ class _WirdReaderPageState extends ConsumerState<WirdReaderPage> {
                 max: 604,
                 activeColor: _getAccentColor(settings.themeMode),
                 inactiveColor:
-                    _getTextColor(settings.themeMode).withOpacity(0.2),
+                    _getTextColor(settings.themeMode).withValues(alpha: 0.2),
                 onChanged: (val) {
                   final newPage = val.toInt();
                   if (newPage != _currentPage) {
@@ -294,12 +294,12 @@ class _WirdReaderPageState extends ConsumerState<WirdReaderPage> {
           decoration: BoxDecoration(
             color: isDark
                 ? const Color(0xFF1E293B)
-                : const Color(0xFF064E3B).withOpacity(0.1),
+                : const Color(0xFF064E3B).withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(24),
             border: Border.all(
               color: isDark
                   ? Colors.white10
-                  : const Color(0xFFD97706).withOpacity(0.3),
+                  : const Color(0xFFD97706).withValues(alpha: 0.3),
               width: 2,
             ),
           ),
@@ -330,7 +330,7 @@ class _WirdReaderPageState extends ConsumerState<WirdReaderPage> {
               border: Border.all(
                 color: isDark
                     ? Colors.white10
-                    : const Color(0xFFD97706).withOpacity(0.1),
+                    : const Color(0xFFD97706).withValues(alpha: 0.1),
                 width: 1,
               ),
             ),
@@ -352,7 +352,7 @@ class _WirdReaderPageState extends ConsumerState<WirdReaderPage> {
                       border: Border.symmetric(
                         horizontal: BorderSide(
                           color: _getAccentColor(settings.themeMode)
-                              .withOpacity(0.2),
+                              .withValues(alpha: 0.2),
                           width: 1,
                         ),
                       ),
@@ -365,7 +365,7 @@ class _WirdReaderPageState extends ConsumerState<WirdReaderPage> {
                         fontFamily: settings.fontFamily,
                         fontSize: 14,
                         color:
-                            _getTextColor(settings.themeMode).withOpacity(0.7),
+                            _getTextColor(settings.themeMode).withValues(alpha: 0.7),
                         letterSpacing: 2,
                         fontWeight: FontWeight.bold,
                       ),
@@ -418,7 +418,7 @@ class _WirdReaderPageState extends ConsumerState<WirdReaderPage> {
             text: s.text,
             style: s.style?.copyWith(
                 backgroundColor: isSelected
-                    ? accentColor.withOpacity(0.15)
+                    ? accentColor.withValues(alpha: 0.15)
                     : s.style?.backgroundColor),
             recognizer: recognizer,
           );
@@ -545,7 +545,7 @@ class _WirdReaderPageState extends ConsumerState<WirdReaderPage> {
 
     return baseStyle.copyWith(
       color: isSelected ? accentColor : textColor,
-      backgroundColor: isSelected ? accentColor.withOpacity(0.15) : null,
+      backgroundColor: isSelected ? accentColor.withValues(alpha: 0.15) : null,
     );
   }
 
@@ -573,13 +573,13 @@ class _WirdReaderPageState extends ConsumerState<WirdReaderPage> {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
         ],
         border: Border.all(
-          color: const Color(0xFFD97706).withOpacity(0.5),
+          color: const Color(0xFFD97706).withValues(alpha: 0.5),
           width: 1,
         ),
       ),
@@ -771,7 +771,7 @@ class _WirdReaderPageState extends ConsumerState<WirdReaderPage> {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
           color: isSelected
-              ? _getAccentColor(settings.themeMode).withOpacity(0.1)
+              ? _getAccentColor(settings.themeMode).withValues(alpha: 0.1)
               : Colors.transparent,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
@@ -804,7 +804,7 @@ class _WirdReaderPageState extends ConsumerState<WirdReaderPage> {
         borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.2),
+            color: Colors.black.withValues(alpha: 0.2),
             blurRadius: 10,
             offset: const Offset(0, -2),
           ),
@@ -888,7 +888,7 @@ class _WirdReaderPageState extends ConsumerState<WirdReaderPage> {
             child: LinearProgressIndicator(
               value: progress,
               backgroundColor:
-                  _getAccentColor(settings.themeMode).withOpacity(0.1),
+                  _getAccentColor(settings.themeMode).withValues(alpha: 0.1),
               valueColor: AlwaysStoppedAnimation<Color>(
                   _getAccentColor(settings.themeMode)),
               minHeight: 4,

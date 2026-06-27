@@ -33,7 +33,6 @@ class PrayerTimesEntity extends Equatable {
   // محسوبة: تعتبر المواقيت قديمة إذا مضى على آخر تحديث أكثر من 24 ساعة
   bool get isStale => DateTime.now().difference(lastUpdated).inHours >= 24;
 
-
   @override
   List<Object?> get props => [
         fajr,
@@ -46,7 +45,6 @@ class PrayerTimesEntity extends Equatable {
         latitude,
         longitude,
         countryCode,
-         calculationMethod,
-         lastUpdated,
+        calculationMethod,
       ];
 }
