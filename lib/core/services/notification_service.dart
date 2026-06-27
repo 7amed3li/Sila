@@ -212,7 +212,7 @@ class NotificationService {
       debugPrint(
           '[${DateTime.now().toIso8601String()}][NotificationService] FlutterLocalNotificationsPlugin.initialize...');
       const androidSettings =
-          AndroidInitializationSettings('@mipmap/ic_launcher');
+          AndroidInitializationSettings('@mipmap/launcher_icon');
       const iosSettings = DarwinInitializationSettings(
         requestAlertPermission: true,
         requestBadgePermission: true,
@@ -559,7 +559,7 @@ class NotificationService {
           useSilent ? 'تنبيهات نصية للصلاة بدون صوت' : 'إشعارات أذان الصلاة',
       importance: Importance.max,
       priority: Priority.high,
-      icon: '@mipmap/ic_launcher',
+      icon: '@mipmap/launcher_icon',
       playSound: !useSilent,
       sound: useSilent ? null : RawResourceAndroidNotificationSound(soundName!),
       enableVibration: !useSilent,
@@ -1394,7 +1394,7 @@ class NotificationService {
             channelDescription: 'إشعارات أذان الصلاة',
             importance: Importance.max,
             priority: Priority.high,
-            icon: '@mipmap/ic_launcher',
+            icon: '@mipmap/launcher_icon',
           ),
         ),
         payload: 'test',
@@ -1431,7 +1431,7 @@ class NotificationService {
       channelDescription: 'إشعارات أذان الصلاة',
       importance: Importance.max,
       priority: Priority.high,
-      icon: '@mipmap/ic_launcher',
+      icon: '@mipmap/launcher_icon',
     );
 
     const iosDetails = DarwinNotificationDetails(
