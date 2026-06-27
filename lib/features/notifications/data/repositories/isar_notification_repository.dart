@@ -181,7 +181,7 @@ class IsarNotificationRepository implements INotificationRepository {
     if (found != null) return found;
 
     final settings = NotificationSettings()..featureKey = featureKey;
-    
+
     switch (featureKey) {
       case 'azkar':
         settings.fixedHour = 6;

@@ -70,7 +70,8 @@ void main() async {
     debugPrint('╔══════════════════════════════════════════╗');
     debugPrint('║     STARTUP BENCHMARK (before runApp)    ║');
     debugPrint('╠══════════════════════════════════════════╣');
-    debugPrint('║ 1. Timezone init:          ${tzMs.toString().padLeft(6)}ms ║');
+    debugPrint(
+        '║ 1. Timezone init:          ${tzMs.toString().padLeft(6)}ms ║');
     debugPrint(
         '║ 2. Firebase.initializeApp: ${firebaseMs.toString().padLeft(6)}ms ║');
     debugPrint(

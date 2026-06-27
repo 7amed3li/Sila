@@ -551,9 +551,26 @@ class NotificationService {
 
     final useSilent = silent || soundFile == null || soundFile.trim().isEmpty;
     final soundName = useSilent ? null : soundFile.split('.').first;
+    final channelId = useSilent ? _channels['silent']! : 'adhan_$soundName';
+
+    // يجب إنشاء الـ Channel ديناميكياً مع الصوت المختار لأن أندرويد لا يسمح بتغيير صوت القناة بعد إنشائها
+    if (!useSilent && soundName != null) {
+      final android = _notifications.resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>();
+      await android?.createNotificationChannel(AndroidNotificationChannel(
+        channelId,
+        'أذان الصلاة',
+        description: 'إشعارات أذان الصلاة المخصصة',
+        importance: Importance.max,
+        playSound: true,
+        enableVibration: true,
+        enableLights: true,
+        sound: RawResourceAndroidNotificationSound(soundName),
+      ));
+    }
 
     final androidDetails = AndroidNotificationDetails(
-      useSilent ? _channels['silent']! : _channels['adhan']!,
+      channelId,
       useSilent ? 'تنبيهات الصلاة الصامتة' : 'أذان الصلاة',
       channelDescription:
           useSilent ? 'تنبيهات نصية للصلاة بدون صوت' : 'إشعارات أذان الصلاة',
@@ -1051,7 +1068,7 @@ class NotificationService {
       presentBadge: false,
       presentSound: false,
     );
-    final details =
+    const details =
         NotificationDetails(android: androidDetails, iOS: iosDetails);
     await _notifications.show(id, title, body, details,
         payload: 'download_waiting');
@@ -1079,7 +1096,7 @@ class NotificationService {
       for (final setting in allSettings) {
         if (!setting.isEnabled || setting.timingType != 'fixed') continue;
 
-        bool changed = false;
+        var changed = false;
 
         // 1. التعلم الذاتي: إذا تم تجاهل الإشعار المتكرر، نغير موعده تلقائياً
         if (setting.needsReschedule) {
