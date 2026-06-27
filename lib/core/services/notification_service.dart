@@ -1067,8 +1067,51 @@ class NotificationService {
       final repo = IsarNotificationRepository(isar);
       final userLang = await PrefsService().getUserLanguage() ?? 'ar';
       final allSettings = await repo.getAllSettings();
+
+      // --- نظام الإشعارات الذكي: تحليل التجمعات (Anti-Clustering) والتعلم ---
+      final hourCounts = <int, int>{};
+      for (final s in allSettings) {
+        if (s.isEnabled && s.timingType == 'fixed') {
+          hourCounts[s.fixedHour] = (hourCounts[s.fixedHour] ?? 0) + 1;
+        }
+      }
+
       for (final setting in allSettings) {
         if (!setting.isEnabled || setting.timingType != 'fixed') continue;
+
+        bool changed = false;
+
+        // 1. التعلم الذاتي: إذا تم تجاهل الإشعار المتكرر، نغير موعده تلقائياً
+        if (setting.needsReschedule) {
+          setting.fixedHour = (setting.fixedHour + 2) % 24;
+          setting.consecutiveIgnored = 0; // تصفير العداد بعد التغيير
+          changed = true;
+          debugPrint(
+              '🧠 SmartNotification: Rescheduling ${setting.featureKey} due to ignores. New time: ${setting.fixedHour}:00');
+        }
+
+        // 2. منع الازدحام (Anti-Clustering): إذا كان هناك أكثر من إشعارين في نفس الساعة، نقوم بتوزيعها
+        int currentCount = hourCounts[setting.fixedHour] ?? 0;
+        if (currentCount > 2 && setting.tapCount == 0) {
+          // نوزع فقط إذا لم يتفاعل معها المستخدم من قبل
+          hourCounts[setting.fixedHour] = currentCount - 1;
+          // نبحث عن ساعة أقل ازدحاماً
+          int newHour = (setting.fixedHour + 1) % 24;
+          while ((hourCounts[newHour] ?? 0) >= 2) {
+            newHour = (newHour + 1) % 24;
+          }
+          setting.fixedHour = newHour;
+          hourCounts[newHour] = (hourCounts[newHour] ?? 0) + 1;
+          changed = true;
+          debugPrint(
+              '🧠 SmartNotification: Anti-clustering shifted ${setting.featureKey} to ${setting.fixedHour}:00');
+        }
+
+        if (changed) {
+          await repo.saveSettings(setting);
+        }
+        // ------------------------------------------------------------------------
+
         final now = DateTime.now();
         var scheduled = DateTime(
           now.year,

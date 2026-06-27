@@ -41,6 +41,27 @@ class NotificationSettingsController
 
     try {
       final fallback = NotificationSettings()..featureKey = _featureKey;
+      switch (_featureKey) {
+        case 'azkar':
+          fallback.fixedHour = 6;
+          break;
+        case 'wird':
+          fallback.fixedHour = 8;
+          break;
+        case 'hifz':
+          fallback.fixedHour = 10;
+          break;
+        case 'tasbih':
+          fallback.fixedHour = 16;
+          break;
+        case 'scholars':
+          fallback.fixedHour = 18;
+          break;
+        case 'salah':
+        case 'prayer':
+          fallback.fixedHour = 7;
+          break;
+      }
       state = AsyncValue.data(fallback);
     } catch (_) {
       state = AsyncValue.error(lastError ?? Exception('Settings load failed'),
