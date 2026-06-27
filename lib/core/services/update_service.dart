@@ -189,8 +189,7 @@ class UpdateService {
         }
 
         // Check if it's a URL issue (403/404)
-        if (e.response?.statusCode == 403 ||
-            e.response?.statusCode == 404) {
+        if (e.response?.statusCode == 403 || e.response?.statusCode == 404) {
           _notif.showDownloadError(
             id: NotificationService.downloadNotificationId,
             locale: locale,
@@ -267,7 +266,8 @@ class UpdateService {
         apkUrl,
         savePath,
         options: Options(
-          headers: useRange && baseBytes > 0 ? {'Range': 'bytes=$baseBytes-'} : null,
+          headers:
+              useRange && baseBytes > 0 ? {'Range': 'bytes=$baseBytes-'} : null,
           receiveTimeout: const Duration(minutes: 5),
           sendTimeout: const Duration(seconds: 30),
         ),

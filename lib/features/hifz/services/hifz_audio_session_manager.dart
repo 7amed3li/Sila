@@ -64,8 +64,11 @@ class HifzAudioSessionManager {
           await stopAudio();
         }
       } finally {
-        await stopAudio();
-        await sub.cancel();
+        try {
+          await stopAudio();
+        } finally {
+          await sub.cancel();
+        }
       }
     } finally {
       _audioActive = false;
@@ -95,7 +98,8 @@ class HifzAudioSessionManager {
     try {
       await stopAudio();
       await _waitForAudioRelease();
-      var started = await _speechService.startListening(autoRestart: autoRestart);
+      var started =
+          await _speechService.startListening(autoRestart: autoRestart);
       if (!started) {
         await Future<void>.delayed(const Duration(milliseconds: 700));
         await stopAudio();

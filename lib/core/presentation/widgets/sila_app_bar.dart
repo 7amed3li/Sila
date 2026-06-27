@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:sila_app/core/theme/app_fonts.dart';
 
 class SilaAppBar extends StatelessWidget implements PreferredSizeWidget {
   const SilaAppBar({
@@ -24,7 +24,7 @@ class SilaAppBar extends StatelessWidget implements PreferredSizeWidget {
         fit: BoxFit.scaleDown,
         child: Text(
           title,
-          style: GoogleFonts.getFont(
+          style: AppFonts.getFont(
             'Cairo',
             fontSize: 18,
             fontWeight: FontWeight.w700,

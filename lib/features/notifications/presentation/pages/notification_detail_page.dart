@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:sila_app/core/theme/app_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:sila_app/features/azkar/presentation/pages/azkar_page.dart';
 import 'package:sila_app/features/azkar/presentation/pages/tasbih_page.dart';
@@ -79,7 +79,7 @@ class NotificationDetailPage extends ConsumerWidget {
                           const SizedBox(height: 10),
                           Text(
                             _getCategoryName(content.category),
-                            style: GoogleFonts.getFont(
+                            style: AppFonts.getFont(
                               'Cairo',
                               color: Colors.white,
                               fontSize: 15,
@@ -107,7 +107,7 @@ class NotificationDetailPage extends ConsumerWidget {
                         content.arabicText,
                         textAlign: TextAlign.center,
                         textDirection: TextDirection.rtl,
-                        style: GoogleFonts.getFont(
+                        style: AppFonts.getFont(
                           'Amiri',
                           fontSize: 24,
                           height: 2.0,
@@ -118,7 +118,7 @@ class NotificationDetailPage extends ConsumerWidget {
                     const SizedBox(height: 12),
                     Text(
                       '${content.source} • ${content.grade}',
-                      style: GoogleFonts.getFont('Cairo', color: metaColor),
+                      style: AppFonts.getFont('Cairo', color: metaColor),
                     ),
                     if (content.shortExplanation.isNotEmpty) ...[
                       const SizedBox(height: 10),
@@ -133,7 +133,7 @@ class NotificationDetailPage extends ConsumerWidget {
                         ),
                         child: Text(
                           content.shortExplanation,
-                          style: GoogleFonts.getFont('Cairo',
+                          style: AppFonts.getFont('Cairo',
                               fontSize: 13, color: titleColor),
                         ),
                       ),
@@ -158,7 +158,7 @@ class NotificationDetailPage extends ConsumerWidget {
                             icon: const Icon(Icons.share_rounded, size: 18),
                             label: Text(
                               'شارك',
-                              style: GoogleFonts.getFont('Cairo',
+                              style: AppFonts.getFont('Cairo',
                                   fontWeight: FontWeight.w700),
                             ),
                             style: OutlinedButton.styleFrom(
@@ -176,7 +176,7 @@ class NotificationDetailPage extends ConsumerWidget {
                                 size: 18),
                             label: Text(
                               'احفظ',
-                              style: GoogleFonts.getFont('Cairo',
+                              style: AppFonts.getFont('Cairo',
                                   fontWeight: FontWeight.w700),
                             ),
                             style: OutlinedButton.styleFrom(
@@ -202,7 +202,7 @@ class NotificationDetailPage extends ConsumerWidget {
                           color: Colors.white),
                       label: Text(
                         'اذهب إلى ${_getCategoryName(content.category)}',
-                        style: GoogleFonts.getFont(
+                        style: AppFonts.getFont(
                           'Cairo',
                           color: Colors.white,
                           fontWeight: FontWeight.w700,
@@ -356,7 +356,7 @@ class _TafsirCardState extends State<_TafsirCard> {
                 ),
                 const SizedBox(width: 8),
                 Text('جاري تحميل تفسير السعدي...',
-                    style: GoogleFonts.getFont('Cairo', color: subtitle)),
+                    style: AppFonts.getFont('Cairo', color: subtitle)),
               ],
             );
           }
@@ -365,8 +365,7 @@ class _TafsirCardState extends State<_TafsirCard> {
           if (tafsir == null || tafsir.isEmpty) {
             return Text(
               'تعذر تحميل التفسير الآن. سيبقى النص القرآني متاحًا بالكامل دون إنترنت.',
-              style:
-                  GoogleFonts.getFont('Cairo', fontSize: 12, color: subtitle),
+              style: AppFonts.getFont('Cairo', fontSize: 12, color: subtitle),
             );
           }
 
@@ -375,14 +374,14 @@ class _TafsirCardState extends State<_TafsirCard> {
             children: [
               Text(
                 'تفسير السعدي',
-                style: GoogleFonts.getFont('Cairo',
+                style: AppFonts.getFont('Cairo',
                     fontWeight: FontWeight.w700, color: title),
               ),
               const SizedBox(height: 8),
               Text(
                 tafsir,
                 textDirection: TextDirection.rtl,
-                style: GoogleFonts.getFont('Cairo',
+                style: AppFonts.getFont('Cairo',
                     fontSize: 13, height: 1.8, color: title),
               ),
             ],

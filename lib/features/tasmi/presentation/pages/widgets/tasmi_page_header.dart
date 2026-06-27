@@ -103,12 +103,12 @@ class TasmiPageHeader extends ConsumerWidget implements PreferredSizeWidget {
                     const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
                   color: isListening
-                      ? Colors.red.withOpacity(0.1)
+                      ? Colors.red.withValues(alpha: 0.1)
                       : primaryColor.withOpacity(isDark ? 0.2 : 0.1),
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
                     color: isListening
-                        ? Colors.red.withOpacity(0.5)
+                        ? Colors.red.withValues(alpha: 0.5)
                         : Colors.transparent,
                   ),
                 ),

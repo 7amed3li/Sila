@@ -10,7 +10,6 @@ import 'package:sila_app/features/azkar/data/models/ibtihal_model.dart';
 part 'nafahat_audio_controller.g.dart';
 
 class NafahatPlayerState {
-
   NafahatPlayerState({
     required this.fullPlaylist,
     required this.filteredPlaylist,

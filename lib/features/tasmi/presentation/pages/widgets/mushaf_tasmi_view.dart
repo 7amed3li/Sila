@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:sila_app/core/theme/app_fonts.dart';
 import 'package:sila_app/features/tasmi/data/models/tasmi_word_entry.dart';
 import 'package:sila_app/features/tasmi/presentation/controllers/tasmi_controller.dart';
 
@@ -49,7 +49,7 @@ class MushafTasmiView extends ConsumerWidget {
         child: RichText(
           textAlign: TextAlign.justify,
           text: TextSpan(
-            style: GoogleFonts.getFont(
+            style: AppFonts.getFont(
               fontFamily,
               fontSize: fontSize,
               height: 2.2, // Generous line height for Mushaf aesthetics
@@ -117,8 +117,8 @@ class MushafTasmiView extends ConsumerWidget {
       return TextStyle(
         color: isDark ? accentColor : primaryColor, // Highlight color
         backgroundColor: isDark
-            ? accentColor.withOpacity(0.2)
-            : primaryColor.withOpacity(0.15),
+            ? accentColor.withValues(alpha: 0.2)
+            : primaryColor.withValues(alpha: 0.15),
         fontWeight: FontWeight.bold,
       );
     }
@@ -134,8 +134,8 @@ class MushafTasmiView extends ConsumerWidget {
         return TextStyle(
           color: isDark ? const Color(0xFFE57373) : const Color(0xFFA32D2D),
           backgroundColor: isDark
-              ? const Color(0xFFE57373).withOpacity(0.15)
-              : const Color(0xFFA32D2D).withOpacity(0.1),
+              ? const Color(0xFFE57373).withValues(alpha: 0.15)
+              : const Color(0xFFA32D2D).withValues(alpha: 0.1),
         );
       case WordEntryStatus.skipped:
         return TextStyle(color: isDark ? Colors.grey[600] : Colors.grey[400]);

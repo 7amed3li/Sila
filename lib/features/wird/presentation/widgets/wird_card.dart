@@ -3,7 +3,7 @@ import 'dart:ui' as ui;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:sila_app/core/theme/app_fonts.dart';
 import 'package:quran/quran.dart' as quran;
 import 'package:sila_app/core/theme/app_theme.dart';
 import 'package:sila_app/features/vefa/presentation/pages/vefa_page.dart';
@@ -43,7 +43,7 @@ class WirdCard extends ConsumerWidget {
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.06),
+            color: Colors.black.withValues(alpha: 0.06),
             blurRadius: 24,
             offset: const Offset(0, 8),
           ),
@@ -54,7 +54,7 @@ class WirdCard extends ConsumerWidget {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: const Color(0xFFD97706).withOpacity(0.1),
+              color: const Color(0xFFD97706).withValues(alpha: 0.1),
               shape: BoxShape.circle,
             ),
             child: const Icon(Icons.auto_stories_rounded,
@@ -63,7 +63,7 @@ class WirdCard extends ConsumerWidget {
           const SizedBox(height: 20),
           Text(
             'set_daily_wird'.tr(),
-            style: GoogleFonts.amiri(
+            style: AppFonts.amiri(
               fontSize: 24,
               fontWeight: FontWeight.bold,
               color: AppTheme.primaryColor,
@@ -73,9 +73,9 @@ class WirdCard extends ConsumerWidget {
           Text(
             'start_blessed_journey'.tr(),
             textAlign: TextAlign.center,
-            style: GoogleFonts.cairo(
+            style: AppFonts.cairo(
               fontSize: 14,
-              color: AppTheme.primaryColor.withOpacity(0.6),
+              color: AppTheme.primaryColor.withValues(alpha: 0.6),
               height: 1.5,
             ),
           ),
@@ -97,8 +97,8 @@ class WirdCard extends ConsumerWidget {
               ),
               child: Text(
                 'start_setup'.tr(),
-                style: GoogleFonts.cairo(
-                    fontWeight: FontWeight.bold, fontSize: 16),
+                style:
+                    AppFonts.cairo(fontWeight: FontWeight.bold, fontSize: 16),
               ),
             ),
           ),
@@ -151,7 +151,7 @@ class WirdCard extends ConsumerWidget {
         borderRadius: BorderRadius.circular(28),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF0F172A).withOpacity(0.3),
+            color: const Color(0xFF0F172A).withValues(alpha: 0.3),
             blurRadius: 20,
             offset: const Offset(0, 10),
           ),
@@ -175,7 +175,7 @@ class WirdCard extends ConsumerWidget {
                     child: Container(
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.1),
+                        color: Colors.white.withValues(alpha: 0.1),
                         shape: BoxShape.circle,
                       ),
                       child: const Icon(Icons.settings_rounded,
@@ -185,7 +185,7 @@ class WirdCard extends ConsumerWidget {
                   const SizedBox(width: 10),
                   Text(
                     'daily_wird_label'.tr(),
-                    style: GoogleFonts.cairo(
+                    style: AppFonts.cairo(
                       color: textColor,
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
@@ -197,14 +197,14 @@ class WirdCard extends ConsumerWidget {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFD97706).withOpacity(0.2),
+                  color: const Color(0xFFD97706).withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(
-                      color: const Color(0xFFD97706).withOpacity(0.3)),
+                      color: const Color(0xFFD97706).withValues(alpha: 0.3)),
                 ),
                 child: Text(
                   'juz_number'.tr(args: ['$juz']),
-                  style: GoogleFonts.cairo(
+                  style: AppFonts.cairo(
                     color: const Color(0xFFD97706),
                     fontWeight: FontWeight.bold,
                     fontSize: 12,
@@ -225,7 +225,7 @@ class WirdCard extends ConsumerWidget {
                   Flexible(
                     child: Text(
                       'progress_text'.tr(args: ['${(progress * 100).toInt()}']),
-                      style: GoogleFonts.cairo(
+                      style: AppFonts.cairo(
                         color: subtextColor,
                         fontSize: 13,
                         fontWeight: FontWeight.w500,
@@ -238,7 +238,7 @@ class WirdCard extends ConsumerWidget {
                   Text(
                     'pages_count'
                         .tr(args: ['$pagesReadSoFar', '$totalPagesToRead']),
-                    style: GoogleFonts.outfit(
+                    style: AppFonts.outfit(
                       color: const Color(0xFFD97706),
                       fontSize: 13,
                       fontWeight: FontWeight.bold,
@@ -252,7 +252,7 @@ class WirdCard extends ConsumerWidget {
                 child: LinearProgressIndicator(
                   value: progress,
                   minHeight: 10,
-                  backgroundColor: Colors.white.withOpacity(0.05),
+                  backgroundColor: Colors.white.withValues(alpha: 0.05),
                   valueColor: const AlwaysStoppedAnimation<Color>(
                       Color(0xFF10B981)), // Success Green
                 ),
@@ -266,16 +266,16 @@ class WirdCard extends ConsumerWidget {
           Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.03),
+              color: Colors.white.withValues(alpha: 0.03),
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: Colors.white.withOpacity(0.05)),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
             ),
             child: Column(
               children: [
                 Text(
                   'from_quran_saying'.tr(),
-                  style: GoogleFonts.amiri(
-                    color: Colors.white.withOpacity(0.5),
+                  style: AppFonts.amiri(
+                    color: Colors.white.withValues(alpha: 0.5),
                     fontSize: 14,
                   ),
                 ),
@@ -286,7 +286,7 @@ class WirdCard extends ConsumerWidget {
                   textDirection: ui.TextDirection.rtl,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style: GoogleFonts.amiri(
+                  style: AppFonts.amiri(
                     fontSize: 24,
                     height: 1.6,
                     color: textColor,
@@ -298,8 +298,8 @@ class WirdCard extends ConsumerWidget {
                     quran.getSurahNameArabic(surahNum),
                     '$safeStartPage'
                   ]),
-                  style: GoogleFonts.cairo(
-                    color: const Color(0xFFD97706).withOpacity(0.8),
+                  style: AppFonts.cairo(
+                    color: const Color(0xFFD97706).withValues(alpha: 0.8),
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
                   ),
@@ -356,7 +356,7 @@ class WirdCard extends ConsumerWidget {
                     borderRadius: BorderRadius.circular(12),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
+                        color: Colors.black.withValues(alpha: 0.1),
                         blurRadius: 8,
                         offset: const Offset(0, 4),
                       ),
@@ -365,7 +365,7 @@ class WirdCard extends ConsumerWidget {
                   child: Center(
                     child: Text(
                       'continue_reading_wird'.tr(),
-                      style: GoogleFonts.cairo(
+                      style: AppFonts.cairo(
                         color: Colors.white,
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
@@ -395,7 +395,7 @@ class WirdCard extends ConsumerWidget {
                     borderRadius: BorderRadius.circular(12),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
+                        color: Colors.black.withValues(alpha: 0.1),
                         blurRadius: 8,
                         offset: const Offset(0, 4),
                       ),
@@ -409,7 +409,7 @@ class WirdCard extends ConsumerWidget {
                         Flexible(
                           child: Text(
                             'completed_reading'.tr(),
-                            style: GoogleFonts.cairo(
+                            style: AppFonts.cairo(
                               color: Colors.white,
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
@@ -431,7 +431,7 @@ class WirdCard extends ConsumerWidget {
         ),
 
         const SizedBox(height: 24),
-        Divider(color: Colors.white.withOpacity(0.1), height: 1),
+        Divider(color: Colors.white.withValues(alpha: 0.1), height: 1),
         const SizedBox(height: 20),
 
         // Statistics Section
@@ -453,10 +453,10 @@ class WirdCard extends ConsumerWidget {
                           isLate
                               ? 'behind_schedule'.tr(args: ['$lateDays'])
                               : 'on_track'.tr(),
-                          style: GoogleFonts.cairo(
+                          style: AppFonts.cairo(
                             color: isLate
                                 ? const Color(0xFFEF4444)
-                                : Colors.white.withOpacity(0.7),
+                                : Colors.white.withValues(alpha: 0.7),
                             fontSize: 12,
                             fontWeight: FontWeight.w500,
                           ),
@@ -470,8 +470,8 @@ class WirdCard extends ConsumerWidget {
                 const SizedBox(width: 8),
                 Text(
                   'current_khatma'.tr(),
-                  style: GoogleFonts.cairo(
-                    color: Colors.white.withOpacity(0.9),
+                  style: AppFonts.cairo(
+                    color: Colors.white.withValues(alpha: 0.9),
                     fontSize: 13,
                     fontWeight: FontWeight.bold,
                   ),
@@ -484,7 +484,7 @@ class WirdCard extends ConsumerWidget {
               borderRadius: BorderRadius.circular(10),
               child: LinearProgressIndicator(
                 value: state.khatmaProgress,
-                backgroundColor: Colors.white.withOpacity(0.1),
+                backgroundColor: Colors.white.withValues(alpha: 0.1),
                 valueColor:
                     const AlwaysStoppedAnimation<Color>(Color(0xFF4B5563)),
                 minHeight: 8,
@@ -497,8 +497,8 @@ class WirdCard extends ConsumerWidget {
                 Flexible(
                   child: Text(
                     'upcoming_wirds'.tr(args: ['${state.remainingWirdsCount}']),
-                    style: GoogleFonts.cairo(
-                      color: Colors.white.withOpacity(0.6),
+                    style: AppFonts.cairo(
+                      color: Colors.white.withValues(alpha: 0.6),
                       fontSize: 11,
                     ),
                     overflow: TextOverflow.ellipsis,
@@ -509,8 +509,8 @@ class WirdCard extends ConsumerWidget {
                   child: Text(
                     'completed_wirds'
                         .tr(args: ['${state.completedWirdsCount}']),
-                    style: GoogleFonts.cairo(
-                      color: Colors.white.withOpacity(0.6),
+                    style: AppFonts.cairo(
+                      color: Colors.white.withValues(alpha: 0.6),
                       fontSize: 11,
                     ),
                     overflow: TextOverflow.ellipsis,
@@ -537,18 +537,18 @@ class WirdCard extends ConsumerWidget {
           isKhatmaComplete
               ? 'quran_completion_title'.tr()
               : 'wird_completed_title'.tr(),
-          style: GoogleFonts.outfit(fontWeight: FontWeight.bold),
+          style: AppFonts.outfit(fontWeight: FontWeight.bold),
         ),
         content: Text(
           isKhatmaComplete
               ? 'quran_completion_message'.tr()
               : 'completion_check'.tr(),
-          style: GoogleFonts.outfit(fontSize: 15, height: 1.6),
+          style: AppFonts.outfit(fontSize: 15, height: 1.6),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('cancel'.tr(), style: GoogleFonts.outfit()),
+            child: Text('cancel'.tr(), style: AppFonts.outfit()),
           ),
           FilledButton(
             style: FilledButton.styleFrom(
@@ -579,7 +579,7 @@ class WirdCard extends ConsumerWidget {
               isKhatmaComplete
                   ? 'start_new_khatma'.tr()
                   : 'wird_completed_title'.tr(),
-              style: GoogleFonts.outfit(fontWeight: FontWeight.w600),
+              style: AppFonts.outfit(fontWeight: FontWeight.w600),
             ),
           ),
         ],
@@ -607,20 +607,20 @@ class WirdCard extends ConsumerWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: Text(
           'wird_completed_title'.tr(),
-          style: GoogleFonts.outfit(fontWeight: FontWeight.bold),
+          style: AppFonts.outfit(fontWeight: FontWeight.bold),
           textAlign: TextAlign.center,
         ),
         content: Text(
           'wird_completed_body'.tr(),
           textAlign: TextAlign.center,
-          style: GoogleFonts.outfit(fontSize: 15),
+          style: AppFonts.outfit(fontSize: 15),
         ),
         actionsAlignment: MainAxisAlignment.center,
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('later'.tr(),
-                style: GoogleFonts.outfit(color: Colors.grey)),
+            child:
+                Text('later'.tr(), style: AppFonts.outfit(color: Colors.grey)),
           ),
           const SizedBox(width: 8),
           FilledButton(
@@ -640,7 +640,7 @@ class WirdCard extends ConsumerWidget {
             },
             child: Text(
               'yes_definitely'.tr(),
-              style: GoogleFonts.outfit(fontWeight: FontWeight.w600),
+              style: AppFonts.outfit(fontWeight: FontWeight.w600),
             ),
           ),
         ],
@@ -697,7 +697,7 @@ class _CelebrationWidgetState extends State<_CelebrationWidget>
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.black.withOpacity(0.4),
+      color: Colors.black.withValues(alpha: 0.4),
       child: Center(
         child: AnimatedBuilder(
           animation: _controller,
@@ -713,7 +713,7 @@ class _CelebrationWidgetState extends State<_CelebrationWidget>
                     borderRadius: BorderRadius.circular(30),
                     boxShadow: [
                       BoxShadow(
-                        color: const Color(0xFFD97706).withOpacity(0.4),
+                        color: const Color(0xFFD97706).withValues(alpha: 0.4),
                         blurRadius: 40,
                         spreadRadius: 10,
                       ),
@@ -729,7 +729,7 @@ class _CelebrationWidgetState extends State<_CelebrationWidget>
                       const SizedBox(height: 16),
                       Text(
                         'mubarak_text'.tr(),
-                        style: GoogleFonts.amiri(
+                        style: AppFonts.amiri(
                           fontSize: 48,
                           fontWeight: FontWeight.bold,
                           color: AppTheme.primaryColor,
@@ -738,9 +738,9 @@ class _CelebrationWidgetState extends State<_CelebrationWidget>
                       const SizedBox(height: 8),
                       Text(
                         'completed_wird_daily'.tr(),
-                        style: GoogleFonts.cairo(
+                        style: AppFonts.cairo(
                           fontSize: 18,
-                          color: AppTheme.primaryColor.withOpacity(0.8),
+                          color: AppTheme.primaryColor.withValues(alpha: 0.8),
                         ),
                       ),
                     ],

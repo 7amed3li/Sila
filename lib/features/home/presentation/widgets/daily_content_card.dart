@@ -1,6 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:sila_app/core/theme/app_fonts.dart';
 import 'package:sila_app/features/sunan_mahjoura/data/sunan_data.dart';
 
 class DailyContentCard extends StatelessWidget {
@@ -26,7 +26,7 @@ class DailyContentCard extends StatelessWidget {
         border: Border.all(color: border, width: 0.5),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 3),
           ),
@@ -45,7 +45,7 @@ class DailyContentCard extends StatelessWidget {
               const SizedBox(width: 8),
               Text(
                 'sunan_mahjoura'.tr(),
-                style: GoogleFonts.getFont(
+                style: AppFonts.getFont(
                   'Cairo',
                   color: const Color(0xFFD97706),
                   fontSize: 14,
@@ -57,7 +57,7 @@ class DailyContentCard extends StatelessWidget {
           const SizedBox(height: 12),
           Text(
             sunnah.text,
-            style: GoogleFonts.getFont(
+            style: AppFonts.getFont(
               'Cairo',
               color: txtP,
               fontSize: 14,
@@ -76,7 +76,7 @@ class DailyContentCard extends StatelessWidget {
               Flexible(
                 child: Text(
                   "${'source'.tr()}: ${sunnah.source}",
-                  style: GoogleFonts.getFont(
+                  style: AppFonts.getFont(
                     'Cairo',
                     color: txtS,
                     fontSize: 11,
@@ -94,22 +94,22 @@ class DailyContentCard extends StatelessWidget {
                       builder: (context) => AlertDialog(
                         backgroundColor: surface,
                         title: Text('explanation'.tr(),
-                            style: GoogleFonts.getFont('Cairo', color: txtP)),
+                            style: AppFonts.getFont('Cairo', color: txtP)),
                         content: SingleChildScrollView(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(sunnah.text,
-                                  style: GoogleFonts.getFont('Cairo',
+                                  style: AppFonts.getFont('Cairo',
                                       fontWeight: FontWeight.bold,
                                       color: txtP)),
                               const SizedBox(height: 10),
                               Text(sunnah.explanation,
-                                  style: GoogleFonts.getFont('Cairo',
+                                  style: AppFonts.getFont('Cairo',
                                       color: txtP, height: 1.6)),
                               const SizedBox(height: 20),
                               Text("${'source'.tr()}: ${sunnah.source}",
-                                  style: GoogleFonts.getFont('Cairo',
+                                  style: AppFonts.getFont('Cairo',
                                       color: txtS, fontSize: 12)),
                             ],
                           ),
@@ -118,7 +118,7 @@ class DailyContentCard extends StatelessWidget {
                           TextButton(
                             onPressed: () => Navigator.pop(context),
                             child: Text('close'.tr(),
-                                style: GoogleFonts.getFont('Cairo',
+                                style: AppFonts.getFont('Cairo',
                                     color: primaryColor)),
                           )
                         ],
@@ -129,7 +129,7 @@ class DailyContentCard extends StatelessWidget {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                     decoration: BoxDecoration(
-                      color: primaryColor.withOpacity(0.08),
+                      color: primaryColor.withValues(alpha: 0.08),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Row(
@@ -139,7 +139,7 @@ class DailyContentCard extends StatelessWidget {
                             size: 14, color: primaryColor),
                         const SizedBox(width: 4),
                         Text('explanation'.tr(),
-                            style: GoogleFonts.getFont('Cairo',
+                            style: AppFonts.getFont('Cairo',
                                 fontSize: 11,
                                 color: primaryColor,
                                 fontWeight: FontWeight.w700)),

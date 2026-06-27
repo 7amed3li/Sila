@@ -94,7 +94,7 @@ class TasmiActionButton extends StatelessWidget {
           : BoxDecoration(
               boxShadow: [
                 BoxShadow(
-                  color: (color ?? Colors.transparent).withOpacity(0.3),
+                  color: (color ?? Colors.transparent).withValues(alpha: 0.3),
                   blurRadius: 12,
                   offset: const Offset(0, 4),
                 ),

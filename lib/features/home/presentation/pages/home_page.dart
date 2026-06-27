@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:sila_app/core/theme/app_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sila_app/core/theme/app_theme.dart';
 import 'package:sila_app/core/services/notification_service.dart';
@@ -158,7 +158,7 @@ class HomePage extends ConsumerWidget {
           borderRadius: BorderRadius.circular(24),
           boxShadow: [
             BoxShadow(
-              color: color.withOpacity(0.2),
+              color: color.withValues(alpha: 0.2),
               blurRadius: 12,
               offset: const Offset(0, 4),
             ),
@@ -171,7 +171,7 @@ class HomePage extends ConsumerWidget {
             Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.15),
+                color: Colors.white.withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(14),
               ),
               child: Icon(icon, color: Colors.white, size: 24),
@@ -183,7 +183,7 @@ class HomePage extends ConsumerWidget {
                 children: [
                   Text(
                     title,
-                    style: GoogleFonts.amiri(
+                    style: AppFonts.amiri(
                       color: Colors.white,
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
@@ -194,8 +194,8 @@ class HomePage extends ConsumerWidget {
                   const SizedBox(height: 4),
                   Text(
                     subtitle,
-                    style: GoogleFonts.cairo(
-                      color: Colors.white.withOpacity(0.8),
+                    style: AppFonts.cairo(
+                      color: Colors.white.withValues(alpha: 0.8),
                       fontSize: 12,
                     ),
                     maxLines: 2,
@@ -238,7 +238,8 @@ class _NotificationInboxCard extends ConsumerWidget {
             }
 
             if (notif.payload != null && notif.payload!.trim().isNotEmpty) {
-              await NotificationService().handleNotificationPayload(notif.payload);
+              await NotificationService()
+                  .handleNotificationPayload(notif.payload);
               if (!context.mounted) return;
               return;
             }
@@ -251,10 +252,10 @@ class _NotificationInboxCard extends ConsumerWidget {
           child: Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: AppTheme.accentColor.withOpacity(0.1),
+              color: AppTheme.accentColor.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
-                color: AppTheme.accentColor.withOpacity(0.3),
+                color: AppTheme.accentColor.withValues(alpha: 0.3),
                 width: 1,
               ),
             ),
@@ -263,7 +264,7 @@ class _NotificationInboxCard extends ConsumerWidget {
                 Container(
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                    color: AppTheme.accentColor.withOpacity(0.2),
+                    color: AppTheme.accentColor.withValues(alpha: 0.2),
                     shape: BoxShape.circle,
                   ),
                   child: const Icon(
@@ -285,7 +286,7 @@ class _NotificationInboxCard extends ConsumerWidget {
                               notif.title,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: GoogleFonts.notoKufiArabic(
+                              style: AppFonts.notoKufiArabic(
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
                                 color: AppTheme.primaryColor,
@@ -295,7 +296,7 @@ class _NotificationInboxCard extends ConsumerWidget {
                           const SizedBox(width: 8),
                           Text(
                             _formatTime(notif.time),
-                            style: GoogleFonts.notoKufiArabic(
+                            style: AppFonts.notoKufiArabic(
                               fontSize: 11,
                               color: Colors.grey[600],
                             ),
@@ -307,7 +308,7 @@ class _NotificationInboxCard extends ConsumerWidget {
                         notif.body,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.notoKufiArabic(
+                        style: AppFonts.notoKufiArabic(
                           fontSize: 13,
                           color: Colors.black87,
                         ),

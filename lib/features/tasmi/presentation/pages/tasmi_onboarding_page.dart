@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:sila_app/core/theme/app_fonts.dart';
 import 'package:sila_app/core/theme/app_theme.dart';
 import 'package:sila_app/features/tasmi/data/models/tasmi_preferences.dart';
 import 'package:sila_app/features/tasmi/presentation/riverpod/tasmi_preferences_provider.dart';
@@ -36,7 +36,7 @@ class _TasmiOnboardingPageState extends ConsumerState<TasmiOnboardingPage> {
             children: [
               Text(
                 'tasmi_onboarding_title'.tr(),
-                style: GoogleFonts.cairo(
+                style: AppFonts.cairo(
                   fontSize: 26,
                   fontWeight: FontWeight.bold,
                   color: isDark ? Colors.white : AppTheme.primaryColor,
@@ -45,7 +45,7 @@ class _TasmiOnboardingPageState extends ConsumerState<TasmiOnboardingPage> {
               const SizedBox(height: 6),
               Text(
                 'tasmi_onboarding_subtitle'.tr(),
-                style: GoogleFonts.cairo(
+                style: AppFonts.cairo(
                   fontSize: 15,
                   color: isDark ? Colors.white70 : Colors.grey[600],
                   fontWeight: FontWeight.w500,
@@ -136,7 +136,7 @@ class _TasmiOnboardingPageState extends ConsumerState<TasmiOnboardingPage> {
                             setState(() => _ttsEnabled = value),
                         title: Text(
                           'correction_voice'.tr(),
-                          style: GoogleFonts.cairo(
+                          style: AppFonts.cairo(
                             fontWeight: FontWeight.bold,
                             color:
                                 isDark ? Colors.white : AppTheme.primaryColor,
@@ -144,7 +144,7 @@ class _TasmiOnboardingPageState extends ConsumerState<TasmiOnboardingPage> {
                         ),
                         subtitle: Text(
                           _ttsEnabled ? 'enabled'.tr() : 'disabled'.tr(),
-                          style: GoogleFonts.cairo(
+                          style: AppFonts.cairo(
                             color: isDark ? Colors.white70 : Colors.grey[600],
                           ),
                         ),
@@ -201,7 +201,7 @@ class _TasmiOnboardingPageState extends ConsumerState<TasmiOnboardingPage> {
                   ),
                   child: Text(
                     'start_tasmi_button'.tr(),
-                    style: GoogleFonts.cairo(
+                    style: AppFonts.cairo(
                         fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -235,7 +235,7 @@ class _SectionTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: GoogleFonts.cairo(
+      style: AppFonts.cairo(
         fontSize: 17,
         fontWeight: FontWeight.bold,
         color: isDark ? Colors.white : AppTheme.primaryColor,
@@ -296,7 +296,7 @@ class _ChoiceCard extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: GoogleFonts.cairo(
+                    style: AppFonts.cairo(
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
                       color: selected
@@ -306,7 +306,7 @@ class _ChoiceCard extends StatelessWidget {
                   ),
                   Text(
                     subtitle,
-                    style: GoogleFonts.cairo(
+                    style: AppFonts.cairo(
                       fontSize: 13,
                       color: isDark ? Colors.white70 : Colors.grey[600],
                       fontWeight: FontWeight.w500,
@@ -363,7 +363,7 @@ class _AttemptsChip extends StatelessWidget {
           child: Text(
             label,
             textAlign: TextAlign.center,
-            style: GoogleFonts.cairo(
+            style: AppFonts.cairo(
               fontSize: 14,
               fontWeight: selected ? FontWeight.bold : FontWeight.w600,
               color: selected

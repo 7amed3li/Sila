@@ -4,7 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:sila_app/core/theme/app_fonts.dart';
 import 'package:hijri/hijri_calendar.dart';
 import 'package:sila_app/features/ibadah_tracker/domain/daily_status_calculator.dart';
 import 'package:sila_app/features/ibadah_tracker/presentation/controllers/custom_ibadah_controller.dart';
@@ -118,12 +118,12 @@ class _IbadahTrackerTabState extends ConsumerState<IbadahTrackerTab> {
                           children: [
                             Text(
                               hijriDate,
-                              style: GoogleFonts.getFont('Cairo',
+                              style: AppFonts.getFont('Cairo',
                                   fontSize: 12, color: Colors.white60),
                             ),
                             Text(
                               dayName,
-                              style: GoogleFonts.getFont('Cairo',
+                              style: AppFonts.getFont('Cairo',
                                   fontSize: 12, color: Colors.white60),
                             ),
                           ],
@@ -132,7 +132,7 @@ class _IbadahTrackerTabState extends ConsumerState<IbadahTrackerTab> {
                         Text(
                           dailyStatusText,
                           textAlign: TextAlign.center,
-                          style: GoogleFonts.getFont('Amiri',
+                          style: AppFonts.getFont('Amiri',
                               fontSize: 16, color: Colors.white, height: 1.8),
                         ),
                         const SizedBox(height: 12),
@@ -158,7 +158,7 @@ class _IbadahTrackerTabState extends ConsumerState<IbadahTrackerTab> {
                         Text(
                           'tracker_completed_count'
                               .tr(args: ['$completedCount', '$totalCount']),
-                          style: GoogleFonts.getFont('Cairo',
+                          style: AppFonts.getFont('Cairo',
                               fontSize: 11, color: Colors.white70),
                         ),
                       ],
@@ -219,7 +219,7 @@ class _IbadahTrackerTabState extends ConsumerState<IbadahTrackerTab> {
                     ),
                     child: Text(
                       'daily_report'.tr(),
-                      style: GoogleFonts.getFont('Cairo',
+                      style: AppFonts.getFont('Cairo',
                           color: Colors.white, fontWeight: FontWeight.w700),
                     ),
                   ),
@@ -248,7 +248,7 @@ class _IbadahTrackerTabState extends ConsumerState<IbadahTrackerTab> {
             const SizedBox(width: 8),
             Text(
               'add_custom_ibadah_title'.tr(),
-              style: GoogleFonts.getFont('Cairo',
+              style: AppFonts.getFont('Cairo',
                   color: const Color(0xFFD97706), fontWeight: FontWeight.w700),
             ),
           ],
@@ -263,7 +263,7 @@ class _IbadahTrackerTabState extends ConsumerState<IbadahTrackerTab> {
       context: context,
       builder: (context) => AlertDialog(
         title: Text('add_custom_ibadah_title'.tr(),
-            style: GoogleFonts.cairo(fontWeight: FontWeight.bold)),
+            style: AppFonts.cairo(fontWeight: FontWeight.bold)),
         content: TextField(
           controller: controller,
           decoration: InputDecoration(
@@ -274,7 +274,7 @@ class _IbadahTrackerTabState extends ConsumerState<IbadahTrackerTab> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('cancel'.tr(), style: GoogleFonts.cairo()),
+            child: Text('cancel'.tr(), style: AppFonts.cairo()),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
@@ -287,8 +287,7 @@ class _IbadahTrackerTabState extends ConsumerState<IbadahTrackerTab> {
                 Navigator.pop(context);
               }
             },
-            child:
-                Text('add'.tr(), style: GoogleFonts.cairo(color: Colors.white)),
+            child: Text('add'.tr(), style: AppFonts.cairo(color: Colors.white)),
           ),
         ],
       ),
@@ -369,8 +368,7 @@ class _IbadahTrackerTabState extends ConsumerState<IbadahTrackerTab> {
                   children: [
                     const Text('✨', style: TextStyle(fontSize: 16)),
                     const SizedBox(width: 8),
-                    Text(name,
-                        style: GoogleFonts.getFont('Cairo', fontSize: 13)),
+                    Text(name, style: AppFonts.getFont('Cairo', fontSize: 13)),
                   ],
                 ),
               ),
@@ -413,20 +411,20 @@ class _IbadahTrackerTabState extends ConsumerState<IbadahTrackerTab> {
       context: context,
       builder: (context) => AlertDialog(
         title: Text('delete_custom_ibadah'.tr(),
-            style: GoogleFonts.cairo(fontWeight: FontWeight.bold)),
-        content: Text('delete_custom_ibadah_confirm'.tr(),
-            style: GoogleFonts.cairo()),
+            style: AppFonts.cairo(fontWeight: FontWeight.bold)),
+        content:
+            Text('delete_custom_ibadah_confirm'.tr(), style: AppFonts.cairo()),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: Text('cancel'.tr(), style: GoogleFonts.cairo()),
+            child: Text('cancel'.tr(), style: AppFonts.cairo()),
           ),
           TextButton(
             onPressed: () {
               Navigator.pop(context, true);
             },
-            child: Text('delete'.tr(),
-                style: GoogleFonts.cairo(color: Colors.red)),
+            child:
+                Text('delete'.tr(), style: AppFonts.cairo(color: Colors.red)),
           ),
         ],
       ),
@@ -447,7 +445,7 @@ class _IbadahTrackerTabState extends ConsumerState<IbadahTrackerTab> {
           Expanded(
             flex: showYesterday ? 3 : 4,
             child: Text('tracker_table.worship'.tr(),
-                style: GoogleFonts.getFont('Cairo',
+                style: AppFonts.getFont('Cairo',
                     fontSize: 12, color: Colors.grey[500])),
           ),
           if (showYesterday)
@@ -455,7 +453,7 @@ class _IbadahTrackerTabState extends ConsumerState<IbadahTrackerTab> {
               child: Text(
                 'tracker_table.yesterday'.tr(),
                 textAlign: TextAlign.center,
-                style: GoogleFonts.getFont('Cairo',
+                style: AppFonts.getFont('Cairo',
                     fontSize: 12, color: Colors.grey[500]),
               ),
             ),
@@ -463,7 +461,7 @@ class _IbadahTrackerTabState extends ConsumerState<IbadahTrackerTab> {
             child: Text(
               'tracker_table.today'.tr(),
               textAlign: TextAlign.center,
-              style: GoogleFonts.getFont(
+              style: AppFonts.getFont(
                 'Cairo',
                 fontSize: 12,
                 fontWeight: FontWeight.w700,
@@ -507,8 +505,7 @@ class _IbadahTrackerTabState extends ConsumerState<IbadahTrackerTab> {
                   children: [
                     Text(icon, style: const TextStyle(fontSize: 16)),
                     const SizedBox(width: 8),
-                    Text(label,
-                        style: GoogleFonts.getFont('Cairo', fontSize: 13)),
+                    Text(label, style: AppFonts.getFont('Cairo', fontSize: 13)),
                   ],
                 ),
               ),
@@ -607,7 +604,7 @@ class _IbadahTrackerTabState extends ConsumerState<IbadahTrackerTab> {
         title: Text(
           'بسم الله',
           textAlign: TextAlign.center,
-          style: GoogleFonts.getFont(
+          style: AppFonts.getFont(
             'Cairo',
             fontSize: 20,
             fontWeight: FontWeight.w700,
@@ -620,7 +617,7 @@ class _IbadahTrackerTabState extends ConsumerState<IbadahTrackerTab> {
             Text(
               'حتى نعرض لك ما يناسبك',
               textAlign: TextAlign.center,
-              style: GoogleFonts.getFont('Cairo',
+              style: AppFonts.getFont('Cairo',
                   fontSize: 14, color: Colors.grey[600]),
             ),
             const SizedBox(height: 20),
@@ -707,7 +704,7 @@ class MujahadahSection extends ConsumerWidget {
             border: Border.all(color: const Color(0xFFE2E8F0)),
             boxShadow: [
               BoxShadow(
-                  color: Colors.black.withOpacity(0.02),
+                  color: Colors.black.withValues(alpha: 0.02),
                   blurRadius: 10,
                   offset: const Offset(0, 4))
             ],
@@ -717,7 +714,7 @@ class MujahadahSection extends ConsumerWidget {
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF064E3B).withOpacity(0.1),
+                  color: const Color(0xFF064E3B).withValues(alpha: 0.1),
                   shape: BoxShape.circle,
                 ),
                 child: const Text('🛡️', style: TextStyle(fontSize: 24)),
@@ -729,7 +726,7 @@ class MujahadahSection extends ConsumerWidget {
                   children: [
                     Text(
                       'مجاهدة النفس',
-                      style: GoogleFonts.cairo(
+                      style: AppFonts.cairo(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                         color: isDark ? Colors.white : const Color(0xFF1F2937),
@@ -737,7 +734,7 @@ class MujahadahSection extends ConsumerWidget {
                     ),
                     Text(
                       'مساحة سرية لترك العادات السلبية والذنوب',
-                      style: GoogleFonts.cairo(
+                      style: AppFonts.cairo(
                         fontSize: 12,
                         color: Colors.grey,
                       ),
@@ -800,7 +797,7 @@ class MujahadahListSheet extends ConsumerWidget {
                     const SizedBox(width: 8),
                     Text(
                       'حصن المجاهدة',
-                      style: GoogleFonts.cairo(
+                      style: AppFonts.cairo(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: isDark ? Colors.white : const Color(0xFF064E3B),
@@ -813,7 +810,7 @@ class MujahadahListSheet extends ConsumerWidget {
                           size: 18, color: Color(0xFFD97706)),
                       label: Text(
                         'إضافة',
-                        style: GoogleFonts.cairo(
+                        style: AppFonts.cairo(
                             color: const Color(0xFFD97706),
                             fontWeight: FontWeight.bold),
                       ),
@@ -830,8 +827,8 @@ class MujahadahListSheet extends ConsumerWidget {
                         child: Text(
                           'أضف أول ذنب أو عادة سلبية ترغب في تركها..',
                           textAlign: TextAlign.center,
-                          style: GoogleFonts.cairo(
-                              color: Colors.grey, fontSize: 16),
+                          style:
+                              AppFonts.cairo(color: Colors.grey, fontSize: 16),
                         ),
                       );
                     }
@@ -893,7 +890,7 @@ class MujahadahListSheet extends ConsumerWidget {
                 children: [
                   Text(
                     'ماذا تريد أن تتخلص منه؟',
-                    style: GoogleFonts.cairo(
+                    style: AppFonts.cairo(
                         fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 16),
@@ -913,7 +910,7 @@ class MujahadahListSheet extends ConsumerWidget {
                               color: const Color(0xFFE2E8F0),
                               borderRadius: BorderRadius.circular(20)),
                           child: Text(h,
-                              style: GoogleFonts.cairo(
+                              style: AppFonts.cairo(
                                   color: const Color(0xFF1E293B))),
                         ),
                       );
@@ -924,7 +921,7 @@ class MujahadahListSheet extends ConsumerWidget {
                     controller: customController,
                     decoration: InputDecoration(
                       hintText: 'أو اكتب عادة أخرى...',
-                      hintStyle: GoogleFonts.cairo(),
+                      hintStyle: AppFonts.cairo(),
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12)),
                     ),
@@ -943,7 +940,7 @@ class MujahadahListSheet extends ConsumerWidget {
                       minimumSize: const Size(double.infinity, 48),
                     ),
                     child: Text('إضافة',
-                        style: GoogleFonts.cairo(
+                        style: AppFonts.cairo(
                             color: Colors.white, fontWeight: FontWeight.bold)),
                   ),
                 ],
@@ -1014,7 +1011,7 @@ class _HabitCard extends ConsumerWidget {
                     children: [
                       Text(
                         habit.title,
-                        style: GoogleFonts.cairo(
+                        style: AppFonts.cairo(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                           color:
@@ -1034,7 +1031,7 @@ class _HabitCard extends ConsumerWidget {
                             ),
                             child: Text(
                               'متحصن: ${habit.currentStreak} يوم',
-                              style: GoogleFonts.cairo(
+                              style: AppFonts.cairo(
                                   fontSize: 11,
                                   color: const Color(0xFF10B981),
                                   fontWeight: FontWeight.bold),
@@ -1044,7 +1041,7 @@ class _HabitCard extends ConsumerWidget {
                             const SizedBox(width: 8),
                             Text(
                               '🏆 الأفضل: ${habit.longestStreak}',
-                              style: GoogleFonts.cairo(
+                              style: AppFonts.cairo(
                                   fontSize: 11, color: Colors.grey),
                             ),
                           ],
@@ -1060,9 +1057,9 @@ class _HabitCard extends ConsumerWidget {
                     final confirm = await showDialog<bool>(
                       context: context,
                       builder: (c) => AlertDialog(
-                        title: Text('حذف', style: GoogleFonts.cairo()),
+                        title: Text('حذف', style: AppFonts.cairo()),
                         content: Text('هل تريد إيقاف تتبع هذه العادة؟',
-                            style: GoogleFonts.cairo()),
+                            style: AppFonts.cairo()),
                         actions: [
                           TextButton(
                               onPressed: () => Navigator.pop(c, false),
@@ -1090,7 +1087,7 @@ class _HabitCard extends ConsumerWidget {
               padding: const EdgeInsets.symmetric(vertical: 12),
               child: Center(
                 child: Text('تم تقييم اليوم 🤍',
-                    style: GoogleFonts.cairo(
+                    style: AppFonts.cairo(
                         color: Colors.grey, fontWeight: FontWeight.bold)),
               ),
             )
@@ -1115,7 +1112,7 @@ class _HabitCard extends ConsumerWidget {
                           const Text('🔴', style: TextStyle(fontSize: 18)),
                           const SizedBox(height: 4),
                           Text('انتكاسة',
-                              style: GoogleFonts.cairo(
+                              style: AppFonts.cairo(
                                   fontSize: 12,
                                   color: const Color(0xFFEF4444),
                                   fontWeight: FontWeight.bold)),
@@ -1142,7 +1139,7 @@ class _HabitCard extends ConsumerWidget {
                           const Text('🟡', style: TextStyle(fontSize: 18)),
                           const SizedBox(height: 4),
                           Text('زلة عابرة',
-                              style: GoogleFonts.cairo(
+                              style: AppFonts.cairo(
                                   fontSize: 12,
                                   color: const Color(0xFFD97706),
                                   fontWeight: FontWeight.bold)),
@@ -1171,7 +1168,7 @@ class _HabitCard extends ConsumerWidget {
                           const Text('🟢', style: TextStyle(fontSize: 18)),
                           const SizedBox(height: 4),
                           Text('انتصار تام',
-                              style: GoogleFonts.cairo(
+                              style: AppFonts.cairo(
                                   fontSize: 12,
                                   color: const Color(0xFF10B981),
                                   fontWeight: FontWeight.bold)),
@@ -1217,7 +1214,7 @@ class _HabitCard extends ConsumerWidget {
               Text(
                 '«كل ابن آدم خطاء، وخير الخطائين التوابون»',
                 textAlign: TextAlign.center,
-                style: GoogleFonts.cairo(
+                style: AppFonts.cairo(
                   fontSize: 16,
                   color: const Color(0xFFD97706),
                   fontWeight: FontWeight.bold,
@@ -1227,7 +1224,7 @@ class _HabitCard extends ConsumerWidget {
               Text(
                 'السقوط ليس نهاية المطاف يا رفيقي، بل هو محطة لتتعلم من ضعفك.\nلست مطالباً بالكمال، بل بالمجاهدة المستمرة. الأهم هو ألا تيأس.\nقم الآن، واستعن بالله.',
                 textAlign: TextAlign.center,
-                style: GoogleFonts.cairo(
+                style: AppFonts.cairo(
                   fontSize: 14,
                   height: 1.6,
                   color: isDark ? Colors.white70 : Colors.black87,
@@ -1247,7 +1244,7 @@ class _HabitCard extends ConsumerWidget {
                       borderRadius: BorderRadius.circular(12)),
                 ),
                 child: Text('أجدد التوبة وأبدأ 🤍',
-                    style: GoogleFonts.cairo(
+                    style: AppFonts.cairo(
                         color: Colors.white,
                         fontSize: 16,
                         fontWeight: FontWeight.bold)),
@@ -1283,8 +1280,7 @@ class _GenderCard extends StatelessWidget {
             Text(icon, style: const TextStyle(fontSize: 26)),
             const SizedBox(height: 6),
             Text(label,
-                style:
-                    GoogleFonts.getFont('Cairo', fontWeight: FontWeight.w700)),
+                style: AppFonts.getFont('Cairo', fontWeight: FontWeight.w700)),
           ],
         ),
       ),

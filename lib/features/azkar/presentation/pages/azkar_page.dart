@@ -91,7 +91,7 @@ class _AzkarPageState extends ConsumerState<AzkarPage> {
                     children: [
                       Icon(
                         Icons.check_circle_outline_rounded,
-                        color: Colors.white.withOpacity(0.9),
+                        color: Colors.white.withValues(alpha: 0.9),
                         size: 28,
                       ),
                       const SizedBox(width: 12),

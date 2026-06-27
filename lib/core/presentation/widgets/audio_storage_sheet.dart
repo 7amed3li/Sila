@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:sila_app/core/theme/app_fonts.dart';
 import 'package:sila_app/core/services/reciter_service.dart';
 import 'package:sila_app/features/quran/presentation/riverpod/audio_controller.dart';
 
@@ -77,7 +77,7 @@ class _AudioStorageSheetState extends ConsumerState<_AudioStorageSheet> {
                   const SizedBox(height: 12),
                   Text(
                     'إدارة مساحة الصوت',
-                    style: GoogleFonts.cairo(
+                    style: AppFonts.cairo(
                       color: Colors.white,
                       fontSize: 17,
                       fontWeight: FontWeight.w700,
@@ -86,8 +86,7 @@ class _AudioStorageSheetState extends ConsumerState<_AudioStorageSheet> {
                   const SizedBox(height: 6),
                   Text(
                     'الإجمالي: ${_fmt(_stats!.totalBytes)} - ملفات: ${_stats!.totalFiles}',
-                    style:
-                        GoogleFonts.cairo(color: Colors.white60, fontSize: 12),
+                    style: AppFonts.cairo(color: Colors.white60, fontSize: 12),
                   ),
                   const SizedBox(height: 12),
                   SizedBox(
@@ -101,12 +100,12 @@ class _AudioStorageSheetState extends ConsumerState<_AudioStorageSheet> {
                           contentPadding: EdgeInsets.zero,
                           title: Text(
                             reciter.nameArabic,
-                            style: GoogleFonts.cairo(
+                            style: AppFonts.cairo(
                                 color: Colors.white, fontSize: 13),
                           ),
                           subtitle: Text(
                             _fmt(bytes),
-                            style: GoogleFonts.cairo(
+                            style: AppFonts.cairo(
                                 color: Colors.white54, fontSize: 11),
                           ),
                           trailing: IconButton(
@@ -139,7 +138,7 @@ class _AudioStorageSheetState extends ConsumerState<_AudioStorageSheet> {
                           color: Colors.redAccent),
                       label: Text(
                         'حذف كل الكاش',
-                        style: GoogleFonts.cairo(color: Colors.white),
+                        style: AppFonts.cairo(color: Colors.white),
                       ),
                     ),
                   ),

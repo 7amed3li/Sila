@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:sila_app/core/theme/app_fonts.dart';
 
 class SilaCtaButton extends StatelessWidget {
   const SilaCtaButton({
@@ -24,7 +24,7 @@ class SilaCtaButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(50),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFFD97706).withOpacity(0.3),
+              color: const Color(0xFFD97706).withValues(alpha: 0.3),
               blurRadius: 16,
               offset: const Offset(0, 6),
             )
@@ -33,7 +33,7 @@ class SilaCtaButton extends StatelessWidget {
         alignment: Alignment.center,
         child: Text(
           text,
-          style: GoogleFonts.getFont(
+          style: AppFonts.getFont(
             'Cairo',
             fontSize: 16,
             fontWeight: FontWeight.w700,

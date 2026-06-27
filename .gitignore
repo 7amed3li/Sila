@@ -27,3 +27,4 @@ android/app/google-services*.json
 implementation_plan.md
 task.md
 walkthrough.md
+.flutter-plugins

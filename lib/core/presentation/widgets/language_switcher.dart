@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:sila_app/core/theme/app_fonts.dart';
 import 'package:sila_app/features/quran/presentation/riverpod/quran_data_provider.dart';
 
 class LanguageSwitcher extends ConsumerStatefulWidget {
@@ -66,7 +66,7 @@ class _LanguageSwitcherState extends ConsumerState<LanguageSwitcher> {
                 color: isSelected
                     ? (isDark
                         ? LanguageSwitcher.primaryColor
-                        : LanguageSwitcher.primaryColor.withOpacity(0.05))
+                        : LanguageSwitcher.primaryColor.withValues(alpha: 0.05))
                     : Colors.transparent,
                 border: isSelected
                     ? const Border(
@@ -82,7 +82,7 @@ class _LanguageSwitcherState extends ConsumerState<LanguageSwitcher> {
                 children: [
                   Text(
                     langName,
-                    style: GoogleFonts.cairo(
+                    style: AppFonts.cairo(
                       fontSize: 14,
                       fontWeight:
                           isSelected ? FontWeight.w600 : FontWeight.w500,
@@ -123,7 +123,7 @@ class _LanguageSwitcherState extends ConsumerState<LanguageSwitcher> {
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: LanguageSwitcher.primaryColor.withOpacity(0.3),
+              color: LanguageSwitcher.primaryColor.withValues(alpha: 0.3),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),

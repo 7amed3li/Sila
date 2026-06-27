@@ -1,7 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:sila_app/core/theme/app_fonts.dart';
 import 'package:sila_app/features/wird/data/models/wird_settings.dart';
 import 'package:sila_app/features/wird/presentation/riverpod/wird_controller.dart';
 
@@ -61,7 +61,7 @@ class _WirdSetupPageState extends ConsumerState<WirdSetupPage> {
               height: 300,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: const Color(0xFF064E3B).withOpacity(0.3),
+                color: const Color(0xFF064E3B).withValues(alpha: 0.3),
               ),
               child: BackdropFilter(
                 filter: ImageFilter.blur(sigmaX: 50, sigmaY: 50),
@@ -85,7 +85,7 @@ class _WirdSetupPageState extends ConsumerState<WirdSetupPage> {
                         Text(
                           'تحديد الورد اليومي',
                           textAlign: TextAlign.center,
-                          style: GoogleFonts.amiri(
+                          style: AppFonts.amiri(
                             fontSize: 32,
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
@@ -95,7 +95,7 @@ class _WirdSetupPageState extends ConsumerState<WirdSetupPage> {
                         Text(
                           'ابدأ رحلتك المباركة مع القرآن الكريم\nوحدد هدفك اليومي للختمة',
                           textAlign: TextAlign.center,
-                          style: GoogleFonts.cairo(
+                          style: AppFonts.cairo(
                             fontSize: 16,
                             color: Colors.white70,
                             height: 1.5,
@@ -145,11 +145,12 @@ class _WirdSetupPageState extends ConsumerState<WirdSetupPage> {
                         borderRadius: BorderRadius.circular(16),
                       ),
                       elevation: 8,
-                      shadowColor: const Color(0xFFD97706).withOpacity(0.5),
+                      shadowColor:
+                          const Color(0xFFD97706).withValues(alpha: 0.5),
                     ),
                     child: Text(
                       'ابدأ الورد الآن',
-                      style: GoogleFonts.cairo(
+                      style: AppFonts.cairo(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
@@ -175,8 +176,8 @@ class _WirdSetupPageState extends ConsumerState<WirdSetupPage> {
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: isSelected
-              ? Colors.white.withOpacity(0.15)
-              : Colors.white.withOpacity(0.05),
+              ? Colors.white.withValues(alpha: 0.15)
+              : Colors.white.withValues(alpha: 0.05),
           borderRadius: BorderRadius.circular(20),
           border: Border.all(
             color: isSelected ? const Color(0xFFD97706) : Colors.white10,
@@ -189,7 +190,7 @@ class _WirdSetupPageState extends ConsumerState<WirdSetupPage> {
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
                 color: isSelected
-                    ? const Color(0xFFD97706).withOpacity(0.2)
+                    ? const Color(0xFFD97706).withValues(alpha: 0.2)
                     : Colors.white10,
                 borderRadius: BorderRadius.circular(12),
               ),
@@ -203,7 +204,7 @@ class _WirdSetupPageState extends ConsumerState<WirdSetupPage> {
                 children: [
                   Text(
                     title,
-                    style: GoogleFonts.cairo(
+                    style: AppFonts.cairo(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                       color: isSelected ? Colors.white : Colors.white70,
@@ -211,7 +212,7 @@ class _WirdSetupPageState extends ConsumerState<WirdSetupPage> {
                   ),
                   Text(
                     subtitle,
-                    style: GoogleFonts.cairo(
+                    style: AppFonts.cairo(
                       fontSize: 12,
                       color: Colors.white54,
                     ),
@@ -248,14 +249,14 @@ class _WirdSetupPageState extends ConsumerState<WirdSetupPage> {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.05),
+        color: Colors.white.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
         children: [
           Text(
             'حدد الكمية:',
-            style: GoogleFonts.cairo(color: Colors.white60, fontSize: 14),
+            style: AppFonts.cairo(color: Colors.white60, fontSize: 14),
           ),
           const SizedBox(height: 8),
           Row(
@@ -270,7 +271,7 @@ class _WirdSetupPageState extends ConsumerState<WirdSetupPage> {
               const SizedBox(width: 20),
               Text(
                 '$_goalValue $unit',
-                style: GoogleFonts.cairo(
+                style: AppFonts.cairo(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
                   color: const Color(0xFFD97706),

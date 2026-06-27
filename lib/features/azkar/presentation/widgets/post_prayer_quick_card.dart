@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:sila_app/core/theme/app_fonts.dart';
 import 'package:sila_app/features/azkar/presentation/pages/azkar_detail_page.dart';
 import 'package:sila_app/features/azkar/presentation/riverpod/post_prayer_controller.dart';
 
@@ -28,14 +28,14 @@ class PostPrayerQuickCard extends ConsumerWidget {
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [cardColor, cardColor.withOpacity(0.8)],
+          colors: [cardColor, cardColor.withValues(alpha: 0.8)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: cardColor.withOpacity(0.3),
+            color: cardColor.withValues(alpha: 0.3),
             blurRadius: 12,
             offset: const Offset(0, 6),
           ),
@@ -67,7 +67,7 @@ class PostPrayerQuickCard extends ConsumerWidget {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.2),
+                  color: Colors.black.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Text(
@@ -84,7 +84,7 @@ class PostPrayerQuickCard extends ConsumerWidget {
           const SizedBox(height: 12),
           Text(
             'post_prayer_adhkar_specific'.tr(args: ['prayer_$prayerName'.tr()]),
-            style: GoogleFonts.amiri(
+            style: AppFonts.amiri(
               color: Colors.white,
               fontSize: 22,
               fontWeight: FontWeight.bold,
@@ -129,7 +129,7 @@ class PostPrayerQuickCard extends ConsumerWidget {
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.2),
+                  color: Colors.white.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: const Icon(Icons.arrow_forward_ios_rounded,

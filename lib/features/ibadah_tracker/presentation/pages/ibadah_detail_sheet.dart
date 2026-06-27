@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:sila_app/core/theme/app_fonts.dart';
 import 'package:sila_app/features/ibadah_tracker/presentation/controllers/ibadah_tracker_controller.dart';
 
 Future<void> showIbadahDetailSheet({
@@ -57,8 +57,7 @@ class _IbadahDetailSheet extends ConsumerWidget {
               SnackBar(
                 content: Text(
                   'tracker_statuses.saved_successfully'.tr(),
-                  style:
-                      GoogleFonts.getFont('Cairo', fontWeight: FontWeight.w700),
+                  style: AppFonts.getFont('Cairo', fontWeight: FontWeight.w700),
                 ),
                 duration: const Duration(milliseconds: 700),
                 behavior: SnackBarBehavior.floating,
@@ -137,14 +136,14 @@ class _IbadahDetailSheet extends ConsumerWidget {
                 const SizedBox(height: 16),
                 Text(
                   '$icon $label',
-                  style: GoogleFonts.getFont('Cairo',
+                  style: AppFonts.getFont('Cairo',
                       fontSize: 18, fontWeight: FontWeight.w700),
                 ),
                 const SizedBox(height: 20),
                 if (isPrayer) ...[
                   Text(
                     'tracker_statuses.how_did_you_pray'.tr(),
-                    style: GoogleFonts.getFont('Cairo',
+                    style: AppFonts.getFont('Cairo',
                         fontSize: 13, color: Colors.grey[500]),
                   ),
                   const SizedBox(height: 10),
@@ -199,7 +198,7 @@ class _IbadahDetailSheet extends ConsumerWidget {
                     const SizedBox(height: 16),
                     Text(
                       'tracker_statuses.where_did_you_pray'.tr(),
-                      style: GoogleFonts.getFont('Cairo',
+                      style: AppFonts.getFont('Cairo',
                           fontSize: 13, color: Colors.grey[500]),
                     ),
                     const SizedBox(height: 10),
@@ -302,7 +301,7 @@ class _StatusOption extends StatelessWidget {
             children: [
               Text(emoji, style: const TextStyle(fontSize: 20)),
               const SizedBox(height: 4),
-              Text(label, style: GoogleFonts.getFont('Cairo', fontSize: 11)),
+              Text(label, style: AppFonts.getFont('Cairo', fontSize: 11)),
             ],
           ),
         ),
@@ -336,7 +335,7 @@ class _BigToggle extends StatelessWidget {
         ),
         child: Center(
           child: Text(label,
-              style: GoogleFonts.getFont('Cairo', fontWeight: FontWeight.w700)),
+              style: AppFonts.getFont('Cairo', fontWeight: FontWeight.w700)),
         ),
       ),
     );

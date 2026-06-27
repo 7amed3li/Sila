@@ -300,7 +300,7 @@ class AdhanSchedulerService {
                 'title': personalizedTitle,
                 'days': activity.streakDays.toString()
               }) ??
-            '$personalizedTitle (سلسلة ${activity.streakDays} يوم)';
+              '$personalizedTitle (سلسلة ${activity.streakDays} يوم)';
         }
         planned.add(_PlannedNotification(
           id: slotId,
@@ -501,7 +501,8 @@ class AdhanSchedulerService {
       }
 
       // Add back the Daily Report as a bonus
-      final userLang = normalizeLanguageCode(await _prefsService.getUserLanguage());
+      final userLang =
+          normalizeLanguageCode(await _prefsService.getUserLanguage());
       final reportTime =
           normalizeToNext(prayerTimes.maghrib.add(const Duration(minutes: 30)));
       await _notificationService
@@ -648,7 +649,8 @@ class AdhanSchedulerService {
     return switch (lang) {
       'en' => 'Review your day and take one step toward a better tomorrow.',
       'tr' => 'Gününü değerlendir ve daha iyi bir yarın için bir adım at.',
-      'fr' => 'Révisez votre journée et faites un pas vers un meilleur lendemain.',
+      'fr' =>
+        'Révisez votre journée et faites un pas vers un meilleur lendemain.',
       _ => 'راجع يومك وخذ خطوة لغد أفضل.',
     };
   }

@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:sila_app/core/theme/app_fonts.dart';
 import 'package:hijri/hijri_calendar.dart';
 import 'package:sila_app/features/ibadah_tracker/data/models/ibadah_record.dart';
 import 'package:sila_app/features/ibadah_tracker/domain/comparison_engine.dart';
@@ -143,7 +143,7 @@ class _DailyReportPageState extends ConsumerState<DailyReportPage> {
                         children: [
                           Text(
                             tr('daily_report_page.title'),
-                            style: GoogleFonts.getFont(
+                            style: AppFonts.getFont(
                               'Cairo',
                               fontSize: 20,
                               fontWeight: FontWeight.w700,
@@ -152,7 +152,7 @@ class _DailyReportPageState extends ConsumerState<DailyReportPage> {
                           ),
                           Text(
                             hijriDate,
-                            style: GoogleFonts.getFont('Cairo',
+                            style: AppFonts.getFont('Cairo',
                                 fontSize: 12, color: Colors.white60),
                           ),
                         ],
@@ -242,7 +242,7 @@ class _DailyReportPageState extends ConsumerState<DailyReportPage> {
                                           : tr(
                                               'daily_report_page.three_months_comparison_unavailable'),
                               textAlign: TextAlign.center,
-                              style: GoogleFonts.getFont('Cairo',
+                              style: AppFonts.getFont('Cairo',
                                   fontSize: 12, color: const Color(0xFF64748B)),
                             ),
                           );
@@ -303,7 +303,7 @@ class _DailyStatusCard extends StatelessWidget {
       child: Text(
         text,
         textAlign: TextAlign.center,
-        style: GoogleFonts.getFont('Cairo', fontSize: 14, height: 1.8),
+        style: AppFonts.getFont('Cairo', fontSize: 14, height: 1.8),
       ),
     );
   }
@@ -321,7 +321,7 @@ class _SectionTitle extends StatelessWidget {
         alignment: Alignment.centerRight,
         child: Text(
           text,
-          style: GoogleFonts.getFont('Cairo',
+          style: AppFonts.getFont('Cairo',
               fontSize: 15, fontWeight: FontWeight.w700),
         ),
       ),
@@ -352,7 +352,7 @@ class _PillList extends StatelessWidget {
               child: Text(
                 e.label,
                 textAlign: TextAlign.right,
-                style: GoogleFonts.getFont('Cairo',
+                style: AppFonts.getFont('Cairo',
                     fontSize: 13, fontWeight: FontWeight.w600),
               ),
             ),
@@ -423,13 +423,13 @@ class _MiniStatCard extends StatelessWidget {
         children: [
           Text(
             title,
-            style: GoogleFonts.getFont('Cairo',
+            style: AppFonts.getFont('Cairo',
                 fontSize: 11, color: const Color(0xFF64748B)),
           ),
           const SizedBox(height: 4),
           Text(
             value,
-            style: GoogleFonts.getFont('Cairo',
+            style: AppFonts.getFont('Cairo',
                 fontWeight: FontWeight.w800, color: accent),
           ),
         ],
@@ -464,7 +464,7 @@ class _ComparisonCard extends StatelessWidget {
       child: Column(
         children: [
           Text(tr('daily_report_page.comparison_yesterday'),
-              style: GoogleFonts.getFont('Cairo', fontWeight: FontWeight.w700)),
+              style: AppFonts.getFont('Cairo', fontWeight: FontWeight.w700)),
           const SizedBox(height: 10),
           Row(
             children: [
@@ -497,7 +497,7 @@ class _ComparisonCard extends StatelessWidget {
             child: Text(
               message,
               textAlign: TextAlign.center,
-              style: GoogleFonts.getFont('Cairo',
+              style: AppFonts.getFont('Cairo',
                   fontSize: 12, fontWeight: FontWeight.w600),
             ),
           ),
@@ -527,11 +527,11 @@ class _RatioBox extends StatelessWidget {
       child: Column(
         children: [
           Text(label,
-              style: GoogleFonts.getFont('Cairo', fontSize: 12, color: color)),
+              style: AppFonts.getFont('Cairo', fontSize: 12, color: color)),
           const SizedBox(height: 6),
           Text(
             '${(ratio * 100).toStringAsFixed(0)}٪',
-            style: GoogleFonts.getFont('Cairo',
+            style: AppFonts.getFont('Cairo',
                 fontWeight: FontWeight.w700, color: color),
           ),
         ],
@@ -615,7 +615,7 @@ class _CalendarHeatmap extends StatelessWidget {
         child: Text(
           tr('daily_report_page.today_unavailable'),
           textAlign: TextAlign.center,
-          style: GoogleFonts.getFont('Cairo',
+          style: AppFonts.getFont('Cairo',
               fontSize: 12, color: const Color(0xFF64748B)),
         ),
       );
@@ -632,7 +632,7 @@ class _CalendarHeatmap extends StatelessWidget {
             empty.toString()
           ]),
           textAlign: TextAlign.center,
-          style: GoogleFonts.getFont('Cairo',
+          style: AppFonts.getFont('Cairo',
               fontSize: 11, color: const Color(0xFF64748B)),
         ),
         const SizedBox(height: 8),
@@ -681,7 +681,7 @@ class _LegendDot extends StatelessWidget {
         ),
         const SizedBox(width: 4),
         Text(label,
-            style: GoogleFonts.getFont('Cairo',
+            style: AppFonts.getFont('Cairo',
                 fontSize: 11, color: const Color(0xFF64748B))),
       ],
     );
@@ -741,7 +741,7 @@ class _RangeSelector extends StatelessWidget {
             ),
             child: Text(
               tr('daily_report_page.custom'),
-              style: GoogleFonts.getFont(
+              style: AppFonts.getFont(
                 'Cairo',
                 fontSize: 12,
                 fontWeight: FontWeight.w700,
@@ -783,7 +783,7 @@ class _RangeChip extends StatelessWidget {
         ),
         child: Text(
           label,
-          style: GoogleFonts.getFont('Cairo',
+          style: AppFonts.getFont('Cairo',
               fontSize: 12, fontWeight: FontWeight.w700, color: color),
         ),
       ),
@@ -863,7 +863,7 @@ List<_IbadahItem> _completedItems(IbadahRecord r,
             out.add(_IbadahItem(key: 'custom_$name', label: name));
           }
         }
-            }
+      }
 
       if (map.containsKey('mujahadah') && map['mujahadah'] is Map) {
         final mujahadahMap = map['mujahadah'] as Map<String, dynamic>;
@@ -964,7 +964,7 @@ List<_IbadahItem> _incompleteItems(IbadahRecord r,
           out.add(_IbadahItem(key: 'custom_$name', label: name));
         }
       }
-    
+
       if (map.containsKey('mujahadah') && map['mujahadah'] is Map) {
         final mujahadahMap = map['mujahadah'] as Map<String, dynamic>;
         for (final entry in mujahadahMap.entries) {
@@ -1044,14 +1044,14 @@ class _ReminderCards extends ConsumerWidget {
                         children: [
                           Text(
                             item.label,
-                            style: GoogleFonts.getFont('Cairo',
+                            style: AppFonts.getFont('Cairo',
                                 fontWeight: FontWeight.w700,
                                 color: const Color(0xFF064E3B)),
                           ),
                           const SizedBox(height: 6),
                           Text(
                             text,
-                            style: GoogleFonts.getFont(
+                            style: AppFonts.getFont(
                               content?.type == 'ayah' ||
                                       content?.type == 'hadith'
                                   ? 'Amiri'
@@ -1069,7 +1069,7 @@ class _ReminderCards extends ConsumerWidget {
                           if (source.isNotEmpty) ...[
                             const SizedBox(height: 4),
                             Text(source,
-                                style: GoogleFonts.getFont('Cairo',
+                                style: AppFonts.getFont('Cairo',
                                     fontSize: 10,
                                     color: const Color(0xFF64748B))),
                           ],

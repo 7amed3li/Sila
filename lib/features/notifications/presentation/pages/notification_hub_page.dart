@@ -1,6 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:sila_app/core/theme/app_fonts.dart';
 import 'package:sila_app/features/notifications/presentation/pages/settings/azkar_notification_settings.dart';
 import 'package:sila_app/features/notifications/presentation/pages/settings/hifz_notification_settings.dart';
 import 'package:sila_app/features/notifications/presentation/pages/settings/salah_notification_settings.dart';
@@ -24,7 +24,7 @@ class NotificationHubPage extends StatelessWidget {
         backgroundColor: const Color(0xFF065F46),
         foregroundColor: Colors.white,
         title: Text('smart_notifications_title'.tr(),
-            style: GoogleFonts.getFont('Cairo', fontWeight: FontWeight.w700)),
+            style: AppFonts.getFont('Cairo', fontWeight: FontWeight.w700)),
       ),
       body: ListView(
         padding: const EdgeInsets.all(16),
@@ -135,12 +135,12 @@ class _HubTile extends StatelessWidget {
         ),
         title: Text(
           title,
-          style: GoogleFonts.getFont('Cairo',
+          style: AppFonts.getFont('Cairo',
               fontWeight: FontWeight.w700, color: titleColor),
         ),
         subtitle: Text(
           subtitle,
-          style: GoogleFonts.getFont('Cairo', fontSize: 11),
+          style: AppFonts.getFont('Cairo', fontSize: 11),
         ),
         trailing: const Icon(Icons.arrow_forward_ios_rounded, size: 14),
       ),

@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:sila_app/core/theme/app_fonts.dart';
 import 'package:hijri/hijri_calendar.dart';
 import 'package:sila_app/core/theme/app_theme.dart';
 import 'package:sila_app/features/quran/presentation/riverpod/quran_data_provider.dart';
@@ -117,7 +117,7 @@ class HomeHeader extends StatelessWidget {
                     children: [
                       Text(
                         _getGreeting(),
-                        style: GoogleFonts.getFont(
+                        style: AppFonts.getFont(
                           'Cairo',
                           fontSize: 13,
                           color: Colors.white60,
@@ -125,7 +125,7 @@ class HomeHeader extends StatelessWidget {
                       ),
                       Text(
                         'welcome_message'.tr(),
-                        style: GoogleFonts.getFont(
+                        style: AppFonts.getFont(
                           'Cairo',
                           fontSize: 20,
                           fontWeight: FontWeight.w700,
@@ -195,16 +195,17 @@ class HomeHeader extends StatelessWidget {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.1),
+                  color: Colors.white.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: Colors.white.withOpacity(0.2)),
+                  border:
+                      Border.all(color: Colors.white.withValues(alpha: 0.2)),
                 ),
                 child: Text(
                   hijriText,
-                  style: GoogleFonts.getFont(
+                  style: AppFonts.getFont(
                     'Cairo',
                     fontSize: 12,
-                    color: Colors.white.withOpacity(0.8),
+                    color: Colors.white.withValues(alpha: 0.8),
                   ),
                 ),
               ),
@@ -250,7 +251,7 @@ class _LanguageHeaderButton extends ConsumerWidget {
               children: [
                 Text(
                   langName,
-                  style: GoogleFonts.cairo(
+                  style: AppFonts.cairo(
                     fontSize: 14,
                     fontWeight:
                         isSelected ? FontWeight.bold : FontWeight.normal,

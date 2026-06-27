@@ -3,7 +3,7 @@ import 'dart:ui' as ui;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:sila_app/core/theme/app_fonts.dart';
 import 'package:quran/quran.dart' as quran_lib;
 import 'package:sila_app/core/providers/reciter_provider.dart';
 import 'package:sila_app/core/theme/app_theme.dart';
@@ -76,7 +76,8 @@ class _QuranDetailsSheetState extends ConsumerState<QuranDetailsSheet> {
                   const BorderRadius.vertical(top: Radius.circular(40)),
               boxShadow: [
                 BoxShadow(
-                  color: _getAccentColor(settings.themeMode).withOpacity(0.15),
+                  color: _getAccentColor(settings.themeMode)
+                      .withValues(alpha: 0.15),
                   blurRadius: 30,
                   spreadRadius: 5,
                 )
@@ -97,7 +98,7 @@ class _QuranDetailsSheetState extends ConsumerState<QuranDetailsSheet> {
                       width: 50,
                       height: 5,
                       decoration: BoxDecoration(
-                        color: Colors.grey.withOpacity(0.4),
+                        color: Colors.grey.withValues(alpha: 0.4),
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
@@ -130,7 +131,7 @@ class _QuranDetailsSheetState extends ConsumerState<QuranDetailsSheet> {
                           children: [
                             Text(
                               title,
-                              style: GoogleFonts.cairo(
+                              style: AppFonts.cairo(
                                 fontSize: 22,
                                 fontWeight: FontWeight.w800,
                                 color: _getTextColor(settings.themeMode),
@@ -139,7 +140,7 @@ class _QuranDetailsSheetState extends ConsumerState<QuranDetailsSheet> {
                             Text(
                               'surah_ayah_label'
                                   .tr(args: [surahName, activeAyah.toString()]),
-                              style: GoogleFonts.cairo(
+                              style: AppFonts.cairo(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,
                                 color: _getAccentColor(settings.themeMode),
@@ -175,12 +176,12 @@ class _QuranDetailsSheetState extends ConsumerState<QuranDetailsSheet> {
                   Container(
                     padding: const EdgeInsets.all(24),
                     decoration: BoxDecoration(
-                      color:
-                          _getAccentColor(settings.themeMode).withOpacity(0.05),
+                      color: _getAccentColor(settings.themeMode)
+                          .withValues(alpha: 0.05),
                       borderRadius: BorderRadius.circular(24),
                       border: Border.all(
                           color: _getAccentColor(settings.themeMode)
-                              .withOpacity(0.15)),
+                              .withValues(alpha: 0.15)),
                     ),
                     child: Column(
                       children: [
@@ -195,7 +196,7 @@ class _QuranDetailsSheetState extends ConsumerState<QuranDetailsSheet> {
                                   colors: [
                                     _getAccentColor(settings.themeMode),
                                     _getAccentColor(settings.themeMode)
-                                        .withOpacity(0.7)
+                                        .withValues(alpha: 0.7)
                                   ],
                                   begin: Alignment.topLeft,
                                   end: Alignment.bottomRight,
@@ -204,7 +205,7 @@ class _QuranDetailsSheetState extends ConsumerState<QuranDetailsSheet> {
                                 boxShadow: [
                                   BoxShadow(
                                       color: _getAccentColor(settings.themeMode)
-                                          .withOpacity(0.4),
+                                          .withValues(alpha: 0.4),
                                       blurRadius: 15,
                                       offset: const Offset(0, 6))
                                 ]),
@@ -242,7 +243,7 @@ class _QuranDetailsSheetState extends ConsumerState<QuranDetailsSheet> {
                     widget.showTafsir
                         ? 'tafsir_label'.tr()
                         : 'translation_label'.tr(),
-                    style: GoogleFonts.cairo(
+                    style: AppFonts.cairo(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                       color: _getAccentColor(settings.themeMode),
@@ -262,7 +263,8 @@ class _QuranDetailsSheetState extends ConsumerState<QuranDetailsSheet> {
                           widget.showTafsir ? settings.fontFamily : 'Roboto',
                       fontSize: settings.fontSize * 0.9,
                       height: widget.showTafsir ? 2.2 : 1.6,
-                      color: _getTextColor(settings.themeMode).withOpacity(0.9),
+                      color: _getTextColor(settings.themeMode)
+                          .withValues(alpha: 0.9),
                     ),
                   ),
 
@@ -279,7 +281,7 @@ class _QuranDetailsSheetState extends ConsumerState<QuranDetailsSheet> {
                     ),
                     onPressed: () => Navigator.pop(context),
                     child: Text('close'.tr(),
-                        style: GoogleFonts.cairo(
+                        style: AppFonts.cairo(
                             fontSize: 18, fontWeight: FontWeight.bold)),
                   ),
                   const SizedBox(height: 24),
@@ -302,7 +304,7 @@ class _QuranDetailsSheetState extends ConsumerState<QuranDetailsSheet> {
       required QuranSettings settings}) {
     return Container(
       decoration: BoxDecoration(
-        color: _getAccentColor(settings.themeMode).withOpacity(0.1),
+        color: _getAccentColor(settings.themeMode).withValues(alpha: 0.1),
         shape: BoxShape.circle,
       ),
       child: IconButton(

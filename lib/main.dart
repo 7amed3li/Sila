@@ -13,54 +13,116 @@ import 'package:sila_app/core/services/notification_service.dart';
 import 'package:sila_app/core/theme/app_theme.dart';
 import 'package:sila_app/features/onboarding/presentation/pages/language_selection_page.dart';
 import 'package:sila_app/features/prayers/data/repositories/prayer_repository_impl.dart';
+import 'package:sila_app/core/theme/app_fonts.dart';
 import 'package:timezone/data/latest.dart' as tz;
 
 final GlobalKey<NavigatorState> appNavigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
+  final totalSw = Stopwatch()..start();
+  final phaseSw = Stopwatch();
   WidgetsFlutterBinding.ensureInitialized();
 
-  // ✅ 1. Timezone — أول حاجة دايمًا
+  // ── Phase 1: Timezone ──
+  phaseSw
+    ..reset()
+    ..start();
   tz.initializeTimeZones();
+  phaseSw.stop();
+  final tzMs = phaseSw.elapsedMilliseconds;
+  debugPrint('⏱ [BENCHMARK] 1. Timezone init: ${tzMs}ms');
 
-  // ✅ 2. Firebase
+  // ── Phase 2: Firebase ──
+  phaseSw
+    ..reset()
+    ..start();
   await Firebase.initializeApp();
-  
+  phaseSw.stop();
+  final firebaseMs = phaseSw.elapsedMilliseconds;
+  debugPrint('⏱ [BENCHMARK] 2. Firebase.initializeApp(): ${firebaseMs}ms');
 
-  // ✅ 4. NotificationService — لازم قبل runApp عشان الـ background handler
-  await NotificationService().initialize();
+  // ── Phase 3: NotificationService ──
+  phaseSw
+    ..reset()
+    ..start();
+  await NotificationService().initializeLocal();
+  phaseSw.stop();
+  final notifMs = phaseSw.elapsedMilliseconds;
+  debugPrint(
+      '⏱ [BENCHMARK] 3. NotificationService.initializeLocal(): ${notifMs}ms');
 
-  // ✅ Check if language was already selected
+  // ── Phase 4: SharedPreferences ──
+  phaseSw
+    ..reset()
+    ..start();
   final prefs = await SharedPreferences.getInstance();
   final isLanguageSelected = prefs.getBool('is_language_selected') ?? false;
+  phaseSw.stop();
+  final prefsMs = phaseSw.elapsedMilliseconds;
+  debugPrint('⏱ [BENCHMARK] 4. SharedPreferences: ${prefsMs}ms');
 
-  // ✅ 5. runApp
-  runApp(
-    ProviderScope(
-      child: EasyLocalization(
-        supportedLocales: const [
-          Locale('ar', 'SA'),
-          Locale('tr', 'TR'),
-          Locale('en', 'US'),
-          Locale('fr', 'FR'),
-        ],
-        path: 'assets/translations',
-        fallbackLocale: const Locale('ar', 'SA'),
-        startLocale: const Locale('ar', 'SA'),
-        child: SilaApp(isLanguageSelected: isLanguageSelected),
+  totalSw.stop();
+  final totalPreRunApp = totalSw.elapsedMilliseconds;
+
+  debugPrint('');
+  debugPrint('╔══════════════════════════════════════════╗');
+  debugPrint('║     STARTUP BENCHMARK (before runApp)    ║');
+  debugPrint('╠══════════════════════════════════════════╣');
+  debugPrint('║ 1. Timezone init:          ${tzMs.toString().padLeft(6)}ms ║');
+  debugPrint(
+      '║ 2. Firebase.initializeApp: ${firebaseMs.toString().padLeft(6)}ms ║');
+  debugPrint(
+      '║ 3. NotificationService:    ${notifMs.toString().padLeft(6)}ms ║');
+  debugPrint(
+      '║ 4. SharedPreferences:      ${prefsMs.toString().padLeft(6)}ms ║');
+  debugPrint('║────────────────────────────────────────── ║');
+  debugPrint(
+      '║ TOTAL before runApp:       ${totalPreRunApp.toString().padLeft(6)}ms ║');
+  debugPrint('╚══════════════════════════════════════════╝');
+  debugPrint('');
+
+  debugPrint('🚩 [main.dart] About to runApp...');
+
+  try {
+    debugPrint('🚩 [main.dart] Before PROVIDER RUN');
+    runApp(
+      ProviderScope(
+        child: EasyLocalization(
+          supportedLocales: const [
+            Locale('ar', 'SA'),
+            Locale('tr', 'TR'),
+            Locale('en', 'US'),
+            Locale('fr', 'FR'),
+          ],
+          path: 'assets/translations',
+          fallbackLocale: const Locale('ar', 'SA'),
+          startLocale: const Locale('ar', 'SA'),
+          child: SilaApp(isLanguageSelected: isLanguageSelected),
+        ),
       ),
-    ),
-  );
+    );
+    debugPrint('🚩 [main.dart] runApp completed');
+  } catch (e, s) {
+    debugPrint('❌ [main.dart] runApp crashed: $e\nStack: $s');
+  }
 }
 
 Future<void> _initBackgroundServices() async {
+  final bgServicesStart = DateTime.now();
   try {
+    debugPrint(
+        '[${DateTime.now().toIso8601String()}][BG] Fetching prayer times...');
     final prayerRepo = PrayerRepositoryImpl();
     final prayerTimes = await prayerRepo.getPrayerTimes();
+    debugPrint(
+        '[${DateTime.now().toIso8601String()}][BG] Got prayerTimes. Scheduling...');
     final adhanScheduler = AdhanSchedulerService();
     await adhanScheduler.scheduleAllPrayers(prayerTimes);
-
-    debugPrint('✅ Background services initialized');
+    debugPrint(
+        '[${DateTime.now().toIso8601String()}][BG] ScheduleAllPrayers done');
+    final done = DateTime.now();
+    debugPrint(
+        '[${done.toIso8601String()}][BG] Background services TOTAL: ${done.difference(bgServicesStart).inMilliseconds} ms');
   } catch (e) {
     debugPrint('❌ Background init failed: $e');
   }
@@ -83,14 +145,25 @@ class _SilaAppState extends State<SilaApp> with WidgetsBindingObserver {
     WidgetsBinding.instance.addObserver(this);
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      // ── Remote BG Notification Setup ──
+      unawaited(NotificationService().initializeRemote());
+
+      debugPrint(
+          '[${DateTime.now().toIso8601String()}][SilaApp] Setting Notification NavigatorKey...');
       try {
         await NotificationService().setNavigatorKey(appNavigatorKey);
+        debugPrint(
+            '[${DateTime.now().toIso8601String()}][SilaApp] Notification NavigatorKey set');
       } catch (e) {
         debugPrint('Failed to set notification navigator key: $e');
       }
 
+      debugPrint(
+          '[${DateTime.now().toIso8601String()}][SilaApp] Initializing Background Services...');
       try {
         await _initBackgroundServices();
+        debugPrint(
+            '[${DateTime.now().toIso8601String()}][SilaApp] Background Services Initialized');
       } catch (e) {
         debugPrint('Background service bootstrap failed: $e');
       }
@@ -132,7 +205,10 @@ class _SilaAppState extends State<SilaApp> with WidgetsBindingObserver {
       },
       home: _showSplash
           ? SplashPage(
-              onComplete: () => setState(() => _showSplash = false),
+              onComplete: () {
+                debugPrint('🚩 [main.dart] SplashPage onComplete CALLED');
+                setState(() => _showSplash = false);
+              },
             )
           : widget.isLanguageSelected
               ? const MainLayout()

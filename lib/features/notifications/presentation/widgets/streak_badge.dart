@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:sila_app/core/theme/app_fonts.dart';
 import 'package:sila_app/features/notifications/presentation/controllers/notification_providers.dart';
 
 class StreakBadge extends ConsumerWidget {
@@ -21,7 +21,7 @@ class StreakBadge extends ConsumerWidget {
       ),
       child: Text(
         '✦ ${'streak_days_count'.tr(args: [days.toString()])}',
-        style: GoogleFonts.getFont(
+        style: AppFonts.getFont(
           'Cairo',
           fontSize: 11,
           fontWeight: FontWeight.w700,

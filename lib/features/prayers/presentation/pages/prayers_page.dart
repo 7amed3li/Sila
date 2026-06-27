@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:sila_app/core/theme/app_fonts.dart';
 import 'package:sila_app/core/services/analytics_service.dart';
 import 'package:sila_app/core/services/notification_service.dart';
 import 'package:sila_app/core/services/prefs_service.dart'; // ADDED: per-prayer adhan toggle
@@ -15,6 +15,7 @@ import 'package:sila_app/features/notifications/presentation/widgets/streak_badg
 import 'package:sila_app/features/prayers/presentation/pages/prayer_settings_page.dart';
 import 'package:sila_app/features/prayers/presentation/pages/qiblah_page.dart';
 import 'package:sila_app/features/prayers/presentation/riverpod/prayer_controller.dart';
+import 'package:sila_app/features/prayers/domain/entities/prayer_times_entity.dart';
 
 class PrayersPage extends ConsumerStatefulWidget {
   const PrayersPage({super.key, this.initialTabIndex = 0});
@@ -26,6 +27,46 @@ class PrayersPage extends ConsumerStatefulWidget {
 }
 
 class _PrayersPageState extends ConsumerState<PrayersPage> {
+  Widget _buildStaleIndicator(PrayerTimesEntity entity) {
+    if (entity.lastUpdated.millisecondsSinceEpoch == 0) {
+      return Padding(
+        padding: const EdgeInsets.only(top: 6.0),
+        child: Row(children: [
+          const Icon(Icons.sync_rounded, color: Colors.amber, size: 17),
+          const SizedBox(width: 6),
+          Expanded(
+            child: Text('loading_prayer_times'.tr(),
+                style: const TextStyle(color: Colors.amber, fontSize: 13)),
+          ),
+        ]),
+      );
+    }
+    if (entity.isStaleAt(DateTime.now())) {
+      final diff = DateTime.now().difference(entity.lastUpdated);
+      String ago;
+      if (diff.inDays > 0) {
+        ago = '${diff.inDays} ${'days_unit'.tr()}';
+      } else if (diff.inHours > 0) {
+        ago = '${diff.inHours} ${'hours_unit'.tr()}';
+      } else {
+        ago = '${diff.inMinutes} ${'minutes_unit'.tr()}';
+      }
+      return Padding(
+        padding: const EdgeInsets.only(top: 6.0),
+        child: Row(children: [
+          const Icon(Icons.info_outline_rounded,
+              color: Colors.orange, size: 17),
+          const SizedBox(width: 6),
+          Expanded(
+            child: Text('stale_prayer_times'.tr(args: [ago]),
+                style: const TextStyle(color: Colors.orange, fontSize: 13)),
+          ),
+        ]),
+      );
+    }
+    return const SizedBox.shrink();
+  }
+
   Timer? _timer;
   bool _screenLogged = false;
 
@@ -138,8 +179,7 @@ class _PrayersPageState extends ConsumerState<PrayersPage> {
               Tab(text: 'prayer_times'.tr()),
               Tab(text: 'my_tracking'.tr()),
             ],
-            labelStyle:
-                GoogleFonts.getFont('Cairo', fontWeight: FontWeight.w700),
+            labelStyle: AppFonts.getFont('Cairo', fontWeight: FontWeight.w700),
             indicatorColor: const Color(0xFFD97706),
             labelColor: const Color(0xFF064E3B),
             unselectedLabelColor: txtS,
@@ -224,7 +264,7 @@ class _PrayersPageState extends ConsumerState<PrayersPage> {
                                         children: [
                                           Text(
                                             'prayer_times'.tr(),
-                                            style: GoogleFonts.getFont(
+                                            style: AppFonts.getFont(
                                               'Cairo',
                                               fontSize: 20,
                                               fontWeight: FontWeight.w800,
@@ -233,12 +273,13 @@ class _PrayersPageState extends ConsumerState<PrayersPage> {
                                           ),
                                           Text(
                                             entity.locationName,
-                                            style: GoogleFonts.getFont(
+                                            style: AppFonts.getFont(
                                               'Cairo',
                                               fontSize: 13,
                                               color: Colors.white60,
                                             ),
                                           ),
+                                          _buildStaleIndicator(entity),
                                         ],
                                       ),
                                       // Settings icon
@@ -316,7 +357,8 @@ class _PrayersPageState extends ConsumerState<PrayersPage> {
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 14, vertical: 8),
                                     decoration: BoxDecoration(
-                                      color: Colors.white.withOpacity(0.12),
+                                      color:
+                                          Colors.white.withValues(alpha: 0.12),
                                       borderRadius: BorderRadius.circular(12),
                                     ),
                                     child: Row(
@@ -332,7 +374,7 @@ class _PrayersPageState extends ConsumerState<PrayersPage> {
                                           context.locale.languageCode == 'tr'
                                               ? '$translatedPrayerName için $remainingTime'
                                               : '$translatedPrayerName بعد $remainingTime',
-                                          style: GoogleFonts.getFont(
+                                          style: AppFonts.getFont(
                                             'Cairo',
                                             fontSize: 13,
                                             color: Colors.white,
@@ -373,12 +415,12 @@ class _PrayersPageState extends ConsumerState<PrayersPage> {
                                   horizontal: 16, vertical: 14),
                               decoration: BoxDecoration(
                                 color: isNext
-                                    ? primaryColor.withOpacity(0.08)
+                                    ? primaryColor.withValues(alpha: 0.08)
                                     : surface,
                                 borderRadius: BorderRadius.circular(14),
                                 border: Border.all(
                                   color: isNext
-                                      ? primaryColor.withOpacity(0.3)
+                                      ? primaryColor.withValues(alpha: 0.3)
                                       : border,
                                   width: isNext ? 1.5 : 0.5,
                                 ),
@@ -395,7 +437,8 @@ class _PrayersPageState extends ConsumerState<PrayersPage> {
                                         decoration: BoxDecoration(
                                           color: isNext
                                               ? primaryColor
-                                              : primaryColor.withOpacity(0.08),
+                                              : primaryColor.withValues(
+                                                  alpha: 0.08),
                                           shape: BoxShape.circle,
                                         ),
                                         child: Icon(
@@ -409,7 +452,7 @@ class _PrayersPageState extends ConsumerState<PrayersPage> {
                                       const SizedBox(width: 10),
                                       Text(
                                         name.tr(),
-                                        style: GoogleFonts.getFont(
+                                        style: AppFonts.getFont(
                                           'Cairo',
                                           fontSize: 15,
                                           fontWeight: FontWeight.w700,
@@ -422,7 +465,7 @@ class _PrayersPageState extends ConsumerState<PrayersPage> {
                                     children: [
                                       Text(
                                         formattedTime,
-                                        style: GoogleFonts.getFont(
+                                        style: AppFonts.getFont(
                                           'Cairo',
                                           fontSize: 15,
                                           fontWeight: FontWeight.w600,
@@ -441,7 +484,7 @@ class _PrayersPageState extends ConsumerState<PrayersPage> {
                                           ),
                                           child: Text(
                                             'next_prayer'.tr(),
-                                            style: GoogleFonts.getFont(
+                                            style: AppFonts.getFont(
                                               'Cairo',
                                               fontSize: 9,
                                               color: Colors.white,
@@ -464,7 +507,7 @@ class _PrayersPageState extends ConsumerState<PrayersPage> {
                                                   ? (v) =>
                                                       _toggleAdhan(key, v, time)
                                                   : null,
-                                              activeThumbColor: primaryColor,
+                                              activeColor: primaryColor,
                                               inactiveThumbColor: txtS,
                                               materialTapTargetSize:
                                                   MaterialTapTargetSize
@@ -505,7 +548,8 @@ class _PrayersPageState extends ConsumerState<PrayersPage> {
                                     width: 44,
                                     height: 44,
                                     decoration: BoxDecoration(
-                                      color: primaryColor.withOpacity(0.1),
+                                      color:
+                                          primaryColor.withValues(alpha: 0.1),
                                       shape: BoxShape.circle,
                                     ),
                                     child: const Icon(Icons.explore_rounded,
@@ -519,7 +563,7 @@ class _PrayersPageState extends ConsumerState<PrayersPage> {
                                       children: [
                                         Text(
                                           'qiblah_direction'.tr(),
-                                          style: GoogleFonts.getFont(
+                                          style: AppFonts.getFont(
                                             'Cairo',
                                             fontSize: 15,
                                             fontWeight: FontWeight.w700,
@@ -528,7 +572,7 @@ class _PrayersPageState extends ConsumerState<PrayersPage> {
                                         ),
                                         Text(
                                           'find_qibla_direction'.tr(),
-                                          style: GoogleFonts.getFont(
+                                          style: AppFonts.getFont(
                                             'Cairo',
                                             fontSize: 12,
                                             color: txtS,

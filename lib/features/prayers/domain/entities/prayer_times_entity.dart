@@ -15,6 +15,7 @@ class PrayerTimesEntity extends Equatable {
     required this.longitude,
     this.countryCode = 'TR',
     this.calculationMethod = 'turkey',
+    required this.lastUpdated,
   });
   final DateTime fajr;
   final DateTime sunrise;
@@ -27,6 +28,10 @@ class PrayerTimesEntity extends Equatable {
   final double longitude;
   final String countryCode; // e.g. "TR", "EG", "SA"
   final String calculationMethod;
+  final DateTime lastUpdated;
+
+  // محسوبة: تعتبر المواقيت قديمة إذا مضى على آخر تحديث أكثر من 24 ساعة
+  bool isStaleAt(DateTime now) => now.difference(lastUpdated).inHours >= 24;
 
   @override
   List<Object?> get props => [
@@ -41,5 +46,6 @@ class PrayerTimesEntity extends Equatable {
         longitude,
         countryCode,
         calculationMethod,
+        lastUpdated,
       ];
 }

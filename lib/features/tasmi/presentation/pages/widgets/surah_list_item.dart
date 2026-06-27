@@ -1,6 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:sila_app/core/theme/app_fonts.dart';
 import 'package:quran/quran.dart' as quran;
 import 'package:sila_app/core/theme/app_theme.dart';
 import 'package:sila_app/core/utils/surah_utils.dart';
@@ -59,7 +59,7 @@ class SurahListItem extends StatelessWidget {
                 ),
                 child: Text(
                   _toArabicNumber(context, surahNumber.toString()),
-                  style: GoogleFonts.cairo(
+                  style: AppFonts.cairo(
                     color:
                         isDark ? AppTheme.accentColor : AppTheme.primaryColor,
                     fontWeight: FontWeight.bold,
@@ -77,7 +77,7 @@ class SurahListItem extends StatelessWidget {
                       'surah_name_prefix'.tr(args: [
                         SurahUtils.getLocalizedSurahName(context, surahNumber)
                       ]),
-                      style: GoogleFonts.cairo(
+                      style: AppFonts.cairo(
                         fontWeight: FontWeight.bold,
                         fontSize: 18,
                         color: isDark ? Colors.white : AppTheme.primaryColor,
@@ -88,7 +88,7 @@ class SurahListItem extends StatelessWidget {
                         _toArabicNumber(context,
                             quran.getVerseCount(surahNumber).toString())
                       ]),
-                      style: GoogleFonts.cairo(
+                      style: AppFonts.cairo(
                         color: isDark ? Colors.white70 : Colors.grey[600],
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
@@ -110,7 +110,7 @@ class SurahListItem extends StatelessWidget {
                 ),
                 child: Text(
                   isMakki ? 'makki'.tr() : 'madani'.tr(),
-                  style: GoogleFonts.cairo(
+                  style: AppFonts.cairo(
                     color: isDark
                         ? Colors.white70
                         : (isMakki ? Colors.amber[800] : Colors.blue[800]),

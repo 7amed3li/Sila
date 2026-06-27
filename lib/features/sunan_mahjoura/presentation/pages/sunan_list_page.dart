@@ -1,6 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:sila_app/core/theme/app_fonts.dart';
 import 'package:sila_app/core/theme/app_theme.dart';
 import 'package:sila_app/features/sunan_mahjoura/data/sunan_data.dart';
 
@@ -15,7 +15,7 @@ class SunanListPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           'sunan_mahjoura'.tr(),
-          style: GoogleFonts.cairo(
+          style: AppFonts.cairo(
             fontWeight: FontWeight.bold,
             color: isDark ? Colors.white : AppTheme.primaryColor,
           ),
@@ -60,7 +60,7 @@ class SunanListPage extends StatelessWidget {
                       Expanded(
                         child: Text(
                           sunnah.textKey.tr(),
-                          style: GoogleFonts.amiri(
+                          style: AppFonts.amiri(
                             fontSize: 20,
                             height: 1.8,
                             fontWeight: FontWeight.w600,
@@ -93,7 +93,7 @@ class SunanListPage extends StatelessWidget {
                           ),
                           child: Text(
                             'sunnah_source'.tr(args: [sunnah.sourceKey.tr()]),
-                            style: GoogleFonts.cairo(
+                            style: AppFonts.cairo(
                               fontSize: 12,
                               color: isDark ? Colors.white70 : Colors.grey[700],
                               fontWeight: FontWeight.w600,
@@ -118,7 +118,7 @@ class SunanListPage extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(20)),
                                 title: Text(
                                   'sunnah_explanation_title'.tr(),
-                                  style: GoogleFonts.cairo(
+                                  style: AppFonts.cairo(
                                     color: isDark
                                         ? Colors.white
                                         : AppTheme.primaryColor,
@@ -127,7 +127,7 @@ class SunanListPage extends StatelessWidget {
                                 ),
                                 content: Text(
                                   sunnah.explanationKey.tr(),
-                                  style: GoogleFonts.cairo(
+                                  style: AppFonts.cairo(
                                     fontSize: 15,
                                     height: 1.6,
                                     color: isDark
@@ -140,7 +140,7 @@ class SunanListPage extends StatelessWidget {
                                       onPressed: () => Navigator.pop(context),
                                       child: Text(
                                         'close_button'.tr(),
-                                        style: GoogleFonts.cairo(
+                                        style: AppFonts.cairo(
                                           color: AppTheme.accentColor,
                                           fontWeight: FontWeight.bold,
                                         ),

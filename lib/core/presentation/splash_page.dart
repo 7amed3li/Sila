@@ -25,14 +25,15 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    debugPrint('[${DateTime.now().toIso8601String()}][Splash] initState start');
 
     _fadeController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 600),
+      duration: const Duration(milliseconds: 400),
     );
     _scaleController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 800),
+      duration: const Duration(milliseconds: 500),
     );
 
     _fadeAnim = CurvedAnimation(parent: _fadeController, curve: Curves.easeOut);
@@ -40,41 +41,82 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
       CurvedAnimation(parent: _scaleController, curve: Curves.elasticOut),
     );
 
+    debugPrint(
+        '[${DateTime.now().toIso8601String()}][Splash] Calling _bootstrapSplash');
     unawaited(_bootstrapSplash());
   }
 
   Future<void> _bootstrapSplash() async {
+    final splashStart = DateTime.now();
+    debugPrint(
+        '[${splashStart.toIso8601String()}][Splash] _bootstrapSplash START');
     try {
-      await _requestPermissionsOnce();
+      debugPrint(
+          '[${DateTime.now().toIso8601String()}][Splash] Requesting permissions...');
+      await _requestPermissionsOnce().timeout(const Duration(seconds: 1),
+          onTimeout: () {
+        debugPrint('[Splash] Permissions request timed out after 1s');
+        return;
+      });
+      debugPrint(
+          '[${DateTime.now().toIso8601String()}][Splash] Permissions requested/handled');
     } catch (e) {
       debugPrint('Splash permission bootstrap failed: $e');
     }
 
     if (!mounted) return;
+    debugPrint(
+        '[${DateTime.now().toIso8601String()}][Splash] Starting animation/start sequence...');
     await _startSequence();
+    final splashEnd = DateTime.now();
+    debugPrint(
+        '[${splashEnd.toIso8601String()}][Splash] _bootstrapSplash END (TOTAL: ${splashEnd.difference(splashStart).inMilliseconds} ms)');
   }
 
   Future<void> _requestPermissionsOnce() async {
-    final prefs = await SharedPreferences.getInstance();
-    final alreadyRequested = prefs.getBool(_permissionsRequestedKey) ?? false;
-    if (alreadyRequested) return;
+    debugPrint(
+        '[${DateTime.now().toIso8601String()}][Splash] Checking notification/location permissions state...');
 
-    final allGranted = await NotificationPermissionHelper.requestAllPermissions();
-    if (allGranted) {
-      await prefs.setBool(_permissionsRequestedKey, true);
+    final prefsSw = Stopwatch()..start();
+    final prefs = await SharedPreferences.getInstance();
+    prefsSw.stop();
+    debugPrint(
+        '⏱ [SPLASH-BENCH] SharedPreferences.getInstance() took: ${prefsSw.elapsedMilliseconds}ms');
+
+    final alreadyRequested = prefs.getBool(_permissionsRequestedKey) ?? false;
+    if (alreadyRequested) {
+      debugPrint(
+          '[${DateTime.now().toIso8601String()}][Splash] Permissions already requested (skip)');
+      return;
     }
+
+    debugPrint(
+        '[${DateTime.now().toIso8601String()}][Splash] Requesting all permissions from OS...');
+    final allGranted =
+        await NotificationPermissionHelper.requestAllPermissions();
+    debugPrint(
+        '[${DateTime.now().toIso8601String()}][Splash] Permission result: allGranted=$allGranted');
+
+    // Always mark as requested so we don't ask again on every startup, even if denied
+    await prefs.setBool(_permissionsRequestedKey, true);
+    debugPrint(
+        '[${DateTime.now().toIso8601String()}][Splash] Permission persisted in prefs');
   }
 
   Future<void> _startSequence() async {
-    await Future<void>.delayed(const Duration(milliseconds: 300));
+    debugPrint(
+        '[${DateTime.now().toIso8601String()}][Splash] Animation/transition start...');
+    await Future<void>.delayed(const Duration(milliseconds: 100));
     if (!mounted) return;
     await Future.wait<void>([
       _scaleController.forward(),
       _fadeController.forward(),
     ]);
 
-    await Future<void>.delayed(const Duration(milliseconds: 900));
+    await Future<void>.delayed(const Duration(milliseconds: 200));
 
+    debugPrint(
+        '[${DateTime.now().toIso8601String()}][Splash] Animation/transition end (ready for navigation)');
     if (mounted) widget.onComplete();
   }
 

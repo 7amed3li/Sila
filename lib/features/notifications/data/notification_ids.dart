@@ -47,9 +47,9 @@ class NotificationIds {
   static const int reEngagementFixedId = 9999;
 
   // ─── Dynamic Offsets & Formulas ────────────────────────────
-  /// صياغة (Formula): ID الخاص بالصلاة + 10000 
+  /// صياغة (Formula): ID الخاص بالصلاة + 10000
   /// مثال: الفجر (1) = 10001
-  static const int prayerReminderOffset = 10000; 
+  static const int prayerReminderOffset = 10000;
 
   /// صياغة (Formula): 9100 + index (من 0 إلى 4 لـ 5 صلوات)
   /// مثال: الفجر (Index 0) = 9100, الظهر (Index 1) = 9101
@@ -57,7 +57,7 @@ class NotificationIds {
 
   /// صياغة (Formula): 2000 + User Setting ID
   /// مثال: التذكير رقم 5 = 2005
-  static const int userCustomDailyOffset = 2000; 
+  static const int userCustomDailyOffset = 2000;
 
   // ─── Reserved Empty Ranges (For Future Use) ─────────────────
   // تم تخصيص هذه الجداول للإضافات المستقبلية لضمان عدم التداخل:
