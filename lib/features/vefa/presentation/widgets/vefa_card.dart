@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:sila_app/core/theme/app_fonts.dart';
 import 'package:sila_app/core/theme/app_theme.dart';
 import 'package:sila_app/features/vefa/domain/entities/vefa_person.dart';
 
@@ -65,7 +65,7 @@ class VefaCard extends StatelessWidget {
                       person.name.isNotEmpty
                           ? person.name[0].toUpperCase()
                           : '?',
-                      style: GoogleFonts.cairo(
+                      style: AppFonts.cairo(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: isSelectionMode
@@ -82,7 +82,7 @@ class VefaCard extends StatelessWidget {
                     children: [
                       Text(
                         person.name,
-                        style: GoogleFonts.cairo(
+                        style: AppFonts.cairo(
                           fontSize: 18,
                           fontWeight: FontWeight.w700,
                           color: isDark ? Colors.white : AppTheme.primaryColor,
@@ -91,7 +91,7 @@ class VefaCard extends StatelessWidget {
                       if (person.relation != null)
                         Text(
                           person.relation!,
-                          style: GoogleFonts.cairo(
+                          style: AppFonts.cairo(
                             fontSize: 14,
                             color: isDark ? Colors.white70 : Colors.grey[600],
                             fontWeight: FontWeight.w500,
@@ -130,7 +130,7 @@ class VefaCard extends StatelessWidget {
                           const SizedBox(width: 4),
                           Text(
                             '${person.giftCount}',
-                            style: GoogleFonts.cairo(
+                            style: AppFonts.cairo(
                               fontSize: 14,
                               color: Colors.red[400],
                               fontWeight: FontWeight.bold,

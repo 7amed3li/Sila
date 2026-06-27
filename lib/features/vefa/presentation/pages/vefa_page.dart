@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:sila_app/core/theme/app_fonts.dart';
 import 'package:sila_app/core/theme/app_theme.dart';
 import 'package:sila_app/features/vefa/presentation/riverpod/vefa_providers.dart';
 import 'package:sila_app/features/vefa/presentation/widgets/add_vefa_contact_sheet.dart';
@@ -24,7 +24,7 @@ class VefaPage extends ConsumerWidget {
       appBar: AppBar(
         title: Text(
           'vefa_list'.tr(),
-          style: GoogleFonts.cairo(
+          style: AppFonts.cairo(
             fontWeight: FontWeight.bold,
             color: isDark ? Colors.white : AppTheme.primaryColor,
           ),
@@ -39,7 +39,7 @@ class VefaPage extends ConsumerWidget {
             child: Text(
               'vefa_list_desc'.tr(),
               textAlign: TextAlign.center,
-              style: GoogleFonts.cairo(
+              style: AppFonts.cairo(
                 color: isDark ? Colors.white70 : Colors.grey[700],
                 fontSize: 15,
                 height: 1.5,
@@ -76,7 +76,7 @@ class VefaPage extends ConsumerWidget {
                             const SizedBox(height: 24),
                             Text(
                               'vefa_list_empty'.tr(),
-                              style: GoogleFonts.cairo(
+                              style: AppFonts.cairo(
                                 color:
                                     isDark ? Colors.white70 : Colors.grey[600],
                                 fontSize: 16,
@@ -109,7 +109,7 @@ class VefaPage extends ConsumerWidget {
                                 },
                                 icon: const Icon(Icons.add),
                                 label: Text('add_new'.tr(),
-                                    style: GoogleFonts.cairo(
+                                    style: AppFonts.cairo(
                                         fontWeight: FontWeight.bold)),
                               )
                             ]
@@ -143,14 +143,14 @@ class VefaPage extends ConsumerWidget {
                     );
                   },
                   error: (err, stack) => Center(
-                      child: Text('Error: $err', style: GoogleFonts.cairo())),
+                      child: Text('Error: $err', style: AppFonts.cairo())),
                   loading: () =>
                       const Center(child: CircularProgressIndicator()),
                 );
               },
               error: (err, stack) => Center(
                   child:
-                      Text('Database Error: $err', style: GoogleFonts.cairo())),
+                      Text('Database Error: $err', style: AppFonts.cairo())),
               loading: () => const Center(child: CircularProgressIndicator()),
             ),
           ),
@@ -173,7 +173,7 @@ class VefaPage extends ConsumerWidget {
           );
         },
         label: Text('add_new'.tr(),
-            style: GoogleFonts.cairo(fontWeight: FontWeight.bold)),
+            style: AppFonts.cairo(fontWeight: FontWeight.bold)),
         icon: const Icon(Icons.add),
       ),
     );
@@ -207,7 +207,7 @@ class VefaPage extends ConsumerWidget {
             ),
             Text(
               'duaa_suggested_title'.tr(),
-              style: GoogleFonts.cairo(
+              style: AppFonts.cairo(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
                 color: isDark ? Colors.white : AppTheme.primaryColor,
@@ -217,7 +217,7 @@ class VefaPage extends ConsumerWidget {
             Text(
               'duaa_suggested_desc'.tr(),
               textAlign: TextAlign.center,
-              style: GoogleFonts.cairo(
+              style: AppFonts.cairo(
                 color: isDark ? Colors.white70 : Colors.grey[700],
                 fontSize: 15,
               ),
@@ -236,7 +236,7 @@ class VefaPage extends ConsumerWidget {
               child: Text(
                 duaaText,
                 textAlign: TextAlign.center,
-                style: GoogleFonts.cairo(
+                style: AppFonts.cairo(
                   fontSize: 20,
                   fontWeight: FontWeight.w700,
                   height: 1.8,
@@ -263,7 +263,7 @@ class VefaPage extends ConsumerWidget {
                           backgroundColor: AppTheme.surfaceColor,
                           content: Text(
                             'تم نسخ الدعاء',
-                            style: GoogleFonts.cairo(
+                            style: AppFonts.cairo(
                               color: AppTheme.primaryColor,
                               fontWeight: FontWeight.bold,
                             ),
@@ -274,7 +274,7 @@ class VefaPage extends ConsumerWidget {
                     icon: const Icon(Icons.copy, color: AppTheme.accentColor),
                     label: Text(
                       'copy_duaa'.tr(),
-                      style: GoogleFonts.cairo(
+                      style: AppFonts.cairo(
                         color: AppTheme.accentColor,
                         fontWeight: FontWeight.bold,
                       ),
@@ -294,7 +294,7 @@ class VefaPage extends ConsumerWidget {
                     onPressed: () => Navigator.pop(context),
                     child: Text(
                       'حسناً',
-                      style: GoogleFonts.cairo(
+                      style: AppFonts.cairo(
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
                         color: Colors.white,

@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:sila_app/core/theme/app_fonts.dart';
 import 'package:sila_app/features/azkar/presentation/pages/azkar_detail_page.dart';
 import 'package:sila_app/features/azkar/presentation/riverpod/post_prayer_controller.dart';
 
@@ -84,7 +84,7 @@ class PostPrayerQuickCard extends ConsumerWidget {
           const SizedBox(height: 12),
           Text(
             'post_prayer_adhkar_specific'.tr(args: ['prayer_$prayerName'.tr()]),
-            style: GoogleFonts.amiri(
+            style: AppFonts.amiri(
               color: Colors.white,
               fontSize: 22,
               fontWeight: FontWeight.bold,

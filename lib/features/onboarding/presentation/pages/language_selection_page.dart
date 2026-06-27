@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:sila_app/core/theme/app_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sila_app/core/presentation/main_layout.dart';
 import 'package:sila_app/features/quran/presentation/riverpod/quran_data_provider.dart';
@@ -52,7 +52,7 @@ class LanguageSelectionPage extends ConsumerWidget {
               Text(
                 'choose_language'.tr(),
                 textAlign: TextAlign.center,
-                style: GoogleFonts.cairo(
+                style: AppFonts.cairo(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
                   color: const Color(0xFF064E3B),
@@ -109,7 +109,7 @@ class LanguageSelectionPage extends ConsumerWidget {
               Text(
                 'Sıla App',
                 textAlign: TextAlign.center,
-                style: GoogleFonts.amiri(
+                style: AppFonts.amiri(
                   fontSize: 16,
                   color: Colors.grey[400],
                 ),
@@ -158,7 +158,7 @@ class _LanguageOptionCard extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: GoogleFonts.cairo(
+                    style: AppFonts.cairo(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                       color: const Color(0xFF064E3B),
@@ -166,7 +166,7 @@ class _LanguageOptionCard extends StatelessWidget {
                   ),
                   Text(
                     subtitle,
-                    style: GoogleFonts.cairo(
+                    style: AppFonts.cairo(
                       fontSize: 14,
                       color: Colors.grey[600],
                     ),

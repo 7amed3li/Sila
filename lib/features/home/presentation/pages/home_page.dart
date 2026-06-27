@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:sila_app/core/theme/app_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sila_app/core/theme/app_theme.dart';
 import 'package:sila_app/core/services/notification_service.dart';
@@ -183,7 +183,7 @@ class HomePage extends ConsumerWidget {
                 children: [
                   Text(
                     title,
-                    style: GoogleFonts.amiri(
+                    style: AppFonts.amiri(
                       color: Colors.white,
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
@@ -194,7 +194,7 @@ class HomePage extends ConsumerWidget {
                   const SizedBox(height: 4),
                   Text(
                     subtitle,
-                    style: GoogleFonts.cairo(
+                    style: AppFonts.cairo(
                       color: Colors.white.withValues(alpha: 0.8),
                       fontSize: 12,
                     ),
@@ -285,7 +285,7 @@ class _NotificationInboxCard extends ConsumerWidget {
                               notif.title,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: GoogleFonts.notoKufiArabic(
+                              style: AppFonts.notoKufiArabic(
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
                                 color: AppTheme.primaryColor,
@@ -295,7 +295,7 @@ class _NotificationInboxCard extends ConsumerWidget {
                           const SizedBox(width: 8),
                           Text(
                             _formatTime(notif.time),
-                            style: GoogleFonts.notoKufiArabic(
+                            style: AppFonts.notoKufiArabic(
                               fontSize: 11,
                               color: Colors.grey[600],
                             ),
@@ -307,7 +307,7 @@ class _NotificationInboxCard extends ConsumerWidget {
                         notif.body,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.notoKufiArabic(
+                        style: AppFonts.notoKufiArabic(
                           fontSize: 13,
                           color: Colors.black87,
                         ),

@@ -2,7 +2,7 @@ import 'dart:ui' as ui;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:sila_app/core/theme/app_fonts.dart';
 import 'package:sila_app/core/theme/app_theme.dart';
 import 'package:sila_app/features/vefa/domain/entities/vefa_person.dart';
 import 'package:sila_app/features/vefa/presentation/riverpod/vefa_providers.dart';
@@ -72,7 +72,7 @@ class _AddVefaContactSheetState extends ConsumerState<AddVefaContactSheet> {
             ),
             Text(
               'add_loved_one'.tr(),
-              style: GoogleFonts.cairo(
+              style: AppFonts.cairo(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
                 color: textColor,
@@ -86,10 +86,10 @@ class _AddVefaContactSheetState extends ConsumerState<AddVefaContactSheet> {
               textDirection: context.locale.languageCode == 'ar'
                   ? ui.TextDirection.rtl
                   : ui.TextDirection.ltr,
-              style: GoogleFonts.cairo(color: textColor),
+              style: AppFonts.cairo(color: textColor),
               decoration: InputDecoration(
                 labelText: 'name'.tr(),
-                labelStyle: GoogleFonts.cairo(color: Colors.grey),
+                labelStyle: AppFonts.cairo(color: Colors.grey),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide(
@@ -118,12 +118,12 @@ class _AddVefaContactSheetState extends ConsumerState<AddVefaContactSheet> {
               textDirection: context.locale.languageCode == 'ar'
                   ? ui.TextDirection.rtl
                   : ui.TextDirection.ltr,
-              style: GoogleFonts.cairo(color: textColor),
+              style: AppFonts.cairo(color: textColor),
               decoration: InputDecoration(
                 labelText: 'relation'.tr(),
                 hintText: 'optional'.tr(),
-                hintStyle: GoogleFonts.cairo(color: Colors.grey),
-                labelStyle: GoogleFonts.cairo(color: Colors.grey),
+                hintStyle: AppFonts.cairo(color: Colors.grey),
+                labelStyle: AppFonts.cairo(color: Colors.grey),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                   borderSide: BorderSide(
@@ -155,7 +155,7 @@ class _AddVefaContactSheetState extends ConsumerState<AddVefaContactSheet> {
               ),
               child: Text(
                 'save'.tr(),
-                style: GoogleFonts.cairo(
+                style: AppFonts.cairo(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),

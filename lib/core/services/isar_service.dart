@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'package:flutter/foundation.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sila_app/core/models/reciter_settings.dart';
@@ -61,7 +61,7 @@ class IsarService {
             ReciterSettingsSchema,
           ],
           directory: dir.path,
-          inspector: true,
+          inspector: kDebugMode,
         );
       } catch (e) {
         final msg = e.toString();

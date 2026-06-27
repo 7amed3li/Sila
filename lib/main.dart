@@ -13,33 +13,60 @@ import 'package:sila_app/core/services/notification_service.dart';
 import 'package:sila_app/core/theme/app_theme.dart';
 import 'package:sila_app/features/onboarding/presentation/pages/language_selection_page.dart';
 import 'package:sila_app/features/prayers/data/repositories/prayer_repository_impl.dart';
+import 'package:sila_app/core/theme/app_fonts.dart';
 import 'package:timezone/data/latest.dart' as tz;
 
 final GlobalKey<NavigatorState> appNavigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
-  final startupStart = DateTime.now();
+  final totalSw = Stopwatch()..start();
+  final phaseSw = Stopwatch();
   WidgetsFlutterBinding.ensureInitialized();
-  debugPrint('[${DateTime.now().toIso8601String()}][Startup] 1. Initializing Timezone...');
+
+  // ── Phase 1: Timezone ──
+  phaseSw..reset()..start();
   tz.initializeTimeZones();
-  debugPrint('[${DateTime.now().toIso8601String()}][Startup] 1. Timezone: Done');
+  phaseSw.stop();
+  final tzMs = phaseSw.elapsedMilliseconds;
+  debugPrint('⏱ [BENCHMARK] 1. Timezone init: ${tzMs}ms');
 
-  debugPrint('[${DateTime.now().toIso8601String()}][Startup] 2. Initializing Firebase...');
+  // ── Phase 2: Firebase ──
+  phaseSw..reset()..start();
   await Firebase.initializeApp();
-  debugPrint('[${DateTime.now().toIso8601String()}][Startup] 2. Firebase: Done');
+  phaseSw.stop();
+  final firebaseMs = phaseSw.elapsedMilliseconds;
+  debugPrint('⏱ [BENCHMARK] 2. Firebase.initializeApp(): ${firebaseMs}ms');
 
-  debugPrint('[${DateTime.now().toIso8601String()}][Startup] 3. Initializing NotificationService...');
-  await NotificationService().initialize();
-  debugPrint('[${DateTime.now().toIso8601String()}][Startup] 3. NotificationService: Done');
+  // ── Phase 3: NotificationService ──
+  phaseSw..reset()..start();
+  await NotificationService().initializeLocal();
+  phaseSw.stop();
+  final notifMs = phaseSw.elapsedMilliseconds;
+  debugPrint('⏱ [BENCHMARK] 3. NotificationService.initializeLocal(): ${notifMs}ms');
 
-  debugPrint('[${DateTime.now().toIso8601String()}][Startup] 4. Retrieving SharedPreferences...');
+  // ── Phase 4: SharedPreferences ──
+  phaseSw..reset()..start();
   final prefs = await SharedPreferences.getInstance();
   final isLanguageSelected = prefs.getBool('is_language_selected') ?? false;
-  debugPrint('[${DateTime.now().toIso8601String()}][Startup] 4. SharedPreferences: Done');
+  phaseSw.stop();
+  final prefsMs = phaseSw.elapsedMilliseconds;
+  debugPrint('⏱ [BENCHMARK] 4. SharedPreferences: ${prefsMs}ms');
 
-  final startupEnd = DateTime.now();
-  final duration = startupEnd.difference(startupStart);
-  debugPrint('[${DateTime.now().toIso8601String()}][Startup] Total init duration: ${duration.inMilliseconds} ms');
+  totalSw.stop();
+  final totalPreRunApp = totalSw.elapsedMilliseconds;
+
+  debugPrint('');
+  debugPrint('╔══════════════════════════════════════════╗');
+  debugPrint('║     STARTUP BENCHMARK (before runApp)    ║');
+  debugPrint('╠══════════════════════════════════════════╣');
+  debugPrint('║ 1. Timezone init:          ${tzMs.toString().padLeft(6)}ms ║');
+  debugPrint('║ 2. Firebase.initializeApp: ${firebaseMs.toString().padLeft(6)}ms ║');
+  debugPrint('║ 3. NotificationService:    ${notifMs.toString().padLeft(6)}ms ║');
+  debugPrint('║ 4. SharedPreferences:      ${prefsMs.toString().padLeft(6)}ms ║');
+  debugPrint('║────────────────────────────────────────── ║');
+  debugPrint('║ TOTAL before runApp:       ${totalPreRunApp.toString().padLeft(6)}ms ║');
+  debugPrint('╚══════════════════════════════════════════╝');
+  debugPrint('');
 
   debugPrint('🚩 [main.dart] About to runApp...');
 
@@ -102,6 +129,9 @@ class _SilaAppState extends State<SilaApp> with WidgetsBindingObserver {
     WidgetsBinding.instance.addObserver(this);
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      // ── Remote BG Notification Setup ──
+      unawaited(NotificationService().initializeRemote());
+
       debugPrint('[${DateTime.now().toIso8601String()}][SilaApp] Setting Notification NavigatorKey...');
       try {
         await NotificationService().setNavigatorKey(appNavigatorKey);

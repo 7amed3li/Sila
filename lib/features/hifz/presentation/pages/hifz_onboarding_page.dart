@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:sila_app/core/theme/app_fonts.dart';
 import 'package:sila_app/core/theme/app_theme.dart';
 import 'package:sila_app/features/hifz/presentation/controllers/hifz_onboarding_controller.dart';
 import 'package:sila_app/features/hifz/presentation/pages/hifz_home_page.dart';
@@ -218,7 +218,7 @@ class _WelcomeScreen extends StatelessWidget {
             Text(
               'hifz_onboarding_welcome_title'.tr(),
               textAlign: TextAlign.center,
-              style: GoogleFonts.cairo(
+              style: AppFonts.cairo(
                 fontSize: 24,
                 fontWeight: FontWeight.w700,
                 color: Colors.white,
@@ -228,7 +228,7 @@ class _WelcomeScreen extends StatelessWidget {
             Text(
               'hifz_onboarding_welcome_desc'.tr(),
               textAlign: TextAlign.center,
-              style: GoogleFonts.cairo(
+              style: AppFonts.cairo(
                 fontSize: 13,
                 fontWeight: FontWeight.w400,
                 color: Colors.white.withValues(alpha: 0.65),
@@ -309,7 +309,7 @@ class _AgeScreen extends StatelessWidget {
                     children: [
                       Text(
                         item.$1,
-                        style: GoogleFonts.cairo(
+                        style: AppFonts.cairo(
                           fontSize: 22,
                           fontWeight: FontWeight.w800,
                           color: AppTheme.primaryColor,
@@ -319,7 +319,7 @@ class _AgeScreen extends StatelessWidget {
                       Text(
                         item.$2,
                         textAlign: TextAlign.center,
-                        style: GoogleFonts.cairo(
+                        style: AppFonts.cairo(
                           fontSize: 10,
                           fontWeight: FontWeight.w500,
                           color: const Color(0xFF64748B),
@@ -412,7 +412,7 @@ class _TimeGoalScreen extends StatelessWidget {
                   ),
                   child: Text(
                     minuteLabels[index],
-                    style: GoogleFonts.cairo(
+                    style: AppFonts.cairo(
                       fontSize: 13,
                       fontWeight: FontWeight.w700,
                       color: selected ? Colors.white : const Color(0xFF475569),
@@ -427,7 +427,7 @@ class _TimeGoalScreen extends StatelessWidget {
             alignment: Alignment.centerRight,
             child: Text(
               'hifz_goal_question'.tr(),
-              style: GoogleFonts.cairo(
+              style: AppFonts.cairo(
                 fontSize: 18,
                 fontWeight: FontWeight.w700,
                 color: const Color(0xFF0F172A),
@@ -458,7 +458,7 @@ class _TimeGoalScreen extends StatelessWidget {
                       const SizedBox(height: 6),
                       Text(
                         goal.$2,
-                        style: GoogleFonts.cairo(
+                        style: AppFonts.cairo(
                           fontSize: 13,
                           fontWeight: FontWeight.w700,
                           color: const Color(0xFF0F172A),
@@ -467,7 +467,7 @@ class _TimeGoalScreen extends StatelessWidget {
                       const SizedBox(height: 2),
                       Text(
                         goal.$3,
-                        style: GoogleFonts.cairo(
+                        style: AppFonts.cairo(
                           fontSize: 10,
                           fontWeight: FontWeight.w400,
                           color: const Color(0xFF64748B),
@@ -495,7 +495,7 @@ class _TimeGoalScreen extends StatelessWidget {
               ),
               child: Text(
                 'next'.tr(),
-                style: GoogleFonts.cairo(
+                style: AppFonts.cairo(
                     fontSize: 14, fontWeight: FontWeight.w700),
               ),
             ),
@@ -545,7 +545,7 @@ class _LearningStyleScreen extends StatelessWidget {
                 Text(
                   style.$2,
                   textAlign: TextAlign.center,
-                  style: GoogleFonts.cairo(
+                  style: AppFonts.cairo(
                     fontSize: 13,
                     fontWeight: FontWeight.w700,
                     color: const Color(0xFF0F172A),
@@ -555,7 +555,7 @@ class _LearningStyleScreen extends StatelessWidget {
                 Text(
                   style.$3,
                   textAlign: TextAlign.center,
-                  style: GoogleFonts.cairo(
+                  style: AppFonts.cairo(
                     fontSize: 10,
                     fontWeight: FontWeight.w400,
                     color: const Color(0xFF64748B),
@@ -590,7 +590,7 @@ class _SmartPlanScreen extends StatelessWidget {
         children: [
           Text(
             'smart_plan_title'.tr(),
-            style: GoogleFonts.cairo(
+            style: AppFonts.cairo(
               fontSize: 20,
               fontWeight: FontWeight.w700,
               color: const Color(0xFF0F172A),
@@ -616,7 +616,7 @@ class _SmartPlanScreen extends StatelessWidget {
               children: [
                 Text(
                   'based_on_answers'.tr(),
-                  style: GoogleFonts.cairo(
+                  style: AppFonts.cairo(
                     fontSize: 10,
                     fontWeight: FontWeight.w600,
                     color: Colors.white.withValues(alpha: 0.6),
@@ -625,7 +625,7 @@ class _SmartPlanScreen extends StatelessWidget {
                 const SizedBox(height: 8),
                 Text(
                   '● ${context.locale.languageCode == 'ar' ? _toArabicIndic(plan?.newAyahsTarget ?? 3) : (plan?.newAyahsTarget ?? 3)} ${'new_ayahs_daily_suffix'.tr()}',
-                  style: GoogleFonts.cairo(
+                  style: AppFonts.cairo(
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
                       color: Colors.white),
@@ -637,7 +637,7 @@ class _SmartPlanScreen extends StatelessWidget {
                             ? _toArabicIndic(plan?.reviewAyahsTarget ?? 8)
                             : (plan?.reviewAyahsTarget ?? 8).toString()
                       ])}',
-                  style: GoogleFonts.cairo(
+                  style: AppFonts.cairo(
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
                       color: Colors.white),
@@ -645,7 +645,7 @@ class _SmartPlanScreen extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text(
                   '● ${plan?.estimatedCompletion ?? 'estimated_completion_fallback'.tr()} ⭐',
-                  style: GoogleFonts.cairo(
+                  style: AppFonts.cairo(
                     fontSize: 13,
                     fontWeight: FontWeight.w700,
                     color: const Color(0xFFFCD34D),
@@ -670,7 +670,7 @@ class _SmartPlanScreen extends StatelessWidget {
                     children: [
                       Text(
                         'auto_adapt_title'.tr(),
-                        style: GoogleFonts.cairo(
+                        style: AppFonts.cairo(
                           fontSize: 14,
                           fontWeight: FontWeight.w700,
                           color: const Color(0xFF0F172A),
@@ -679,7 +679,7 @@ class _SmartPlanScreen extends StatelessWidget {
                       const SizedBox(height: 4),
                       Text(
                         'auto_adapt_desc'.tr(),
-                        style: GoogleFonts.cairo(
+                        style: AppFonts.cairo(
                           fontSize: 11,
                           fontWeight: FontWeight.w400,
                           color: const Color(0xFF94A3B8),
@@ -712,7 +712,7 @@ class _SmartPlanScreen extends StatelessWidget {
                       )
                     : Text(
                         'start_my_journey'.tr(),
-                        style: GoogleFonts.cairo(
+                        style: AppFonts.cairo(
                           fontSize: 15,
                           fontWeight: FontWeight.w700,
                           color: Colors.white,
@@ -743,7 +743,7 @@ class _QuestionLayout extends StatelessWidget {
         children: [
           Text(
             title,
-            style: GoogleFonts.cairo(
+            style: AppFonts.cairo(
               fontSize: 18,
               fontWeight: FontWeight.w700,
               color: const Color(0xFF0F172A),
@@ -752,7 +752,7 @@ class _QuestionLayout extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             hint,
-            style: GoogleFonts.cairo(
+            style: AppFonts.cairo(
               fontSize: 11,
               fontWeight: FontWeight.w400,
               color: const Color(0xFF94A3B8),
@@ -829,7 +829,7 @@ class _InfoBanner extends StatelessWidget {
       child: Text(
         message,
         textAlign: TextAlign.center,
-        style: GoogleFonts.cairo(
+        style: AppFonts.cairo(
           fontSize: 10,
           fontWeight: FontWeight.w700,
           color: textColor,
@@ -871,7 +871,7 @@ class _ScaleTapButtonState extends State<_ScaleTapButton> {
           child: Center(
             child: Text(
               widget.label,
-              style: GoogleFonts.cairo(
+              style: AppFonts.cairo(
                 fontSize: 14,
                 fontWeight: FontWeight.w700,
                 color: Colors.white,

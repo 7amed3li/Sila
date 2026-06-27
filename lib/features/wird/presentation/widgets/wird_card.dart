@@ -3,7 +3,7 @@ import 'dart:ui' as ui;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:sila_app/core/theme/app_fonts.dart';
 import 'package:quran/quran.dart' as quran;
 import 'package:sila_app/core/theme/app_theme.dart';
 import 'package:sila_app/features/vefa/presentation/pages/vefa_page.dart';
@@ -63,7 +63,7 @@ class WirdCard extends ConsumerWidget {
           const SizedBox(height: 20),
           Text(
             'set_daily_wird'.tr(),
-            style: GoogleFonts.amiri(
+            style: AppFonts.amiri(
               fontSize: 24,
               fontWeight: FontWeight.bold,
               color: AppTheme.primaryColor,
@@ -73,7 +73,7 @@ class WirdCard extends ConsumerWidget {
           Text(
             'start_blessed_journey'.tr(),
             textAlign: TextAlign.center,
-            style: GoogleFonts.cairo(
+            style: AppFonts.cairo(
               fontSize: 14,
               color: AppTheme.primaryColor.withValues(alpha: 0.6),
               height: 1.5,
@@ -97,7 +97,7 @@ class WirdCard extends ConsumerWidget {
               ),
               child: Text(
                 'start_setup'.tr(),
-                style: GoogleFonts.cairo(
+                style: AppFonts.cairo(
                     fontWeight: FontWeight.bold, fontSize: 16),
               ),
             ),
@@ -185,7 +185,7 @@ class WirdCard extends ConsumerWidget {
                   const SizedBox(width: 10),
                   Text(
                     'daily_wird_label'.tr(),
-                    style: GoogleFonts.cairo(
+                    style: AppFonts.cairo(
                       color: textColor,
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
@@ -204,7 +204,7 @@ class WirdCard extends ConsumerWidget {
                 ),
                 child: Text(
                   'juz_number'.tr(args: ['$juz']),
-                  style: GoogleFonts.cairo(
+                  style: AppFonts.cairo(
                     color: const Color(0xFFD97706),
                     fontWeight: FontWeight.bold,
                     fontSize: 12,
@@ -225,7 +225,7 @@ class WirdCard extends ConsumerWidget {
                   Flexible(
                     child: Text(
                       'progress_text'.tr(args: ['${(progress * 100).toInt()}']),
-                      style: GoogleFonts.cairo(
+                      style: AppFonts.cairo(
                         color: subtextColor,
                         fontSize: 13,
                         fontWeight: FontWeight.w500,
@@ -238,7 +238,7 @@ class WirdCard extends ConsumerWidget {
                   Text(
                     'pages_count'
                         .tr(args: ['$pagesReadSoFar', '$totalPagesToRead']),
-                    style: GoogleFonts.outfit(
+                    style: AppFonts.outfit(
                       color: const Color(0xFFD97706),
                       fontSize: 13,
                       fontWeight: FontWeight.bold,
@@ -274,7 +274,7 @@ class WirdCard extends ConsumerWidget {
               children: [
                 Text(
                   'from_quran_saying'.tr(),
-                  style: GoogleFonts.amiri(
+                  style: AppFonts.amiri(
                     color: Colors.white.withValues(alpha: 0.5),
                     fontSize: 14,
                   ),
@@ -286,7 +286,7 @@ class WirdCard extends ConsumerWidget {
                   textDirection: ui.TextDirection.rtl,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
-                  style: GoogleFonts.amiri(
+                  style: AppFonts.amiri(
                     fontSize: 24,
                     height: 1.6,
                     color: textColor,
@@ -298,7 +298,7 @@ class WirdCard extends ConsumerWidget {
                     quran.getSurahNameArabic(surahNum),
                     '$safeStartPage'
                   ]),
-                  style: GoogleFonts.cairo(
+                  style: AppFonts.cairo(
                     color: const Color(0xFFD97706).withValues(alpha: 0.8),
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
@@ -365,7 +365,7 @@ class WirdCard extends ConsumerWidget {
                   child: Center(
                     child: Text(
                       'continue_reading_wird'.tr(),
-                      style: GoogleFonts.cairo(
+                      style: AppFonts.cairo(
                         color: Colors.white,
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
@@ -409,7 +409,7 @@ class WirdCard extends ConsumerWidget {
                         Flexible(
                           child: Text(
                             'completed_reading'.tr(),
-                            style: GoogleFonts.cairo(
+                            style: AppFonts.cairo(
                               color: Colors.white,
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
@@ -453,7 +453,7 @@ class WirdCard extends ConsumerWidget {
                           isLate
                               ? 'behind_schedule'.tr(args: ['$lateDays'])
                               : 'on_track'.tr(),
-                          style: GoogleFonts.cairo(
+                          style: AppFonts.cairo(
                             color: isLate
                                 ? const Color(0xFFEF4444)
                                 : Colors.white.withValues(alpha: 0.7),
@@ -470,7 +470,7 @@ class WirdCard extends ConsumerWidget {
                 const SizedBox(width: 8),
                 Text(
                   'current_khatma'.tr(),
-                  style: GoogleFonts.cairo(
+                  style: AppFonts.cairo(
                     color: Colors.white.withValues(alpha: 0.9),
                     fontSize: 13,
                     fontWeight: FontWeight.bold,
@@ -497,7 +497,7 @@ class WirdCard extends ConsumerWidget {
                 Flexible(
                   child: Text(
                     'upcoming_wirds'.tr(args: ['${state.remainingWirdsCount}']),
-                    style: GoogleFonts.cairo(
+                    style: AppFonts.cairo(
                       color: Colors.white.withValues(alpha: 0.6),
                       fontSize: 11,
                     ),
@@ -509,7 +509,7 @@ class WirdCard extends ConsumerWidget {
                   child: Text(
                     'completed_wirds'
                         .tr(args: ['${state.completedWirdsCount}']),
-                    style: GoogleFonts.cairo(
+                    style: AppFonts.cairo(
                       color: Colors.white.withValues(alpha: 0.6),
                       fontSize: 11,
                     ),
@@ -537,18 +537,18 @@ class WirdCard extends ConsumerWidget {
           isKhatmaComplete
               ? 'quran_completion_title'.tr()
               : 'wird_completed_title'.tr(),
-          style: GoogleFonts.outfit(fontWeight: FontWeight.bold),
+          style: AppFonts.outfit(fontWeight: FontWeight.bold),
         ),
         content: Text(
           isKhatmaComplete
               ? 'quran_completion_message'.tr()
               : 'completion_check'.tr(),
-          style: GoogleFonts.outfit(fontSize: 15, height: 1.6),
+          style: AppFonts.outfit(fontSize: 15, height: 1.6),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('cancel'.tr(), style: GoogleFonts.outfit()),
+            child: Text('cancel'.tr(), style: AppFonts.outfit()),
           ),
           FilledButton(
             style: FilledButton.styleFrom(
@@ -579,7 +579,7 @@ class WirdCard extends ConsumerWidget {
               isKhatmaComplete
                   ? 'start_new_khatma'.tr()
                   : 'wird_completed_title'.tr(),
-              style: GoogleFonts.outfit(fontWeight: FontWeight.w600),
+              style: AppFonts.outfit(fontWeight: FontWeight.w600),
             ),
           ),
         ],
@@ -607,20 +607,20 @@ class WirdCard extends ConsumerWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: Text(
           'wird_completed_title'.tr(),
-          style: GoogleFonts.outfit(fontWeight: FontWeight.bold),
+          style: AppFonts.outfit(fontWeight: FontWeight.bold),
           textAlign: TextAlign.center,
         ),
         content: Text(
           'wird_completed_body'.tr(),
           textAlign: TextAlign.center,
-          style: GoogleFonts.outfit(fontSize: 15),
+          style: AppFonts.outfit(fontSize: 15),
         ),
         actionsAlignment: MainAxisAlignment.center,
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
             child: Text('later'.tr(),
-                style: GoogleFonts.outfit(color: Colors.grey)),
+                style: AppFonts.outfit(color: Colors.grey)),
           ),
           const SizedBox(width: 8),
           FilledButton(
@@ -640,7 +640,7 @@ class WirdCard extends ConsumerWidget {
             },
             child: Text(
               'yes_definitely'.tr(),
-              style: GoogleFonts.outfit(fontWeight: FontWeight.w600),
+              style: AppFonts.outfit(fontWeight: FontWeight.w600),
             ),
           ),
         ],
@@ -729,7 +729,7 @@ class _CelebrationWidgetState extends State<_CelebrationWidget>
                       const SizedBox(height: 16),
                       Text(
                         'mubarak_text'.tr(),
-                        style: GoogleFonts.amiri(
+                        style: AppFonts.amiri(
                           fontSize: 48,
                           fontWeight: FontWeight.bold,
                           color: AppTheme.primaryColor,
@@ -738,7 +738,7 @@ class _CelebrationWidgetState extends State<_CelebrationWidget>
                       const SizedBox(height: 8),
                       Text(
                         'completed_wird_daily'.tr(),
-                        style: GoogleFonts.cairo(
+                        style: AppFonts.cairo(
                           fontSize: 18,
                           color: AppTheme.primaryColor.withValues(alpha: 0.8),
                         ),

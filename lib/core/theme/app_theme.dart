@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:sila_app/core/theme/app_fonts.dart';
 
 class AppTheme {
   // Premium Palette
@@ -47,10 +47,10 @@ class AppTheme {
       ),
       scaffoldBackgroundColor: backgroundColor,
       textTheme:
-          GoogleFonts.outfitTextTheme(ThemeData.light().textTheme).copyWith(
-        displayLarge: GoogleFonts.outfit(
+          AppFonts.outfitTextTheme(ThemeData.light().textTheme).copyWith(
+        displayLarge: AppFonts.outfit(
             fontWeight: FontWeight.bold, color: primaryColor),
-        titleLarge: GoogleFonts.outfit(
+        titleLarge: AppFonts.outfit(
             fontWeight: FontWeight.w600, color: primaryColor),
       ),
       appBarTheme: const AppBarTheme(
@@ -82,7 +82,7 @@ class AppTheme {
         background: darkBackgroundColor,
       ),
       scaffoldBackgroundColor: darkBackgroundColor,
-      textTheme: GoogleFonts.outfitTextTheme(ThemeData.dark().textTheme),
+      textTheme: AppFonts.outfitTextTheme(ThemeData.dark().textTheme),
       appBarTheme: const AppBarTheme(
         backgroundColor: Colors.transparent,
         elevation: 0,

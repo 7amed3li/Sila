@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:sila_app/core/theme/app_fonts.dart';
 
 import '../main_layout.dart'; // To access bottomNavIndexProvider
 
@@ -150,7 +150,7 @@ class _NavItem extends StatelessWidget {
             const SizedBox(height: 2),
             Text(
               label,
-              style: GoogleFonts.getFont(
+              style: AppFonts.getFont(
                 'Cairo',
                 fontSize: 10,
                 height: 1.2,

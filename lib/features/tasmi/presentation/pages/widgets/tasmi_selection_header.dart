@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:sila_app/core/theme/app_fonts.dart';
 import 'package:sila_app/core/theme/app_theme.dart';
 
 class TasmiSelectionHeader extends StatelessWidget {
@@ -47,7 +47,7 @@ class TasmiSelectionHeader extends StatelessWidget {
               ),
               Text(
                 title,
-                style: GoogleFonts.cairo(
+                style: AppFonts.cairo(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                   color: isDark ? Colors.white : AppTheme.primaryColor,
@@ -58,7 +58,7 @@ class TasmiSelectionHeader extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             subtitle,
-            style: GoogleFonts.cairo(
+            style: AppFonts.cairo(
               color: isDark ? Colors.white70 : Colors.grey[700],
               fontSize: 16,
               fontWeight: FontWeight.w500,

@@ -25,7 +25,7 @@ import 'package:sila_app/features/vefa/presentation/pages/vefa_page.dart';
 
 import 'widgets/sila_bottom_bar.dart';
 
-// PERF FIX 7: Note — GoogleFonts.cairo() and GoogleFonts.getFont('Cairo') replaced
+// PERF FIX 7: Note — AppFonts.cairo() and AppFonts.getFont('Cairo') replaced
 // with TextStyle(fontFamily: 'Cairo', ...) throughout this file.
 // For other files using GoogleFonts, apply the same pattern.
 // To bundle the font locally, add to pubspec.yaml:

@@ -3,7 +3,7 @@ import 'dart:ui' as ui;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:sila_app/core/theme/app_fonts.dart';
 import 'package:quran/quran.dart' as quran_lib;
 import 'package:sila_app/core/providers/reciter_provider.dart';
 import 'package:sila_app/core/theme/app_theme.dart';
@@ -130,7 +130,7 @@ class _QuranDetailsSheetState extends ConsumerState<QuranDetailsSheet> {
                           children: [
                             Text(
                               title,
-                              style: GoogleFonts.cairo(
+                              style: AppFonts.cairo(
                                 fontSize: 22,
                                 fontWeight: FontWeight.w800,
                                 color: _getTextColor(settings.themeMode),
@@ -139,7 +139,7 @@ class _QuranDetailsSheetState extends ConsumerState<QuranDetailsSheet> {
                             Text(
                               'surah_ayah_label'
                                   .tr(args: [surahName, activeAyah.toString()]),
-                              style: GoogleFonts.cairo(
+                              style: AppFonts.cairo(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,
                                 color: _getAccentColor(settings.themeMode),
@@ -242,7 +242,7 @@ class _QuranDetailsSheetState extends ConsumerState<QuranDetailsSheet> {
                     widget.showTafsir
                         ? 'tafsir_label'.tr()
                         : 'translation_label'.tr(),
-                    style: GoogleFonts.cairo(
+                    style: AppFonts.cairo(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                       color: _getAccentColor(settings.themeMode),
@@ -279,7 +279,7 @@ class _QuranDetailsSheetState extends ConsumerState<QuranDetailsSheet> {
                     ),
                     onPressed: () => Navigator.pop(context),
                     child: Text('close'.tr(),
-                        style: GoogleFonts.cairo(
+                        style: AppFonts.cairo(
                             fontSize: 18, fontWeight: FontWeight.bold)),
                   ),
                   const SizedBox(height: 24),

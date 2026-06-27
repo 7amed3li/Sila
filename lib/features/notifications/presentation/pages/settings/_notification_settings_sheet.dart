@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:sila_app/core/theme/app_fonts.dart';
 import 'package:sila_app/features/notifications/presentation/controllers/notification_settings_controller.dart';
 
 class NotificationSettingsSheet extends ConsumerStatefulWidget {
@@ -71,7 +71,7 @@ class _NotificationSettingsSheetState
                               children: [
                                 Text(
                                   'notification_reminder_settings'.tr(),
-                                  style: GoogleFonts.getFont(
+                                  style: AppFonts.getFont(
                                     'Cairo',
                                     fontSize: 16,
                                     fontWeight: FontWeight.w800,
@@ -80,7 +80,7 @@ class _NotificationSettingsSheetState
                                 ),
                                 Text(
                                   'customize_reminders'.tr(),
-                                  style: GoogleFonts.getFont(
+                                  style: AppFonts.getFont(
                                     'Cairo',
                                     fontSize: 11,
                                     color: subtitle,
@@ -97,14 +97,14 @@ class _NotificationSettingsSheetState
                           activeColor: const Color(0xFF064E3B),
                           title: Text(
                             'enable_reminder'.tr(),
-                            style: GoogleFonts.getFont('Cairo',
+                            style: AppFonts.getFont('Cairo',
                                 color: title, fontWeight: FontWeight.w700),
                           ),
                           subtitle: Text(
                             settings.isEnabled
                                 ? 'notifications_active_now'.tr()
                                 : 'notifications_disabled_now'.tr(),
-                            style: GoogleFonts.getFont('Cairo',
+                            style: AppFonts.getFont('Cairo',
                                 color: subtitle, fontSize: 11),
                           ),
                           onChanged: (v) => ref
@@ -129,7 +129,7 @@ class _NotificationSettingsSheetState
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text('repeat_frequency'.tr(),
-                              style: GoogleFonts.getFont(
+                              style: AppFonts.getFont(
                                 'Cairo',
                                 color: title,
                                 fontWeight: FontWeight.w700,
@@ -154,17 +154,17 @@ class _NotificationSettingsSheetState
                               DropdownMenuItem(
                                 value: 'daily',
                                 child: Text('daily'.tr(),
-                                    style: GoogleFonts.getFont('Cairo')),
+                                    style: AppFonts.getFont('Cairo')),
                               ),
                               DropdownMenuItem(
                                 value: 'weekly',
                                 child: Text('weekly'.tr(),
-                                    style: GoogleFonts.getFont('Cairo')),
+                                    style: AppFonts.getFont('Cairo')),
                               ),
                               DropdownMenuItem(
                                 value: 'smart',
                                 child: Text('smart'.tr(),
-                                    style: GoogleFonts.getFont('Cairo')),
+                                    style: AppFonts.getFont('Cairo')),
                               ),
                             ],
                             onChanged: (v) {
@@ -179,7 +179,7 @@ class _NotificationSettingsSheetState
                           ),
                           const SizedBox(height: 14),
                           Text('preferred_content_type'.tr(),
-                              style: GoogleFonts.getFont(
+                              style: AppFonts.getFont(
                                 'Cairo',
                                 color: title,
                                 fontWeight: FontWeight.w700,
@@ -215,12 +215,12 @@ class _NotificationSettingsSheetState
                               activeColor: const Color(0xFF064E3B),
                               title: Text(
                                 'reminder_before_end'.tr(),
-                                style: GoogleFonts.getFont('Cairo',
+                                style: AppFonts.getFont('Cairo',
                                     color: title, fontWeight: FontWeight.w700),
                               ),
                               subtitle: Text(
                                 'reminder_before_end_desc'.tr(),
-                                style: GoogleFonts.getFont('Cairo',
+                                style: AppFonts.getFont('Cairo',
                                     color: subtitle, fontSize: 11),
                               ),
                               onChanged: (v) => ref
@@ -252,13 +252,13 @@ class _NotificationSettingsSheetState
                 onPressed: () =>
                     ref.invalidate(notificationSettingsProvider(featureKey)),
                 icon: const Icon(Icons.refresh_rounded),
-                label: Text('retry'.tr(), style: GoogleFonts.getFont('Cairo')),
+                label: Text('retry'.tr(), style: AppFonts.getFont('Cairo')),
               ),
               const SizedBox(height: 4),
               Text(
                 '$e',
                 textAlign: TextAlign.center,
-                style: GoogleFonts.getFont('Cairo',
+                style: AppFonts.getFont('Cairo',
                     fontSize: 10, color: const Color(0xFF94A3B8)),
               ),
             ],
@@ -293,7 +293,7 @@ class _TypeChip extends ConsumerWidget {
     final selected = state.value?.preferredTypes.contains(type) ?? false;
     return ChoiceChip(
       label: Text(label,
-          style: GoogleFonts.getFont('Cairo',
+          style: AppFonts.getFont('Cairo',
               color: textColor, fontWeight: FontWeight.w700)),
       selected: selected,
       backgroundColor: chipBg,

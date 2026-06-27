@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:sila_app/core/theme/app_fonts.dart';
 import 'package:sila_app/core/services/adhan_native_service.dart';
 import 'package:sila_app/core/services/adhan_scheduler_service.dart';
 import 'package:sila_app/core/services/prefs_service.dart';
@@ -153,7 +153,7 @@ class _AdhanSettingsPageState extends ConsumerState<AdhanSettingsPage> {
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-            content: Text(msg, style: GoogleFonts.cairo()),
+            content: Text(msg, style: AppFonts.cairo()),
             duration: const Duration(seconds: 2)),
       );
     }
@@ -174,7 +174,7 @@ class _AdhanSettingsPageState extends ConsumerState<AdhanSettingsPage> {
         foregroundColor: Colors.white,
         centerTitle: true,
         title: Text('adhan_settings'.tr(),
-            style: GoogleFonts.cairo(fontWeight: FontWeight.w700)),
+            style: AppFonts.cairo(fontWeight: FontWeight.w700)),
         elevation: 0,
       ),
       body: ListView(
@@ -184,13 +184,13 @@ class _AdhanSettingsPageState extends ConsumerState<AdhanSettingsPage> {
           _card(
             child: SwitchListTile(
               title: Text('enable_adhan'.tr(),
-                  style: GoogleFonts.cairo(
+                  style: AppFonts.cairo(
                       color: Colors.white,
                       fontWeight: FontWeight.w700,
                       fontSize: 16)),
               subtitle: Text('adhan_notifications_enabled'.tr(),
                   style:
-                      GoogleFonts.cairo(color: Colors.white38, fontSize: 12)),
+                      AppFonts.cairo(color: Colors.white38, fontSize: 12)),
               value: _adhanEnabled,
               onChanged: _toggleGlobal,
               activeColor: const Color(0xFF43A047),
@@ -213,11 +213,11 @@ class _AdhanSettingsPageState extends ConsumerState<AdhanSettingsPage> {
                     color: Color(0xFF66BB6A), size: 20),
               ),
               title: Text('adhan_sound_label'.tr(),
-                  style: GoogleFonts.cairo(
+                  style: AppFonts.cairo(
                       color: Colors.white, fontWeight: FontWeight.w600)),
               subtitle: Text(_sounds[_selectedSound]?.tr() ?? _selectedSound,
                   style:
-                      GoogleFonts.cairo(color: Colors.white38, fontSize: 12)),
+                      AppFonts.cairo(color: Colors.white38, fontSize: 12)),
               trailing: const Icon(Icons.chevron_right_rounded,
                   color: Colors.white38),
               onTap: _showSoundDialog,
@@ -230,7 +230,7 @@ class _AdhanSettingsPageState extends ConsumerState<AdhanSettingsPage> {
           Padding(
             padding: const EdgeInsets.only(bottom: 10),
             child: Text('enable_per_prayer'.tr(),
-                style: GoogleFonts.cairo(
+                style: AppFonts.cairo(
                     color: const Color(0xFF43A047),
                     fontSize: 13,
                     fontWeight: FontWeight.w700)),
@@ -252,7 +252,7 @@ class _AdhanSettingsPageState extends ConsumerState<AdhanSettingsPage> {
                               : Colors.white24,
                           size: 22),
                       title: Text(p['name'] as String,
-                          style: GoogleFonts.cairo(
+                          style: AppFonts.cairo(
                               color:
                                   _adhanEnabled ? Colors.white : Colors.white30,
                               fontSize: 15)),
@@ -343,7 +343,7 @@ class _AdhanSettingsPageState extends ConsumerState<AdhanSettingsPage> {
                   ),
                   icon: const Icon(Icons.play_circle_outline_rounded),
                   label: Text('test_adhan_sound'.tr(),
-                      style: GoogleFonts.cairo(fontSize: 15)),
+                      style: AppFonts.cairo(fontSize: 15)),
                 ),
               ),
               const SizedBox(width: 12),
@@ -387,7 +387,7 @@ class _AdhanSettingsPageState extends ConsumerState<AdhanSettingsPage> {
                   child: Text(
                     'adhan_auto_play_info'.tr(),
                     style:
-                        GoogleFonts.cairo(color: Colors.white54, fontSize: 12),
+                        AppFonts.cairo(color: Colors.white54, fontSize: 12),
                   ),
                 ),
               ],
@@ -423,7 +423,7 @@ class _AdhanSettingsPageState extends ConsumerState<AdhanSettingsPage> {
             Padding(
               padding: const EdgeInsets.all(20),
               child: Text('select_adhan_sound'.tr(),
-                  style: GoogleFonts.cairo(
+                  style: AppFonts.cairo(
                       color: Colors.white,
                       fontSize: 17,
                       fontWeight: FontWeight.bold)),
@@ -432,7 +432,7 @@ class _AdhanSettingsPageState extends ConsumerState<AdhanSettingsPage> {
                   value: e.key,
                   groupValue: _selectedSound,
                   title: Text(e.value.tr(),
-                      style: GoogleFonts.cairo(color: Colors.white70)),
+                      style: AppFonts.cairo(color: Colors.white70)),
                   activeColor: const Color(0xFF43A047),
                   onChanged: (v) {
                     if (v != null) {
@@ -444,7 +444,7 @@ class _AdhanSettingsPageState extends ConsumerState<AdhanSettingsPage> {
             TextButton(
               onPressed: () => Navigator.pop(context),
               child: Text('cancel'.tr(),
-                  style: GoogleFonts.cairo(color: Colors.white38)),
+                  style: AppFonts.cairo(color: Colors.white38)),
             ),
             const SizedBox(height: 8),
           ],

@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:sila_app/core/theme/app_fonts.dart';
 import 'package:quran/quran.dart' as quran;
 
 import 'package:sila_app/core/theme/app_theme.dart';
@@ -80,7 +80,7 @@ class LastReadCard extends ConsumerWidget {
                     children: [
                       Text(
                         'continue_reading'.tr(),
-                        style: GoogleFonts.cairo(
+                        style: AppFonts.cairo(
                           fontSize: 12,
                           color: txtS,
                           fontWeight: FontWeight.w600,
@@ -88,14 +88,14 @@ class LastReadCard extends ConsumerWidget {
                       ),
                       Text(
                         'surah_label'.tr(args: [surahName]),
-                        style: GoogleFonts.cairo(
+                        style: AppFonts.cairo(
                             fontSize: 16,
                             fontWeight: FontWeight.w700,
                             color: txtP),
                       ),
                       Text(
                         'page_label'.tr(args: [currentPage.toString()]),
-                        style: GoogleFonts.cairo(
+                        style: AppFonts.cairo(
                           fontSize: 12,
                           color: txtS,
                           fontWeight: FontWeight.w600,

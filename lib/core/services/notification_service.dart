@@ -158,9 +158,9 @@ class NotificationService {
     },
   };
 
-  Future<void> initialize() async {
+  Future<void> initializeLocal() async {
     final notifyInitStart = DateTime.now();
-    debugPrint('[${notifyInitStart.toIso8601String()}][NotificationService] initialize() START');
+    debugPrint('[${notifyInitStart.toIso8601String()}][NotificationService] initializeLocal() START');
     if (_initialized) {
       debugPrint('[${DateTime.now().toIso8601String()}][NotificationService] Already initialized, SKIP');
       return;
@@ -172,13 +172,13 @@ class NotificationService {
       return await inFlight;
     }
 
-    final initFuture = _doInitialize();
+    final initFuture = _doInitializeLocal();
     _initializationFuture = initFuture;
 
     try {
       await initFuture;
       final end = DateTime.now();
-      debugPrint('[${end.toIso8601String()}][NotificationService] initialize() END, duration: ${end.difference(notifyInitStart).inMilliseconds} ms');
+      debugPrint('[${end.toIso8601String()}][NotificationService] initializeLocal() END, duration: ${end.difference(notifyInitStart).inMilliseconds} ms');
     } finally {
       if (identical(_initializationFuture, initFuture)) {
         _initializationFuture = null;
@@ -186,10 +186,10 @@ class NotificationService {
     }
   }
 
-  Future<void> _doInitialize() async {
+  Future<void> _doInitializeLocal() async {
     final doInitStart = DateTime.now();
     _initializing = true;
-    debugPrint('[${doInitStart.toIso8601String()}][NotificationService] _doInitialize START');
+    debugPrint('[${doInitStart.toIso8601String()}][NotificationService] _doInitializeLocal START');
     try {
       debugPrint('[${DateTime.now().toIso8601String()}][NotificationService] FlutterLocalNotificationsPlugin.initialize...');
       const androidSettings =
@@ -228,12 +228,38 @@ class NotificationService {
         await _handleNotificationTap(launchResponse);
       }
 
+      _initialized = true;
+      debugPrint('[${DateTime.now().toIso8601String()}][NotificationService] Initialized');
+    } catch (e, st) {
+      debugPrint('[${DateTime.now().toIso8601String()}][NotificationService] initialization ERROR: $e');
+      _initialized = false;
+      Error.throwWithStackTrace(e, st);
+    } finally {
+      _initializing = false;
+      debugPrint('[${DateTime.now().toIso8601String()}][NotificationService] _doInitializeLocal END (duration: ${DateTime.now().difference(doInitStart).inMilliseconds} ms)');
+    }
+  }
+
+  static const int _maxFcmRetries = 3;
+  static const String _fcmSubscribedKey = 'fcm_topics_subscribed';
+
+  Future<void> initializeRemote() async {
+    final fcmSw = Stopwatch()..start();
+    final prefs = await SharedPreferences.getInstance();
+    final alreadySubscribed = prefs.getBool(_fcmSubscribedKey) ?? false;
+
+    for (var attempt = 0; attempt < _maxFcmRetries; attempt++) {
       try {
-        debugPrint('[${DateTime.now().toIso8601String()}][NotificationService] Setting up FCM permissions and topics...');
-        await FirebaseMessaging.instance.requestPermission();
-        await FirebaseMessaging.instance.subscribeToTopic('all_users');
-        await FirebaseMessaging.instance.subscribeToTopic('updates');
-        debugPrint('[${DateTime.now().toIso8601String()}][NotificationService] FCM perms/subscription done');
+        await FirebaseMessaging.instance.requestPermission()
+            .timeout(const Duration(seconds: 5));
+
+        if (!alreadySubscribed) {
+          await FirebaseMessaging.instance.subscribeToTopic('all_users')
+              .timeout(const Duration(seconds: 3));
+          await FirebaseMessaging.instance.subscribeToTopic('updates')
+              .timeout(const Duration(seconds: 3));
+          await prefs.setBool(_fcmSubscribedKey, true);
+        }
 
         FirebaseMessaging.onMessage.listen((message) {
           if (message.data['type'] == 'update') {
@@ -246,21 +272,22 @@ class NotificationService {
             _showUpdateNotification(message);
           }
         });
-      } catch (e) {
-        debugPrint('Firebase Messaging setup failed: $e');
-      }
 
-      _initialized = true;
-      debugPrint('[${DateTime.now().toIso8601String()}][NotificationService] Initialized');
-    } catch (e, st) {
-      debugPrint('[${DateTime.now().toIso8601String()}][NotificationService] initialization ERROR: $e');
-      _initialized = false;
-      Error.throwWithStackTrace(e, st);
-    } finally {
-      _initializing = false;
-      debugPrint('[${DateTime.now().toIso8601String()}][NotificationService] _doInitialize END (duration: ${DateTime.now().difference(doInitStart).inMilliseconds} ms)');
+        fcmSw.stop();
+        debugPrint('⏱ [BG-BENCH] ✅ FCM setup complete (attempt ${attempt + 1}) in ${fcmSw.elapsedMilliseconds}ms');
+        return;
+      } catch (e) {
+        debugPrint('⏱ [BG-BENCH] ⚠️ FCM setup attempt ${attempt + 1} failed: $e (after ${fcmSw.elapsedMilliseconds}ms)');
+        if (attempt < _maxFcmRetries - 1) {
+          await Future.delayed(Duration(seconds: 2 * (attempt + 1)));
+        }
+      }
     }
+
+    fcmSw.stop();
+    debugPrint('⏱ [BG-BENCH] ❌ FCM setup failed after $_maxFcmRetries attempts, will retry next launch. Total time: ${fcmSw.elapsedMilliseconds}ms');
   }
+
 
   Future<void> dispose() async {
     await _audioPlayer.dispose();
@@ -472,7 +499,7 @@ class NotificationService {
     bool silent = false,
   }) async {
     if (!_initialized) {
-      await initialize();
+      await initializeLocal();
       if (!_initialized) {
         debugPrint('❌ NotificationService not initialized');
         return false;
@@ -565,7 +592,7 @@ class NotificationService {
     required String body,
     required DateTime dateTime,
   }) async {
-    if (!_initialized) await initialize();
+    if (!_initialized) await initializeLocal();
 
     // Timezone safety check: ensure local timezone object is accessible.
     late final tz.Location location;
@@ -648,7 +675,7 @@ class NotificationService {
     String? payload,
     String channelKey = 'reminder',
   }) async {
-    if (!_initialized) await initialize();
+    if (!_initialized) await initializeLocal();
     final scheduledTime = tz.TZDateTime.from(dateTime, tz.local);
 
     final channelId = _channels[channelKey] ?? _channels['reminder']!;
@@ -750,7 +777,7 @@ class NotificationService {
     required String body,
     String? payload,
   }) async {
-    if (!_initialized) await initialize();
+    if (!_initialized) await initializeLocal();
 
     const androidDetails = AndroidNotificationDetails(
       'adhan_channel',
@@ -847,7 +874,7 @@ class NotificationService {
     required String locale,
     required int percent,
   }) async {
-    if (!_initialized) await initialize();
+    if (!_initialized) await initializeLocal();
     final title = _dl('downloading', locale);
     final body = _dl('body_pct', locale).replaceFirst('{}', '$percent');
     final androidDetails = AndroidNotificationDetails(
@@ -881,7 +908,7 @@ class NotificationService {
     required String locale,
     required String apkPath,
   }) async {
-    if (!_initialized) await initialize();
+    if (!_initialized) await initializeLocal();
     _lastDownloadApkPath = apkPath;
     final title = _dl('complete', locale);
     final body = _dl('install', locale);
@@ -921,7 +948,7 @@ class NotificationService {
     String? downloadUrl,
     bool withRetry = false,
   }) async {
-    if (!_initialized) await initialize();
+    if (!_initialized) await initializeLocal();
     _lastDownloadUrl = downloadUrl;
     final title = _dl('error', locale);
     String body;
@@ -968,7 +995,7 @@ class NotificationService {
     required int id,
     required String locale,
   }) async {
-    if (!_initialized) await initialize();
+    if (!_initialized) await initializeLocal();
     final title = _dl('waiting', locale);
     final body = _dl('retrying', locale);
     const androidDetails = AndroidNotificationDetails(
@@ -999,7 +1026,7 @@ class NotificationService {
   String? get lastDownloadUrl => _lastDownloadUrl;
 
   Future<void> rescheduleAllOnBoot() async {
-    if (!_initialized) await initialize();
+    if (!_initialized) await initializeLocal();
     try {
       final isar = await IsarService().db;
       final repo = IsarNotificationRepository(isar);
@@ -1281,7 +1308,7 @@ class NotificationService {
   }
 
   Future<void> scheduleDebugNotificationInSeconds({int seconds = 15}) async {
-    if (!_initialized) await initialize();
+    if (!_initialized) await initializeLocal();
 
     await logNotificationHealth();
 

@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:sila_app/core/theme/app_fonts.dart';
 import 'package:sila_app/core/services/analytics_service.dart';
 import 'package:sila_app/core/services/notification_service.dart';
 import 'package:sila_app/core/services/prefs_service.dart'; // ADDED: per-prayer adhan toggle
@@ -176,7 +176,7 @@ class _PrayersPageState extends ConsumerState<PrayersPage> {
               Tab(text: 'my_tracking'.tr()),
             ],
             labelStyle:
-                GoogleFonts.getFont('Cairo', fontWeight: FontWeight.w700),
+                AppFonts.getFont('Cairo', fontWeight: FontWeight.w700),
             indicatorColor: const Color(0xFFD97706),
             labelColor: const Color(0xFF064E3B),
             unselectedLabelColor: txtS,
@@ -261,7 +261,7 @@ class _PrayersPageState extends ConsumerState<PrayersPage> {
                                         children: [
                                           Text(
                                             'prayer_times'.tr(),
-                                            style: GoogleFonts.getFont(
+                                            style: AppFonts.getFont(
                                               'Cairo',
                                               fontSize: 20,
                                               fontWeight: FontWeight.w800,
@@ -270,7 +270,7 @@ class _PrayersPageState extends ConsumerState<PrayersPage> {
                                           ),
                                           Text(
                                             entity.locationName,
-                                            style: GoogleFonts.getFont(
+                                            style: AppFonts.getFont(
                                               'Cairo',
                                               fontSize: 13,
                                               color: Colors.white60,
@@ -370,7 +370,7 @@ class _PrayersPageState extends ConsumerState<PrayersPage> {
                                           context.locale.languageCode == 'tr'
                                               ? '$translatedPrayerName için $remainingTime'
                                               : '$translatedPrayerName بعد $remainingTime',
-                                          style: GoogleFonts.getFont(
+                                          style: AppFonts.getFont(
                                             'Cairo',
                                             fontSize: 13,
                                             color: Colors.white,
@@ -447,7 +447,7 @@ class _PrayersPageState extends ConsumerState<PrayersPage> {
                                       const SizedBox(width: 10),
                                       Text(
                                         name.tr(),
-                                        style: GoogleFonts.getFont(
+                                        style: AppFonts.getFont(
                                           'Cairo',
                                           fontSize: 15,
                                           fontWeight: FontWeight.w700,
@@ -460,7 +460,7 @@ class _PrayersPageState extends ConsumerState<PrayersPage> {
                                     children: [
                                       Text(
                                         formattedTime,
-                                        style: GoogleFonts.getFont(
+                                        style: AppFonts.getFont(
                                           'Cairo',
                                           fontSize: 15,
                                           fontWeight: FontWeight.w600,
@@ -479,7 +479,7 @@ class _PrayersPageState extends ConsumerState<PrayersPage> {
                                           ),
                                           child: Text(
                                             'next_prayer'.tr(),
-                                            style: GoogleFonts.getFont(
+                                            style: AppFonts.getFont(
                                               'Cairo',
                                               fontSize: 9,
                                               color: Colors.white,
@@ -557,7 +557,7 @@ class _PrayersPageState extends ConsumerState<PrayersPage> {
                                       children: [
                                         Text(
                                           'qiblah_direction'.tr(),
-                                          style: GoogleFonts.getFont(
+                                          style: AppFonts.getFont(
                                             'Cairo',
                                             fontSize: 15,
                                             fontWeight: FontWeight.w700,
@@ -566,7 +566,7 @@ class _PrayersPageState extends ConsumerState<PrayersPage> {
                                         ),
                                         Text(
                                           'find_qibla_direction'.tr(),
-                                          style: GoogleFonts.getFont(
+                                          style: AppFonts.getFont(
                                             'Cairo',
                                             fontSize: 12,
                                             color: txtS,

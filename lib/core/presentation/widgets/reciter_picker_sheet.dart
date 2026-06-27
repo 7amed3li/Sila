@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:sila_app/core/theme/app_fonts.dart';
 import 'package:sila_app/core/providers/reciter_provider.dart';
 import 'package:sila_app/core/services/reciter_service.dart';
 
@@ -47,7 +47,7 @@ class ReciterPickerSheet extends ConsumerWidget {
                 children: [
                   Text(
                     'اختر الشيخ',
-                    style: GoogleFonts.getFont(
+                    style: AppFonts.getFont(
                       'Cairo',
                       fontSize: 18,
                       fontWeight: FontWeight.w700,
@@ -62,7 +62,7 @@ class ReciterPickerSheet extends ConsumerWidget {
                     ),
                     child: Text(
                       '⭐ موصى به للحفظ',
-                      style: GoogleFonts.getFont(
+                      style: AppFonts.getFont(
                         'Cairo',
                         fontSize: 10,
                         color: const Color(0xFF064E3B),
@@ -95,7 +95,7 @@ class ReciterPickerSheet extends ConsumerWidget {
                 ),
                 title: Text(
                   reciter.nameArabic,
-                  style: GoogleFonts.getFont(
+                  style: AppFonts.getFont(
                     'Cairo',
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
@@ -146,7 +146,7 @@ class _StyleBadge extends StatelessWidget {
       child: Text(
         style,
         style:
-            GoogleFonts.getFont('Cairo', fontSize: 10, color: Colors.grey[700]),
+            AppFonts.getFont('Cairo', fontSize: 10, color: Colors.grey[700]),
       ),
     );
   }
@@ -165,7 +165,7 @@ class _RecommendedBadge extends StatelessWidget {
       ),
       child: Text(
         'مناسب للحفظ',
-        style: GoogleFonts.getFont('Cairo',
+        style: AppFonts.getFont('Cairo',
             fontSize: 10, color: const Color(0xFF064E3B)),
       ),
     );

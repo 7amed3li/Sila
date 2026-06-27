@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:sila_app/core/theme/app_fonts.dart';
 import 'package:sila_app/core/theme/app_theme.dart';
 import 'package:sila_app/features/hifz/data/models/hifz_settings.dart';
 import 'package:sila_app/features/hifz/presentation/controllers/hifz_settings_controller.dart';
@@ -18,7 +18,7 @@ class HifzSettingsPage extends ConsumerWidget {
       appBar: AppBar(
         title: Text(
           'hifz_settings'.tr(),
-          style: GoogleFonts.cairo(fontWeight: FontWeight.w700),
+          style: AppFonts.cairo(fontWeight: FontWeight.w700),
         ),
       ),
       body: asyncSettings.when(
@@ -26,7 +26,7 @@ class HifzSettingsPage extends ConsumerWidget {
         error: (_, __) => Center(
           child: Text(
             'error'.tr(),
-            style: GoogleFonts.cairo(fontSize: 14),
+            style: AppFonts.cairo(fontSize: 14),
           ),
         ),
         data: (settings) {
@@ -87,10 +87,10 @@ class HifzSettingsPage extends ConsumerWidget {
                 contentPadding: EdgeInsets.zero,
                 activeColor: AppTheme.primaryColor,
                 title:
-                    Text('ignore_diacritics'.tr(), style: GoogleFonts.cairo()),
+                    Text('ignore_diacritics'.tr(), style: AppFonts.cairo()),
                 subtitle: Text(
                   'ignore_diacritics_subtitle'.tr(),
-                  style: GoogleFonts.cairo(fontSize: 12),
+                  style: AppFonts.cairo(fontSize: 12),
                 ),
                 value: settings.hideVisibleDiacritics,
                 onChanged: (v) =>
@@ -99,10 +99,10 @@ class HifzSettingsPage extends ConsumerWidget {
               SwitchListTile.adaptive(
                 contentPadding: EdgeInsets.zero,
                 activeColor: AppTheme.primaryColor,
-                title: Text('play_on_error'.tr(), style: GoogleFonts.cairo()),
+                title: Text('play_on_error'.tr(), style: AppFonts.cairo()),
                 subtitle: Text(
                   'play_on_error_subtitle'.tr(),
-                  style: GoogleFonts.cairo(fontSize: 12),
+                  style: AppFonts.cairo(fontSize: 12),
                 ),
                 value: settings.playCorrectOnError,
                 onChanged: (v) =>
@@ -111,7 +111,7 @@ class HifzSettingsPage extends ConsumerWidget {
               SwitchListTile.adaptive(
                 contentPadding: EdgeInsets.zero,
                 activeColor: AppTheme.primaryColor,
-                title: Text('beginner_mode'.tr(), style: GoogleFonts.cairo()),
+                title: Text('beginner_mode'.tr(), style: AppFonts.cairo()),
                 value: settings.beginnerMode,
                 onChanged: (v) => controller.updateSettings(beginnerMode: v),
               ),
@@ -119,7 +119,7 @@ class HifzSettingsPage extends ConsumerWidget {
                 contentPadding: EdgeInsets.zero,
                 activeColor: AppTheme.primaryColor,
                 title:
-                    Text('smart_strictness'.tr(), style: GoogleFonts.cairo()),
+                    Text('smart_strictness'.tr(), style: AppFonts.cairo()),
                 value: settings.smartStrictness,
                 onChanged: (v) => controller.updateSettings(smartStrictness: v),
               ),
@@ -142,7 +142,7 @@ class _SectionTitle extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 8),
       child: Text(
         text,
-        style: GoogleFonts.cairo(
+        style: AppFonts.cairo(
           fontSize: 13,
           color: const Color(0xFF0F172A),
           fontWeight: FontWeight.w700,
@@ -177,8 +177,8 @@ class _StepperTile extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 8),
       child: ListTile(
         title:
-            Text(title, style: GoogleFonts.cairo(fontWeight: FontWeight.w700)),
-        subtitle: Text(subtitle, style: GoogleFonts.cairo(fontSize: 12)),
+            Text(title, style: AppFonts.cairo(fontWeight: FontWeight.w700)),
+        subtitle: Text(subtitle, style: AppFonts.cairo(fontSize: 12)),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -188,7 +188,7 @@ class _StepperTile extends StatelessWidget {
             ),
             Text(
               '$value$suffix',
-              style: GoogleFonts.cairo(fontWeight: FontWeight.w700),
+              style: AppFonts.cairo(fontWeight: FontWeight.w700),
             ),
             IconButton(
               onPressed: value < max ? () => onChanged(value + 1) : null,

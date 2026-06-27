@@ -5,7 +5,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:sila_app/core/theme/app_fonts.dart';
 import 'package:quran/quran.dart' as quran;
 import 'package:sila_app/core/presentation/widgets/reciter_picker_sheet.dart';
 import 'package:sila_app/core/providers/reciter_provider.dart';
@@ -59,7 +59,7 @@ class _WirdReaderPageState extends ConsumerState<WirdReaderPage> {
                 const Icon(Icons.touch_app, color: Colors.white, size: 20),
                 const SizedBox(width: 12),
                 Text('wird_hint_text'.tr(),
-                    style: GoogleFonts.cairo(fontSize: 13)),
+                    style: AppFonts.cairo(fontSize: 13)),
               ],
             ),
             behavior: SnackBarBehavior.floating,
@@ -216,7 +216,7 @@ class _WirdReaderPageState extends ConsumerState<WirdReaderPage> {
                     isBookmarked
                         ? 'تم إزالة العلامة المرجعية'
                         : 'تم الحفظ في العلامات المرجعية',
-                    style: GoogleFonts.cairo(
+                    style: AppFonts.cairo(
                         color: AppTheme.primaryColor,
                         fontWeight: FontWeight.bold),
                   ),
@@ -242,7 +242,7 @@ class _WirdReaderPageState extends ConsumerState<WirdReaderPage> {
         children: [
           Text(
             '604',
-            style: GoogleFonts.cairo(
+            style: AppFonts.cairo(
                 color: _getTextColor(settings.themeMode), fontSize: 12),
           ),
           Expanded(
@@ -272,7 +272,7 @@ class _WirdReaderPageState extends ConsumerState<WirdReaderPage> {
           ),
           Text(
             '1',
-            style: GoogleFonts.cairo(
+            style: AppFonts.cairo(
                 color: _getTextColor(settings.themeMode), fontSize: 12),
           ),
         ],
@@ -447,7 +447,7 @@ class _WirdReaderPageState extends ConsumerState<WirdReaderPage> {
                 padding: const EdgeInsets.only(top: 2),
                 child: Text(
                   ayahIndex.toString(),
-                  style: GoogleFonts.cairo(
+                  style: AppFonts.cairo(
                     fontSize: (baseStyle.fontSize ?? 26) * 0.4,
                     fontWeight: FontWeight.w800,
                     color: isSelected ? accentColor : textColor,
@@ -530,13 +530,13 @@ class _WirdReaderPageState extends ConsumerState<WirdReaderPage> {
             fontFamily: 'KFGQPCUthmanicScript', fontSize: size, height: height);
         break;
       case 'Amiri':
-        baseStyle = GoogleFonts.amiri(fontSize: size, height: height);
+        baseStyle = AppFonts.amiri(fontSize: size, height: height);
         break;
       case 'Scheherazade':
-        baseStyle = GoogleFonts.scheherazadeNew(fontSize: size, height: height);
+        baseStyle = AppFonts.scheherazadeNew(fontSize: size, height: height);
         break;
       case 'Noto Naskh':
-        baseStyle = GoogleFonts.notoNaskhArabic(fontSize: size, height: height);
+        baseStyle = AppFonts.notoNaskhArabic(fontSize: size, height: height);
         break;
       default:
         baseStyle = TextStyle(
@@ -615,7 +615,7 @@ class _WirdReaderPageState extends ConsumerState<WirdReaderPage> {
           children: [
             Text('reading_settings_title'.tr(),
                 textAlign: TextAlign.center,
-                style: GoogleFonts.cairo(
+                style: AppFonts.cairo(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: _getTextColor(settings.themeMode))),
@@ -666,7 +666,7 @@ class _WirdReaderPageState extends ConsumerState<WirdReaderPage> {
             const SizedBox(height: 24),
             Text('quran_font_label'.tr(),
                 textAlign: TextAlign.center,
-                style: GoogleFonts.cairo(
+                style: AppFonts.cairo(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
                     color: _getTextColor(settings.themeMode))),
@@ -731,7 +731,7 @@ class _WirdReaderPageState extends ConsumerState<WirdReaderPage> {
             child: Column(children: [
               Icon(icon, color: _getAccentColor(settings.themeMode)),
               Text(label,
-                  style: GoogleFonts.cairo(
+                  style: AppFonts.cairo(
                       fontSize: 12, color: _getTextColor(settings.themeMode)))
             ])));
   }
@@ -756,7 +756,7 @@ class _WirdReaderPageState extends ConsumerState<WirdReaderPage> {
                           : Colors.grey))),
           Text(label,
               style:
-                  GoogleFonts.cairo(color: _getTextColor(settings.themeMode)))
+                  AppFonts.cairo(color: _getTextColor(settings.themeMode)))
         ]));
   }
 
@@ -838,7 +838,7 @@ class _WirdReaderPageState extends ConsumerState<WirdReaderPage> {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text('verse_copied_success'.tr(),
-                    style: GoogleFonts.cairo()),
+                    style: AppFonts.cairo()),
                 behavior: SnackBarBehavior.floating,
                 duration: const Duration(seconds: 1),
               ),
@@ -860,7 +860,7 @@ class _WirdReaderPageState extends ConsumerState<WirdReaderPage> {
             const SizedBox(height: 4),
             Text(
               label,
-              style: GoogleFonts.cairo(
+              style: AppFonts.cairo(
                 color: Colors.white,
                 fontSize: 11,
                 fontWeight: FontWeight.w500,

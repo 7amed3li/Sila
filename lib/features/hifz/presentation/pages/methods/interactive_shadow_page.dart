@@ -4,7 +4,7 @@ import 'dart:ui' as ui;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:sila_app/core/theme/app_fonts.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:quran/quran.dart' as quran;
 import 'package:sila_app/core/presentation/widgets/reciter_picker_sheet.dart';
@@ -124,7 +124,7 @@ class _InteractiveShadowPageState extends ConsumerState<InteractiveShadowPage>
               Expanded(
                 child: Text(
                   'الميكروفون يحتاج إذنا إضافيا',
-                  style: GoogleFonts.cairo(
+                  style: AppFonts.cairo(
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
                     color: Colors.orange.shade900,
@@ -143,7 +143,7 @@ class _InteractiveShadowPageState extends ConsumerState<InteractiveShadowPage>
                 },
                 child: Text(
                   'تفعيل',
-                  style: GoogleFonts.cairo(fontWeight: FontWeight.w700),
+                  style: AppFonts.cairo(fontWeight: FontWeight.w700),
                 ),
               ),
             ],
@@ -179,7 +179,7 @@ class _InteractiveShadowPageState extends ConsumerState<InteractiveShadowPage>
       builder: (ctx) => AlertDialog(
         title: Text(
           'recitation_mode_title'.tr(),
-          style: GoogleFonts.cairo(fontWeight: FontWeight.w700),
+          style: AppFonts.cairo(fontWeight: FontWeight.w700),
         ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
@@ -188,11 +188,11 @@ class _InteractiveShadowPageState extends ConsumerState<InteractiveShadowPage>
               leading: const Icon(Icons.mic_rounded),
               title: Text(
                 'recitation_mode_full_verse_title'.tr(),
-                style: GoogleFonts.cairo(fontWeight: FontWeight.w700),
+                style: AppFonts.cairo(fontWeight: FontWeight.w700),
               ),
               subtitle: Text(
                 'recitation_mode_full_verse_subtitle'.tr(),
-                style: GoogleFonts.cairo(fontSize: 12),
+                style: AppFonts.cairo(fontSize: 12),
               ),
               onTap: () =>
                   Navigator.pop(ctx, RecitationCompletionMode.fullVerse),
@@ -201,11 +201,11 @@ class _InteractiveShadowPageState extends ConsumerState<InteractiveShadowPage>
               leading: const Icon(Icons.edit_note_rounded),
               title: Text(
                 'recitation_mode_missing_only_title'.tr(),
-                style: GoogleFonts.cairo(fontWeight: FontWeight.w700),
+                style: AppFonts.cairo(fontWeight: FontWeight.w700),
               ),
               subtitle: Text(
                 'recitation_mode_missing_only_subtitle'.tr(),
-                style: GoogleFonts.cairo(fontSize: 12),
+                style: AppFonts.cairo(fontSize: 12),
               ),
               onTap: () =>
                   Navigator.pop(ctx, RecitationCompletionMode.missingOnly),
@@ -449,7 +449,7 @@ class _InteractiveShadowPageState extends ConsumerState<InteractiveShadowPage>
                                       )
                                     : Text(
                                         'next'.tr(),
-                                        style: GoogleFonts.cairo(
+                                        style: AppFonts.cairo(
                                             fontSize: 12,
                                             fontWeight: FontWeight.w700),
                                       ),
@@ -471,14 +471,14 @@ class _InteractiveShadowPageState extends ConsumerState<InteractiveShadowPage>
                                                   textColor.withValues(alpha: 0.1))),
                                       title: Text(
                                         'finish_session_title'.tr(),
-                                        style: GoogleFonts.cairo(
+                                        style: AppFonts.cairo(
                                             color: textColor,
                                             fontWeight: FontWeight.w700),
                                         textAlign: TextAlign.center,
                                       ),
                                       content: Text(
                                         'finish_session_desc'.tr(),
-                                        style: GoogleFonts.cairo(
+                                        style: AppFonts.cairo(
                                             color: textColor.withValues(alpha: 0.7),
                                             fontSize: 13),
                                         textAlign: TextAlign.center,
@@ -490,7 +490,7 @@ class _InteractiveShadowPageState extends ConsumerState<InteractiveShadowPage>
                                           onPressed: () =>
                                               Navigator.pop(ctx, false),
                                           child: Text('cancel'.tr(),
-                                              style: GoogleFonts.cairo(
+                                              style: AppFonts.cairo(
                                                   color: textColor
                                                       .withValues(alpha: 0.5))),
                                         ),
@@ -506,7 +506,7 @@ class _InteractiveShadowPageState extends ConsumerState<InteractiveShadowPage>
                                                       BorderRadius.circular(
                                                           8))),
                                           child: Text('finish_session_btn'.tr(),
-                                              style: GoogleFonts.cairo(
+                                              style: AppFonts.cairo(
                                                   fontWeight: FontWeight.w700)),
                                         ),
                                       ],
@@ -528,7 +528,7 @@ class _InteractiveShadowPageState extends ConsumerState<InteractiveShadowPage>
                                 ),
                                 child: Text(
                                   'finish_session'.tr(),
-                                  style: GoogleFonts.cairo(
+                                  style: AppFonts.cairo(
                                     fontSize: 12,
                                     fontWeight: FontWeight.w700,
                                     color: Colors.red
@@ -673,7 +673,7 @@ class _TopHeader extends ConsumerWidget {
                       const SizedBox(width: 3),
                       Text(
                         reciterLabel,
-                        style: GoogleFonts.cairo(
+                        style: AppFonts.cairo(
                             fontSize: 10, color: Colors.white.withValues(alpha: 0.9)),
                       ),
                     ],
@@ -732,7 +732,7 @@ class _StageBanner extends ConsumerWidget {
       child: Center(
         child: Text(
           _stageName(stage),
-          style: GoogleFonts.cairo(
+          style: AppFonts.cairo(
             fontSize: 11,
             fontWeight: FontWeight.w700,
             color: textColor,
@@ -1012,7 +1012,7 @@ class _AudioBar extends ConsumerWidget {
                   isPlaying: isPlaying, controller: waveController)),
           const SizedBox(width: 8),
           Text(reciterLabel,
-              style: GoogleFonts.cairo(
+              style: AppFonts.cairo(
                   fontSize: 10,
                   color: textColor.withValues(alpha: 0.6),
                   fontWeight: FontWeight.w600)),
@@ -1199,7 +1199,7 @@ class _WritingModeBar extends ConsumerWidget {
               children: [
                 Text(
                   'writing_mode_active'.tr(),
-                  style: GoogleFonts.cairo(
+                  style: AppFonts.cairo(
                     fontSize: 11,
                     fontWeight: FontWeight.w700,
                     color: const Color(0xFF6EE7B7),
@@ -1208,7 +1208,7 @@ class _WritingModeBar extends ConsumerWidget {
                 const SizedBox(height: 4),
                 Text(
                   'writing_mode_hint'.tr(),
-                  style: GoogleFonts.cairo(
+                  style: AppFonts.cairo(
                       fontSize: 10, color: textColor.withValues(alpha: 0.5)),
                 ),
               ],
@@ -1262,7 +1262,7 @@ class _InlineStatusMessage extends ConsumerWidget {
         ),
         child: Text(
           message,
-          style: GoogleFonts.cairo(
+          style: AppFonts.cairo(
               fontSize: 11, color: textColor, fontWeight: FontWeight.w700),
           textAlign: TextAlign.center,
         ),
@@ -1365,7 +1365,7 @@ class _MicBar extends ConsumerWidget {
                         const SizedBox(width: 6),
                         Text(
                           statusText,
-                          style: GoogleFonts.cairo(
+                          style: AppFonts.cairo(
                             fontSize: 11,
                             fontWeight: FontWeight.w700,
                             color: statusColor,
@@ -1384,7 +1384,7 @@ class _MicBar extends ConsumerWidget {
                       isListening
                           ? 'speak_clearly'.tr()
                           : 'tap_to_start_mic'.tr(),
-                      style: GoogleFonts.cairo(
+                      style: AppFonts.cairo(
                           fontSize: 9.5, color: textColor.withValues(alpha: 0.4)),
                     ),
                     const SizedBox(height: 5),
@@ -1471,12 +1471,12 @@ class _StatChip extends ConsumerWidget {
         child: Column(
           children: [
             Text(value,
-                style: GoogleFonts.cairo(
+                style: AppFonts.cairo(
                     fontSize: 16,
                     fontWeight: FontWeight.w800,
                     color: valueColor)),
             Text(label,
-                style: GoogleFonts.cairo(
+                style: AppFonts.cairo(
                     fontSize: 10, color: textColor.withValues(alpha: 0.5))),
           ],
         ),
@@ -1510,13 +1510,13 @@ class _InstructionCard extends ConsumerWidget {
       child: Column(
         children: [
           Text(pair.$1,
-              style: GoogleFonts.cairo(
+              style: AppFonts.cairo(
                   fontSize: 13,
                   fontWeight: FontWeight.w700,
                   color: accentColor)),
           const SizedBox(height: 4),
           Text(pair.$2,
-              style: GoogleFonts.cairo(
+              style: AppFonts.cairo(
                   fontSize: 11,
                   color: QuranUIUtils.getTextColor(settings.themeMode)
                       .withValues(alpha: 0.6),
@@ -1697,7 +1697,7 @@ class _SessionResultsViewState extends ConsumerState<_SessionResultsView> {
                   children: [
                     Text(
                       '${_toArabicIndic(context, accuracyPercent)}٪',
-                      style: GoogleFonts.cairo(
+                      style: AppFonts.cairo(
                         fontSize: 28,
                         fontWeight: FontWeight.w800,
                         color: colors.onSurface,
@@ -1705,7 +1705,7 @@ class _SessionResultsViewState extends ConsumerState<_SessionResultsView> {
                     ),
                     Text(
                       'memorization_accuracy'.tr(),
-                      style: GoogleFonts.cairo(
+                      style: AppFonts.cairo(
                         fontSize: 11,
                         color: onSurfaceMuted,
                       ),
@@ -1751,7 +1751,7 @@ class _SessionResultsViewState extends ConsumerState<_SessionResultsView> {
                 ),
                 child: Text(
                   message,
-                  style: GoogleFonts.cairo(
+                  style: AppFonts.cairo(
                     fontSize: 15,
                     color: AppTheme.primaryColor,
                     fontWeight: FontWeight.w700,
@@ -1769,7 +1769,7 @@ class _SessionResultsViewState extends ConsumerState<_SessionResultsView> {
                 const SizedBox(width: 6),
                 Text(
                   'words_needing_review'.tr(),
-                  style: GoogleFonts.cairo(
+                  style: AppFonts.cairo(
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
                     color: AppTheme.primaryColor,
@@ -1797,7 +1797,7 @@ class _SessionResultsViewState extends ConsumerState<_SessionResultsView> {
                   return Text(
                     'no_review_items'.tr(),
                     style:
-                        GoogleFonts.cairo(fontSize: 12, color: onSurfaceMuted),
+                        AppFonts.cairo(fontSize: 12, color: onSurfaceMuted),
                   );
                 }
 
@@ -1838,7 +1838,7 @@ class _SessionResultsViewState extends ConsumerState<_SessionResultsView> {
                                   child: Text(
                                     item.displayText,
                                     textAlign: TextAlign.center,
-                                    style: GoogleFonts.amiri(
+                                    style: AppFonts.amiri(
                                       fontSize: 20,
                                       color: item.severe
                                           ? colors.error
@@ -1849,7 +1849,7 @@ class _SessionResultsViewState extends ConsumerState<_SessionResultsView> {
                                 const SizedBox(width: 10),
                                 Text(
                                   '${'surah_label'.tr()} ${SurahUtils.getLocalizedSurahName(context, widget.state.surahNumber)} • ${'ayah_label'.tr()} ${_toArabicIndic(context, item.ayahNumber)}',
-                                  style: GoogleFonts.cairo(
+                                  style: AppFonts.cairo(
                                       fontSize: 11, color: onSurfaceMuted),
                                 ),
                               ],
@@ -1872,7 +1872,7 @@ class _SessionResultsViewState extends ConsumerState<_SessionResultsView> {
                         child: Text(
                           'and_x_more_ayahs'
                               .tr(args: [_toArabicIndic(context, hiddenCount)]),
-                          style: GoogleFonts.cairo(
+                          style: AppFonts.cairo(
                               fontSize: 11, color: onSurfaceMuted),
                         ),
                       ),
@@ -1899,12 +1899,12 @@ class _SessionResultsViewState extends ConsumerState<_SessionResultsView> {
                     children: [
                       Text(
                         'hasanat_earned_title'.tr(),
-                        style: GoogleFonts.cairo(
+                        style: AppFonts.cairo(
                             fontSize: 12, color: onSurfaceMuted),
                       ),
                       Text(
                         _toArabicIndic(context, widget.state.sessionHashanat),
-                        style: GoogleFonts.cairo(
+                        style: AppFonts.cairo(
                           fontSize: 20,
                           fontWeight: FontWeight.w800,
                           color: AppTheme.accentColor,
@@ -1912,7 +1912,7 @@ class _SessionResultsViewState extends ConsumerState<_SessionResultsView> {
                       ),
                       Text(
                         'inshaallah'.tr(),
-                        style: GoogleFonts.cairo(
+                        style: AppFonts.cairo(
                             fontSize: 11, color: onSurfaceMuted),
                       ),
                     ],
@@ -1929,7 +1929,7 @@ class _SessionResultsViewState extends ConsumerState<_SessionResultsView> {
               icon: const Text('💛', style: TextStyle(fontSize: 16)),
               label: Text(
                 'gift_thawab'.tr(),
-                style: GoogleFonts.cairo(
+                style: AppFonts.cairo(
                     fontSize: 15, fontWeight: FontWeight.w700),
               ),
               style: ElevatedButton.styleFrom(
@@ -1957,7 +1957,7 @@ class _SessionResultsViewState extends ConsumerState<_SessionResultsView> {
                             widget.state.currentVerseIndex +
                             1)
                   ]),
-                  style: GoogleFonts.cairo(
+                  style: AppFonts.cairo(
                       fontSize: 15, fontWeight: FontWeight.w700),
                 ),
                 style: ElevatedButton.styleFrom(
@@ -1985,7 +1985,7 @@ class _SessionResultsViewState extends ConsumerState<_SessionResultsView> {
                     ),
                     child: Text(
                       'restart_button'.tr(),
-                      style: GoogleFonts.cairo(
+                      style: AppFonts.cairo(
                         fontSize: 14,
                         fontWeight: FontWeight.w700,
                         color: AppTheme.primaryColor,
@@ -2009,7 +2009,7 @@ class _SessionResultsViewState extends ConsumerState<_SessionResultsView> {
                     ),
                     child: Text(
                       'home_button'.tr(),
-                      style: GoogleFonts.cairo(
+                      style: AppFonts.cairo(
                           fontSize: 14, fontWeight: FontWeight.w700),
                     ),
                   ),
@@ -2065,7 +2065,7 @@ class _ResultsStatCard extends StatelessWidget {
         children: [
           Text(
             value,
-            style: GoogleFonts.cairo(
+            style: AppFonts.cairo(
               fontSize: 24,
               fontWeight: FontWeight.w800,
               color: color,
@@ -2073,7 +2073,7 @@ class _ResultsStatCard extends StatelessWidget {
           ),
           Text(
             label,
-            style: GoogleFonts.cairo(
+            style: AppFonts.cairo(
               fontSize: 12,
               color: colors.onSurface.withValues(alpha: 0.65),
             ),
@@ -2119,7 +2119,7 @@ class _MomentCaptureSheetState extends ConsumerState<_MomentCaptureSheet> {
       final selected = _selectedFeeling == label;
       return ChoiceChip(
         label: Text('$emoji ${label.tr()}',
-            style: GoogleFonts.cairo(fontSize: 11)),
+            style: AppFonts.cairo(fontSize: 11)),
         selected: selected,
         showCheckmark: false,
         onSelected: (_) => setState(() => _selectedFeeling = label),
@@ -2161,7 +2161,7 @@ class _MomentCaptureSheetState extends ConsumerState<_MomentCaptureSheet> {
           const SizedBox(height: 10),
           Text(
             widget.surahName,
-            style: GoogleFonts.cairo(
+            style: AppFonts.cairo(
                 fontSize: 10, color: textColor.withValues(alpha: 0.4)),
           ),
           const SizedBox(height: 6),
@@ -2169,7 +2169,7 @@ class _MomentCaptureSheetState extends ConsumerState<_MomentCaptureSheet> {
             textDirection: ui.TextDirection.rtl,
             child: Text(
               widget.verseText,
-              style: GoogleFonts.amiri(
+              style: AppFonts.amiri(
                   fontSize: 14, color: textColor.withValues(alpha: 0.8), height: 2.0),
               textAlign: TextAlign.center,
             ),
@@ -2179,7 +2179,7 @@ class _MomentCaptureSheetState extends ConsumerState<_MomentCaptureSheet> {
             alignment: Alignment.centerRight,
             child: Text(
               'moment_prompt'.tr(),
-              style: GoogleFonts.cairo(
+              style: AppFonts.cairo(
                   fontSize: 14, fontWeight: FontWeight.w700, color: textColor),
             ),
           ),
@@ -2197,14 +2197,14 @@ class _MomentCaptureSheetState extends ConsumerState<_MomentCaptureSheet> {
           ),
           const SizedBox(height: 10),
           TextField(
-            style: GoogleFonts.cairo(
+            style: AppFonts.cairo(
                 fontSize: 13, color: textColor.withValues(alpha: 0.9)),
             textDirection: ui.TextDirection.rtl,
             maxLines: 2,
             onChanged: (v) => _note = v,
             decoration: InputDecoration(
               hintText: 'moment_note_hint'.tr(),
-              hintStyle: GoogleFonts.cairo(
+              hintStyle: AppFonts.cairo(
                   fontSize: 12, color: textColor.withValues(alpha: 0.3)),
               filled: true,
               fillColor: textColor.withValues(alpha: 0.04),
@@ -2238,7 +2238,7 @@ class _MomentCaptureSheetState extends ConsumerState<_MomentCaptureSheet> {
                         borderRadius: BorderRadius.circular(10)),
                   ),
                   child: Text('skip'.tr(),
-                      style: GoogleFonts.cairo(
+                      style: AppFonts.cairo(
                           fontSize: 12, color: textColor.withValues(alpha: 0.5))),
                 ),
               ),
@@ -2258,7 +2258,7 @@ class _MomentCaptureSheetState extends ConsumerState<_MomentCaptureSheet> {
                   ),
                   child: Text(
                     'save_moment_button'.tr(),
-                    style: GoogleFonts.cairo(
+                    style: AppFonts.cairo(
                         fontSize: 13, fontWeight: FontWeight.w700),
                   ),
                 ),

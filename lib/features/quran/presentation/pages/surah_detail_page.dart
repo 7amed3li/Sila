@@ -5,7 +5,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:sila_app/core/theme/app_fonts.dart';
 import 'package:quran/quran.dart' as quran;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sila_app/core/presentation/widgets/reciter_picker_sheet.dart';
@@ -187,7 +187,7 @@ class _SurahDetailPageState extends ConsumerState<SurahDetailPage> {
                   ? QuranUIUtils.toArabicNumber(juz)
                   : juz.toString()
             ]),
-            style: GoogleFonts.cairo(
+            style: AppFonts.cairo(
               color: iconColor.withValues(alpha: 0.7),
               fontSize: 12,
               fontWeight: FontWeight.normal,
@@ -216,7 +216,7 @@ class _SurahDetailPageState extends ConsumerState<SurahDetailPage> {
       child: Row(
         children: [
           Text('604',
-              style: GoogleFonts.cairo(
+              style: AppFonts.cairo(
                   color: QuranUIUtils.getTextColor(settings.themeMode),
                   fontSize: 12)),
           Expanded(
@@ -245,7 +245,7 @@ class _SurahDetailPageState extends ConsumerState<SurahDetailPage> {
             ),
           ),
           Text('1',
-              style: GoogleFonts.cairo(
+              style: AppFonts.cairo(
                   color: QuranUIUtils.getTextColor(settings.themeMode),
                   fontSize: 12)),
         ],
@@ -461,7 +461,7 @@ class _SurahDetailPageState extends ConsumerState<SurahDetailPage> {
               padding: const EdgeInsets.only(top: 2),
               child: Text(
                 ayahNum.toString(),
-                style: GoogleFonts.cairo(
+                style: AppFonts.cairo(
                   fontSize: (selectedStyle.fontSize ?? 26) * 0.4,
                   fontWeight: FontWeight.w800,
                   color: selectedStyle.color,
@@ -533,15 +533,15 @@ class _SurahDetailPageState extends ConsumerState<SurahDetailPage> {
             height: height,
             color: color);
       case 'Amiri':
-        return GoogleFonts.amiri(fontSize: size, height: height, color: color);
+        return AppFonts.amiri(fontSize: size, height: height, color: color);
       case 'Scheherazade':
-        return GoogleFonts.scheherazadeNew(
+        return AppFonts.scheherazadeNew(
             fontSize: size, height: height, color: color);
       case 'Noto Naskh':
-        return GoogleFonts.notoNaskhArabic(
+        return AppFonts.notoNaskhArabic(
             fontSize: size, height: height, color: color);
       default:
-        return GoogleFonts.getFont(settings.fontFamily,
+        return AppFonts.getFont(settings.fontFamily,
             fontSize: size, height: height, color: color);
     }
   }
@@ -562,7 +562,7 @@ class _SurahDetailPageState extends ConsumerState<SurahDetailPage> {
           children: [
             Text('reading_settings_title'.tr(),
                 textAlign: TextAlign.center,
-                style: GoogleFonts.cairo(
+                style: AppFonts.cairo(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: QuranUIUtils.getTextColor(settings.themeMode))),
@@ -599,7 +599,7 @@ class _SurahDetailPageState extends ConsumerState<SurahDetailPage> {
             const SizedBox(height: 24),
             Text('quran_font_label'.tr(),
                 textAlign: TextAlign.center,
-                style: GoogleFonts.cairo(
+                style: AppFonts.cairo(
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
                     color: QuranUIUtils.getTextColor(settings.themeMode))),
@@ -667,7 +667,7 @@ class _SurahDetailPageState extends ConsumerState<SurahDetailPage> {
               Icon(icon,
                   color: QuranUIUtils.getAccentColor(settings.themeMode)),
               Text(label,
-                  style: GoogleFonts.cairo(
+                  style: AppFonts.cairo(
                       fontSize: 12,
                       color: QuranUIUtils.getTextColor(settings.themeMode)))
             ])));
@@ -692,7 +692,7 @@ class _SurahDetailPageState extends ConsumerState<SurahDetailPage> {
                           ? QuranUIUtils.getAccentColor(settings.themeMode)
                           : Colors.grey))),
           Text(label,
-              style: GoogleFonts.cairo(
+              style: AppFonts.cairo(
                   color: QuranUIUtils.getTextColor(settings.themeMode)))
         ]));
   }

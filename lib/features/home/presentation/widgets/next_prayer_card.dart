@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:sila_app/core/theme/app_fonts.dart';
 import 'package:sila_app/core/utils/time_utils.dart';
 import 'package:sila_app/features/prayers/presentation/riverpod/prayer_controller.dart';
 
@@ -95,15 +95,15 @@ class _NextPrayerCardState extends ConsumerState<NextPrayerCard> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text('next_prayer'.tr(),
-                      style: GoogleFonts.getFont('Cairo',
+                      style: AppFonts.getFont('Cairo',
                           fontSize: 12, color: Colors.white60)),
                   Text(nextPrayerName,
-                      style: GoogleFonts.getFont('Cairo',
+                      style: AppFonts.getFont('Cairo',
                           fontSize: 22,
                           fontWeight: FontWeight.w800,
                           color: Colors.white)),
                   Text(formattedNextTime,
-                      style: GoogleFonts.getFont('Cairo',
+                      style: AppFonts.getFont('Cairo',
                           fontSize: 14, color: Colors.white70)),
                 ],
               ),
@@ -111,10 +111,10 @@ class _NextPrayerCardState extends ConsumerState<NextPrayerCard> {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text('remaining_time'.tr(),
-                      style: GoogleFonts.getFont('Cairo',
+                      style: AppFonts.getFont('Cairo',
                           fontSize: 11, color: Colors.white60)),
                   Text(remainingTime,
-                      style: GoogleFonts.getFont('Cairo',
+                      style: AppFonts.getFont('Cairo',
                           fontSize: 18,
                           fontWeight: FontWeight.w700,
                           color: const Color(0xFFFCD34D))),

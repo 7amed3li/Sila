@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:adhan/adhan.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:geolocator/geolocator.dart';
@@ -86,121 +88,151 @@ class PrayerRepositoryImpl extends PrayerRepository {
 
   @override
   Future<PrayerTimesEntity> getPrayerTimes() async {
-    final locService = LocationService();
     final prefs = PrefsService();
-
     final now = DateTime.now();
     var methodString = await prefs.getCalculationMethod();
     final isAuto = await prefs.isAutoLocation();
 
-    var lat = _defaultLat;
-    var long = _defaultLong;
-    var city = _defaultCity;
-    var countryCode = 'TR';
-
-    try {
-      final oldCountryCode = await prefs.getCountryCode();
-
+    // 1. FAST PATH: Check memory cache first
+    if (_cachedPrayerTimes != null && _isFresh(_cachedPrayerTimesAt, _prayerTimesTtl)) {
+      debugPrint('⏱ [PRAYER-CACHE] Using IN-MEMORY cache (0ms)');
       if (isAuto) {
-        final canReuseRecentAutoLocation =
-            _lastResolvedLat != null &&
-            _lastResolvedLong != null &&
-            _lastAutoLocationFetchAt != null &&
-            now.difference(_lastAutoLocationFetchAt!) <= _autoLocationDebounce;
+        unawaited(_refreshLocationInBackground(prefs, methodString));
+      }
+      return _cachedPrayerTimes!;
+    }
 
-        if (canReuseRecentAutoLocation) {
-          lat = _lastResolvedLat!;
-          long = _lastResolvedLong!;
-          city = _lastResolvedCity ?? _defaultCity;
-          countryCode = _lastResolvedCountryCode ?? oldCountryCode;
-        } else {
-          final position = await locService.determinePosition();
-          final newLat = position.latitude;
-          final newLong = position.longitude;
+    // 2. FAST PATH: Use stored location for instant calculation
+    final stored = await prefs.getStoredLocation();
+    if (stored != null) {
+      debugPrint('⏱ [PRAYER-CACHE] Using STORED LOCATION cache');
+      final lat = stored['lat'] as double;
+      final long = stored['long'] as double;
+      final city = stored['city'] as String;
+      final countryCode = stored['countryCode'] as String? ?? 'TR';
+      
+      final result = _calculatePrayerTimesLocally(
+        lat: lat, 
+        long: long, 
+        city: city, 
+        countryCode: countryCode, 
+        method: methodString,
+        isAuto: isAuto,
+      );
 
-          if (_lastResolvedLat != null && _lastResolvedLong != null) {
-            final movedMeters = Geolocator.distanceBetween(
-              _lastResolvedLat!,
-              _lastResolvedLong!,
-              newLat,
-              newLong,
-            );
+      // Trigger background refresh if auto location is enabled
+      if (isAuto) {
+        unawaited(_refreshLocationInBackground(prefs, methodString));
+      }
 
-            if (movedMeters < _significantLocationChangeMeters &&
-                _lastResolvedCity != null &&
-                _lastResolvedCountryCode != null) {
-              lat = _lastResolvedLat!;
-              long = _lastResolvedLong!;
-              city = _lastResolvedCity!;
-              countryCode = _lastResolvedCountryCode!;
-            } else {
-              lat = newLat;
-              long = newLong;
-              final locationInfo = await locService.getLocationInfo(lat, long);
-              city = locationInfo['city'] ?? _defaultCity;
-              countryCode = locationInfo['countryCode'] ?? 'TR';
-            }
-          } else {
-            lat = newLat;
-            long = newLong;
-            final locationInfo = await locService.getLocationInfo(lat, long);
-            city = locationInfo['city'] ?? _defaultCity;
-            countryCode = locationInfo['countryCode'] ?? 'TR';
-          }
+      return result;
+    }
 
-          _lastResolvedLat = lat;
-          _lastResolvedLong = long;
-          _lastResolvedCity = city;
-          _lastResolvedCountryCode = countryCode;
-          _lastAutoLocationFetchAt = now;
-        }
+    // 3. FRESH INSTALL PATH (No stored location yet)
+    debugPrint('⏱ [PRAYER-CACHE] NO CACHE FOUND. Awaiting actual GPS location (Fresh Install)...');
+    
+    // We await the background refresh so the UI shows a loading spinner
+    // instead of showing wrong default data.
+    await _refreshLocationInBackground(prefs, methodString);
 
+    if (_cachedPrayerTimes != null) {
+      return _cachedPrayerTimes!;
+    }
+
+    // If we reach here, GPS failed (e.g. permission denied or timeout)
+    debugPrint('⏱ [PRAYER-CACHE] GPS failed. Using fallback (Mecca).');
+    return _calculatePrayerTimesLocally(
+      lat: 21.4225, // Mecca
+      long: 39.8262,
+      city: '⚠️ يرجى تفعيل الموقع', // "Please enable location" with warning
+      countryCode: 'SA',
+      method: 'mekka',
+      isAuto: isAuto,
+    );
+  }
+
+  Future<void> _refreshLocationInBackground(PrefsService prefs, String methodString) async {
+    try {
+      final locService = LocationService();
+      final now = DateTime.now();
+
+      if (_lastAutoLocationFetchAt != null &&
+          now.difference(_lastAutoLocationFetchAt!) <= _autoLocationDebounce) {
+        return;
+      }
+
+      // Add a 10-second timeout to prevent infinite hanging
+      final position = await locService.determinePosition().timeout(
+        const Duration(seconds: 10),
+        onTimeout: () => throw TimeoutException('GPS request timed out after 10s'),
+      );
+      final newLat = position.latitude;
+      final newLong = position.longitude;
+
+      bool locationChanged = true;
+      if (_lastResolvedLat != null && _lastResolvedLong != null) {
+        final movedMeters = Geolocator.distanceBetween(
+          _lastResolvedLat!,
+          _lastResolvedLong!,
+          newLat,
+          newLong,
+        );
+        locationChanged = movedMeters >= _significantLocationChangeMeters;
+      }
+
+      if (locationChanged || _lastResolvedCity == null) {
+        final locationInfo = await locService.getLocationInfo(newLat, newLong);
+        final city = locationInfo['city'] ?? 'موقع غير معروف';
+        final countryCode = locationInfo['countryCode'] ?? 'SA';
+
+        _lastResolvedLat = newLat;
+        _lastResolvedLong = newLong;
+        _lastResolvedCity = city;
+        _lastResolvedCountryCode = countryCode;
+
+        final oldCountryCode = await prefs.getCountryCode();
         if (oldCountryCode != countryCode) {
           final autoMethod = _getMethodForCountry(countryCode);
           await prefs.setCalculationMethod(autoMethod);
           await prefs.saveCountryCode(countryCode);
           methodString = autoMethod;
         }
-      } else {
-        final stored = await prefs.getStoredLocation();
-        if (stored != null) {
-          lat = stored['lat'] as double;
-          long = stored['long'] as double;
-          city = stored['city'] as String;
-          countryCode = stored['countryCode'] as String? ?? 'TR';
 
-          if (oldCountryCode != countryCode) {
-            final autoMethod = _getMethodForCountry(countryCode);
-            await prefs.setCalculationMethod(autoMethod);
-            await prefs.saveCountryCode(countryCode);
-            methodString = autoMethod;
-          }
-        }
+        await prefs.saveManualLocation(newLat, newLong, city, countryCode: countryCode);
+        await prefs.setAutoLocation(true);
+        
+        _calculatePrayerTimesLocally(
+          lat: newLat,
+          long: newLong,
+          city: city,
+          countryCode: countryCode,
+          method: methodString,
+          isAuto: true,
+        );
       }
+      
+      _lastAutoLocationFetchAt = now;
+
     } catch (e) {
-      print('Location Error: $e');
+      debugPrint('Background Location Error: $e');
+      // If there's an error (like permission denied) and we have absolutely no cache,
+      // the caller will handle the fallback. We just catch and log it.
     }
+  }
 
-    final resolvedCacheKey = _buildCacheKey(
-      date: now,
-      method: methodString,
-      isAuto: isAuto,
-      lat: lat,
-      long: long,
-    );
-
-    // Return cached data only if still fresh
-    if (_cachedPrayerTimes != null &&
-        _cachedPrayerTimesKey == resolvedCacheKey &&
-        _isFresh(_cachedPrayerTimesAt, _prayerTimesTtl)) {
-      return _cachedPrayerTimes!;
-    }
-
-    // No cache: do blocking calculation
-    final params = _getCalculationParams(methodString);
+  PrayerTimesEntity _calculatePrayerTimesLocally({
+    required double lat,
+    required double long,
+    required String city,
+    required String countryCode,
+    required String method,
+    required bool isAuto,
+  }) {
+    final params = _getCalculationParams(method);
     final myCoordinates = Coordinates(lat, long);
-    final date = DateComponents.from(DateTime.now());
-    final utcOffset = DateTime.now().timeZoneOffset;
+    final now = DateTime.now();
+    final date = DateComponents.from(now);
+    final utcOffset = now.timeZoneOffset;
 
     final prayerTimes = PrayerTimes(
       myCoordinates,
@@ -224,12 +256,20 @@ class PrayerRepositoryImpl extends PrayerRepository {
       latitude: lat,
       longitude: long,
       countryCode: countryCode,
-      calculationMethod: methodString,
-      lastUpdated: DateTime.now(),
+      calculationMethod: method,
+      lastUpdated: now,
+    );
+
+    final resolvedCacheKey = _buildCacheKey(
+      date: now,
+      method: method,
+      isAuto: isAuto,
+      lat: lat,
+      long: long,
     );
 
     _cachedPrayerTimes = result;
-    _cachedPrayerTimesAt = DateTime.now();
+    _cachedPrayerTimesAt = now;
     _cachedPrayerTimesKey = resolvedCacheKey;
 
     return result;

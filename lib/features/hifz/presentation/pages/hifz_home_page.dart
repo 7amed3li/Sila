@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:sila_app/core/theme/app_fonts.dart';
 import 'package:quran/quran.dart' as quran;
 import 'package:sila_app/core/theme/app_theme.dart';
 import 'package:sila_app/core/utils/surah_utils.dart';
@@ -145,7 +145,7 @@ class _HifzHomePageState extends ConsumerState<HifzHomePage> {
             Expanded(
               child: Text(
                 'feature_under_construction'.tr(args: [featureName]),
-                style: GoogleFonts.cairo(
+                style: AppFonts.cairo(
                   fontSize: 11,
                   fontWeight: FontWeight.w600,
                   color: Colors.white,
@@ -194,7 +194,7 @@ class _HifzHomePageState extends ConsumerState<HifzHomePage> {
                 children: [
                   Text(
                     title,
-                    style: GoogleFonts.cairo(
+                    style: AppFonts.cairo(
                       fontSize: 14,
                       fontWeight: FontWeight.w700,
                       color: const Color(0xFF0F172A),
@@ -202,7 +202,7 @@ class _HifzHomePageState extends ConsumerState<HifzHomePage> {
                   ),
                   Text(
                     subtitle,
-                    style: GoogleFonts.cairo(
+                    style: AppFonts.cairo(
                       fontSize: 11,
                       color: const Color(0xFF64748B),
                     ),
@@ -219,7 +219,7 @@ class _HifzHomePageState extends ConsumerState<HifzHomePage> {
                 ),
                 child: Text(
                   'recommended'.tr(),
-                  style: GoogleFonts.cairo(
+                  style: AppFonts.cairo(
                     fontSize: 10,
                     color: const Color(0xFF064E3B),
                     fontWeight: FontWeight.w700,
@@ -327,7 +327,7 @@ class _HifzHomePageState extends ConsumerState<HifzHomePage> {
                                   ),
                                   child: Text(
                                     'main_feature'.tr(),
-                                    style: GoogleFonts.cairo(
+                                    style: AppFonts.cairo(
                                       fontSize: 10,
                                       fontWeight: FontWeight.w700,
                                       color: AppTheme.goldLight,
@@ -337,7 +337,7 @@ class _HifzHomePageState extends ConsumerState<HifzHomePage> {
                                 const SizedBox(height: 12),
                                 Text(
                                   'ai_tasmi_title'.tr(),
-                                  style: GoogleFonts.cairo(
+                                  style: AppFonts.cairo(
                                     fontSize: 18,
                                     fontWeight: FontWeight.w800,
                                     color: Colors.white,
@@ -347,7 +347,7 @@ class _HifzHomePageState extends ConsumerState<HifzHomePage> {
                                 const SizedBox(height: 6),
                                 Text(
                                   'ai_tasmi_desc'.tr(),
-                                  style: GoogleFonts.cairo(
+                                  style: AppFonts.cairo(
                                     fontSize: 12,
                                     color: Colors.white.withValues(alpha: 0.8),
                                     height: 1.5,
@@ -386,7 +386,7 @@ class _HifzHomePageState extends ConsumerState<HifzHomePage> {
                   const SizedBox(height: 24),
                   Text(
                     'hifz_methods'.tr(),
-                    style: GoogleFonts.cairo(
+                    style: AppFonts.cairo(
                       fontSize: 13,
                       fontWeight: FontWeight.w700,
                       color: const Color(0xFF0F172A),
@@ -419,7 +419,7 @@ class _HifzHomePageState extends ConsumerState<HifzHomePage> {
                   const SizedBox(height: 16),
                   Text(
                     'my_moments'.tr(),
-                    style: GoogleFonts.cairo(
+                    style: AppFonts.cairo(
                       fontSize: 13,
                       fontWeight: FontWeight.w700,
                       color: const Color(0xFF0F172A),
@@ -448,7 +448,7 @@ class _HifzHomePageState extends ConsumerState<HifzHomePage> {
                         label: Text(
                           'continue_from_verse'.tr(
                               args: [_toArabicIndic(state.resumeFromVerse)]),
-                          style: GoogleFonts.cairo(
+                          style: AppFonts.cairo(
                             fontSize: 14,
                             fontWeight: FontWeight.w700,
                             color: Colors.white,
@@ -507,14 +507,14 @@ class _Header extends StatelessWidget {
                     children: [
                       Text(
                         'welcome_hifz_user'.tr(),
-                        style: GoogleFonts.cairo(
+                        style: AppFonts.cairo(
                           fontSize: 13,
                           color: Colors.white.withValues(alpha: 0.7),
                         ),
                       ),
                       Text(
                         'quran_memorizer'.tr(),
-                        style: GoogleFonts.cairo(
+                        style: AppFonts.cairo(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
                           color: Colors.white,
@@ -615,7 +615,7 @@ class _DailyPlanCard extends StatelessWidget {
             children: [
               Text(
                 'your_plan_today'.tr(),
-                style: GoogleFonts.cairo(
+                style: AppFonts.cairo(
                   fontSize: 13,
                   fontWeight: FontWeight.w700,
                   color: const Color(0xFF0F172A),
@@ -623,7 +623,7 @@ class _DailyPlanCard extends StatelessWidget {
               ),
               Text(
                 todayDate,
-                style: GoogleFonts.cairo(
+                style: AppFonts.cairo(
                   fontSize: 10,
                   color: const Color(0xFF94A3B8),
                 ),
@@ -653,7 +653,7 @@ class _DailyPlanCard extends StatelessWidget {
                   const SizedBox(width: 8),
                   Text(
                     '${isArabic ? _toArabicIndic(state.doneAyahsToday) : state.doneAyahsToday} / ${isArabic ? _toArabicIndic(total) : total} ${'ayah_label'.tr()}',
-                    style: GoogleFonts.cairo(
+                    style: AppFonts.cairo(
                       fontSize: 11,
                       fontWeight: FontWeight.w700,
                       color: AppTheme.primaryColor,
@@ -669,7 +669,7 @@ class _DailyPlanCard extends StatelessWidget {
             children: [
               Text(
                 'today_verses'.tr(),
-                style: GoogleFonts.cairo(
+                style: AppFonts.cairo(
                   fontSize: 10,
                   color: const Color(0xFF94A3B8),
                 ),
@@ -688,7 +688,7 @@ class _DailyPlanCard extends StatelessWidget {
                         ? _toArabicIndic(state.reviewDueCount)
                         : state.reviewDueCount.toString()
                   ]),
-                  style: GoogleFonts.cairo(
+                  style: AppFonts.cairo(
                     fontSize: 10,
                     fontWeight: FontWeight.w700,
                     color: AppTheme.primaryColor,
@@ -726,7 +726,7 @@ class _HasanatCard extends StatelessWidget {
             builder: (_, value, __) {
               return Text(
                 isArabic ? _toArabicIndic(value) : value.toString(),
-                style: GoogleFonts.cairo(
+                style: AppFonts.cairo(
                   fontSize: 32,
                   fontWeight: FontWeight.w800,
                   color: _hasanatGold,
@@ -736,7 +736,7 @@ class _HasanatCard extends StatelessWidget {
           ),
           Text(
             'hasanah_earned'.tr(),
-            style: GoogleFonts.cairo(
+            style: AppFonts.cairo(
               fontSize: 11,
               color: Colors.white.withValues(alpha: 0.7),
             ),
@@ -744,7 +744,7 @@ class _HasanatCard extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             'hasanah_hadith'.tr(),
-            style: GoogleFonts.cairo(
+            style: AppFonts.cairo(
               fontSize: 9,
               fontStyle: FontStyle.italic,
               color: Colors.white.withValues(alpha: 0.4),
@@ -854,7 +854,7 @@ class _MethodsGrid extends StatelessWidget {
                     ),
                     child: Text(
                       'recommended'.tr(),
-                      style: GoogleFonts.cairo(
+                      style: AppFonts.cairo(
                         fontSize: 9,
                         fontWeight: FontWeight.w700,
                         color: Colors.white,
@@ -866,7 +866,7 @@ class _MethodsGrid extends StatelessWidget {
                 const SizedBox(height: 8),
                 Text(
                   c.title,
-                  style: GoogleFonts.cairo(
+                  style: AppFonts.cairo(
                     fontSize: 12,
                     fontWeight: FontWeight.w700,
                     color: const Color(0xFF0F172A),
@@ -875,7 +875,7 @@ class _MethodsGrid extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text(
                   c.sub,
-                  style: GoogleFonts.cairo(
+                  style: AppFonts.cairo(
                     fontSize: 10,
                     color: const Color(0xFF64748B),
                   ),
@@ -914,7 +914,7 @@ class _MomentsSection extends StatelessWidget {
             const SizedBox(height: 6),
             Text(
               'no_moments_title'.tr(),
-              style: GoogleFonts.cairo(
+              style: AppFonts.cairo(
                 fontSize: 12,
                 fontWeight: FontWeight.w700,
                 color: const Color(0xFF1E40AF),
@@ -922,7 +922,7 @@ class _MomentsSection extends StatelessWidget {
             ),
             Text(
               'no_moments_desc'.tr(),
-              style: GoogleFonts.cairo(
+              style: AppFonts.cairo(
                 fontSize: 10,
                 color: const Color(0xFF93C5FD),
               ),
@@ -970,7 +970,7 @@ class _MomentsSection extends StatelessWidget {
                   children: [
                     Text(
                       surahName,
-                      style: GoogleFonts.cairo(
+                      style: AppFonts.cairo(
                         fontSize: 12,
                         fontWeight: FontWeight.w800,
                         color: AppTheme.primaryColor,
@@ -984,7 +984,7 @@ class _MomentsSection extends StatelessWidget {
                   reflection.isEmpty ? 'no_reflection'.tr() : reflection,
                   maxLines: 4,
                   overflow: TextOverflow.ellipsis,
-                  style: GoogleFonts.cairo(
+                  style: AppFonts.cairo(
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
                     color: const Color(0xFF1E293B),
@@ -1015,7 +1015,7 @@ class _ErrorCard extends StatelessWidget {
       ),
       child: Text(
         message,
-        style: GoogleFonts.cairo(fontSize: 11, color: _errorColor),
+        style: AppFonts.cairo(fontSize: 11, color: _errorColor),
       ),
     );
   }

@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:sila_app/core/theme/app_fonts.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sila_app/core/presentation/widgets/audio_storage_sheet.dart';
 import 'package:sila_app/core/presentation/widgets/reciter_picker_sheet.dart';
@@ -92,7 +92,7 @@ class _PrayerSettingsPageState extends ConsumerState<PrayerSettingsPage> {
         centerTitle: true,
         title: Text(
           'prayer_settings'.tr(),
-          style: GoogleFonts.cairo(fontWeight: FontWeight.w700),
+          style: AppFonts.cairo(fontWeight: FontWeight.w700),
         ),
         elevation: 0,
       ),
@@ -147,7 +147,7 @@ class _PrayerSettingsPageState extends ConsumerState<PrayerSettingsPage> {
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 child: Text(
                   'info_calculation_method'.tr(),
-                  style: GoogleFonts.cairo(color: Colors.white38, fontSize: 12),
+                  style: AppFonts.cairo(color: Colors.white38, fontSize: 12),
                 ),
               ),
           ]),
@@ -282,7 +282,7 @@ class _Section extends StatelessWidget {
           padding: const EdgeInsets.only(bottom: 8),
           child: Text(
             label,
-            style: GoogleFonts.cairo(
+            style: AppFonts.cairo(
               color: const Color(0xFF43A047),
               fontSize: 13,
               fontWeight: FontWeight.w700,
@@ -331,10 +331,10 @@ class _Tile extends StatelessWidget {
         child: Icon(icon, color: const Color(0xFF66BB6A), size: 20),
       ),
       title: Text(title,
-          style: GoogleFonts.cairo(
+          style: AppFonts.cairo(
               color: Colors.white, fontWeight: FontWeight.w600, fontSize: 14)),
       subtitle: Text(subtitle,
-          style: GoogleFonts.cairo(color: Colors.white38, fontSize: 12)),
+          style: AppFonts.cairo(color: Colors.white38, fontSize: 12)),
       trailing: trailing,
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
     );
@@ -359,7 +359,7 @@ class _MethodDialog extends StatelessWidget {
             padding: const EdgeInsets.all(20),
             child: Text(
               'select_calculation_method'.tr(),
-              style: GoogleFonts.cairo(
+              style: AppFonts.cairo(
                   color: Colors.white,
                   fontSize: 18,
                   fontWeight: FontWeight.bold),
@@ -373,7 +373,7 @@ class _MethodDialog extends StatelessWidget {
                 return ListTile(
                   onTap: () => Navigator.pop(context, e.key),
                   title: Text(e.value.tr(),
-                      style: GoogleFonts.cairo(
+                      style: AppFonts.cairo(
                           color: selected
                               ? const Color(0xFF66BB6A)
                               : Colors.white70,
@@ -391,7 +391,7 @@ class _MethodDialog extends StatelessWidget {
           TextButton(
             onPressed: () => Navigator.pop(context),
             child: Text('cancel'.tr(),
-                style: GoogleFonts.cairo(color: Colors.white54)),
+                style: AppFonts.cairo(color: Colors.white54)),
           ),
           const SizedBox(height: 8),
         ],

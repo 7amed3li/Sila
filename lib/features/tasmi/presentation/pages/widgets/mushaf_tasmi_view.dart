@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:sila_app/core/theme/app_fonts.dart';
 import 'package:sila_app/features/tasmi/data/models/tasmi_word_entry.dart';
 import 'package:sila_app/features/tasmi/presentation/controllers/tasmi_controller.dart';
 
@@ -49,7 +49,7 @@ class MushafTasmiView extends ConsumerWidget {
         child: RichText(
           textAlign: TextAlign.justify,
           text: TextSpan(
-            style: GoogleFonts.getFont(
+            style: AppFonts.getFont(
               fontFamily,
               fontSize: fontSize,
               height: 2.2, // Generous line height for Mushaf aesthetics

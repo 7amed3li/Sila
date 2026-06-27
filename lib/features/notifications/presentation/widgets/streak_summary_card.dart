@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:sila_app/core/theme/app_fonts.dart';
 import 'package:sila_app/features/notifications/presentation/controllers/notification_providers.dart';
 
 class StreakSummaryCard extends ConsumerWidget {
@@ -61,7 +61,7 @@ class StreakSummaryCard extends ConsumerWidget {
                   const SizedBox(width: 12),
                   Text(
                     'worship_tracking'.tr(),
-                    style: GoogleFonts.cairo(
+                    style: AppFonts.cairo(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
@@ -71,7 +71,7 @@ class StreakSummaryCard extends ConsumerWidget {
               ),
               Text(
                 'weekly_activity'.tr(),
-                style: GoogleFonts.cairo(
+                style: AppFonts.cairo(
                   fontSize: 11,
                   color: Colors.white.withValues(alpha: 0.5),
                   fontWeight: FontWeight.w500,
@@ -115,7 +115,7 @@ class StreakSummaryCard extends ConsumerWidget {
                       children: [
                         Text(
                           _name(k).tr(),
-                          style: GoogleFonts.cairo(
+                          style: AppFonts.cairo(
                             fontSize: 13,
                             fontWeight: FontWeight.w600,
                             color: Colors.white.withValues(alpha: 0.9),
@@ -123,7 +123,7 @@ class StreakSummaryCard extends ConsumerWidget {
                         ),
                         Text(
                           '$count ${'streak_days'.tr()}',
-                          style: GoogleFonts.outfit(
+                          style: AppFonts.outfit(
                             fontSize: 11,
                             fontWeight: FontWeight.bold,
                             color: hasStreak
