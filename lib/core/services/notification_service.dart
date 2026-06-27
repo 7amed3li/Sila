@@ -212,7 +212,7 @@ class NotificationService {
       debugPrint(
           '[${DateTime.now().toIso8601String()}][NotificationService] FlutterLocalNotificationsPlugin.initialize...');
       const androidSettings =
-          AndroidInitializationSettings('@mipmap/ic_launcher');
+          AndroidInitializationSettings('@mipmap/launcher_icon');
       const iosSettings = DarwinInitializationSettings(
         requestAlertPermission: true,
         requestBadgePermission: true,
@@ -532,7 +532,7 @@ class NotificationService {
     String? soundFile,
     bool silent = false,
   }) async {
-    if (!_initialized) {
+    if (!_initialized && !_initializing) {
       await initializeLocal();
       if (!_initialized) {
         debugPrint('❌ NotificationService not initialized');
@@ -551,15 +551,32 @@ class NotificationService {
 
     final useSilent = silent || soundFile == null || soundFile.trim().isEmpty;
     final soundName = useSilent ? null : soundFile.split('.').first;
+    final channelId = useSilent ? _channels['silent']! : 'adhan_$soundName';
+
+    // يجب إنشاء الـ Channel ديناميكياً مع الصوت المختار لأن أندرويد لا يسمح بتغيير صوت القناة بعد إنشائها
+    if (!useSilent && soundName != null) {
+      final android = _notifications.resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>();
+      await android?.createNotificationChannel(AndroidNotificationChannel(
+        channelId,
+        'أذان الصلاة',
+        description: 'إشعارات أذان الصلاة المخصصة',
+        importance: Importance.max,
+        playSound: true,
+        enableVibration: true,
+        enableLights: true,
+        sound: RawResourceAndroidNotificationSound(soundName),
+      ));
+    }
 
     final androidDetails = AndroidNotificationDetails(
-      useSilent ? _channels['silent']! : _channels['adhan']!,
+      channelId,
       useSilent ? 'تنبيهات الصلاة الصامتة' : 'أذان الصلاة',
       channelDescription:
           useSilent ? 'تنبيهات نصية للصلاة بدون صوت' : 'إشعارات أذان الصلاة',
       importance: Importance.max,
       priority: Priority.high,
-      icon: '@mipmap/ic_launcher',
+      icon: '@mipmap/launcher_icon',
       playSound: !useSilent,
       sound: useSilent ? null : RawResourceAndroidNotificationSound(soundName!),
       enableVibration: !useSilent,
@@ -625,7 +642,7 @@ class NotificationService {
     required String body,
     required DateTime dateTime,
   }) async {
-    if (!_initialized) await initializeLocal();
+    if (!_initialized && !_initializing) await initializeLocal();
 
     // Timezone safety check: ensure local timezone object is accessible.
     late final tz.Location location;
@@ -710,7 +727,7 @@ class NotificationService {
     String? payload,
     String channelKey = 'reminder',
   }) async {
-    if (!_initialized) await initializeLocal();
+    if (!_initialized && !_initializing) await initializeLocal();
     final scheduledTime = tz.TZDateTime.from(dateTime, tz.local);
 
     final channelId = _channels[channelKey] ?? _channels['reminder']!;
@@ -1051,7 +1068,7 @@ class NotificationService {
       presentBadge: false,
       presentSound: false,
     );
-    final details =
+    const details =
         NotificationDetails(android: androidDetails, iOS: iosDetails);
     await _notifications.show(id, title, body, details,
         payload: 'download_waiting');
@@ -1061,14 +1078,57 @@ class NotificationService {
   String? get lastDownloadUrl => _lastDownloadUrl;
 
   Future<void> rescheduleAllOnBoot() async {
-    if (!_initialized) await initializeLocal();
+    if (!_initialized && !_initializing) await initializeLocal();
     try {
       final isar = await IsarService().db;
       final repo = IsarNotificationRepository(isar);
       final userLang = await PrefsService().getUserLanguage() ?? 'ar';
       final allSettings = await repo.getAllSettings();
+
+      // --- نظام الإشعارات الذكي: تحليل التجمعات (Anti-Clustering) والتعلم ---
+      final hourCounts = <int, int>{};
+      for (final s in allSettings) {
+        if (s.isEnabled && s.timingType == 'fixed') {
+          hourCounts[s.fixedHour] = (hourCounts[s.fixedHour] ?? 0) + 1;
+        }
+      }
+
       for (final setting in allSettings) {
         if (!setting.isEnabled || setting.timingType != 'fixed') continue;
+
+        var changed = false;
+
+        // 1. التعلم الذاتي: إذا تم تجاهل الإشعار المتكرر، نغير موعده تلقائياً
+        if (setting.needsReschedule) {
+          setting.fixedHour = (setting.fixedHour + 2) % 24;
+          setting.consecutiveIgnored = 0; // تصفير العداد بعد التغيير
+          changed = true;
+          debugPrint(
+              '🧠 SmartNotification: Rescheduling ${setting.featureKey} due to ignores. New time: ${setting.fixedHour}:00');
+        }
+
+        // 2. منع الازدحام (Anti-Clustering): إذا كان هناك أكثر من إشعارين في نفس الساعة، نقوم بتوزيعها
+        int currentCount = hourCounts[setting.fixedHour] ?? 0;
+        if (currentCount > 2 && setting.tapCount == 0) {
+          // نوزع فقط إذا لم يتفاعل معها المستخدم من قبل
+          hourCounts[setting.fixedHour] = currentCount - 1;
+          // نبحث عن ساعة أقل ازدحاماً
+          int newHour = (setting.fixedHour + 1) % 24;
+          while ((hourCounts[newHour] ?? 0) >= 2) {
+            newHour = (newHour + 1) % 24;
+          }
+          setting.fixedHour = newHour;
+          hourCounts[newHour] = (hourCounts[newHour] ?? 0) + 1;
+          changed = true;
+          debugPrint(
+              '🧠 SmartNotification: Anti-clustering shifted ${setting.featureKey} to ${setting.fixedHour}:00');
+        }
+
+        if (changed) {
+          await repo.saveSettings(setting);
+        }
+        // ------------------------------------------------------------------------
+
         final now = DateTime.now();
         var scheduled = DateTime(
           now.year,
@@ -1394,7 +1454,7 @@ class NotificationService {
             channelDescription: 'إشعارات أذان الصلاة',
             importance: Importance.max,
             priority: Priority.high,
-            icon: '@mipmap/ic_launcher',
+            icon: '@mipmap/launcher_icon',
           ),
         ),
         payload: 'test',
@@ -1431,7 +1491,7 @@ class NotificationService {
       channelDescription: 'إشعارات أذان الصلاة',
       importance: Importance.max,
       priority: Priority.high,
-      icon: '@mipmap/ic_launcher',
+      icon: '@mipmap/launcher_icon',
     );
 
     const iosDetails = DarwinNotificationDetails(

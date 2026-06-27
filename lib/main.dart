@@ -19,71 +19,73 @@ import 'package:timezone/data/latest.dart' as tz;
 final GlobalKey<NavigatorState> appNavigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
-  final totalSw = Stopwatch()..start();
-  final phaseSw = Stopwatch();
-  WidgetsFlutterBinding.ensureInitialized();
-
-  // ── Phase 1: Timezone ──
-  phaseSw
-    ..reset()
-    ..start();
-  tz.initializeTimeZones();
-  phaseSw.stop();
-  final tzMs = phaseSw.elapsedMilliseconds;
-  debugPrint('⏱ [BENCHMARK] 1. Timezone init: ${tzMs}ms');
-
-  // ── Phase 2: Firebase ──
-  phaseSw
-    ..reset()
-    ..start();
-  await Firebase.initializeApp();
-  phaseSw.stop();
-  final firebaseMs = phaseSw.elapsedMilliseconds;
-  debugPrint('⏱ [BENCHMARK] 2. Firebase.initializeApp(): ${firebaseMs}ms');
-
-  // ── Phase 3: NotificationService ──
-  phaseSw
-    ..reset()
-    ..start();
-  await NotificationService().initializeLocal();
-  phaseSw.stop();
-  final notifMs = phaseSw.elapsedMilliseconds;
-  debugPrint(
-      '⏱ [BENCHMARK] 3. NotificationService.initializeLocal(): ${notifMs}ms');
-
-  // ── Phase 4: SharedPreferences ──
-  phaseSw
-    ..reset()
-    ..start();
-  final prefs = await SharedPreferences.getInstance();
-  final isLanguageSelected = prefs.getBool('is_language_selected') ?? false;
-  phaseSw.stop();
-  final prefsMs = phaseSw.elapsedMilliseconds;
-  debugPrint('⏱ [BENCHMARK] 4. SharedPreferences: ${prefsMs}ms');
-
-  totalSw.stop();
-  final totalPreRunApp = totalSw.elapsedMilliseconds;
-
-  debugPrint('');
-  debugPrint('╔══════════════════════════════════════════╗');
-  debugPrint('║     STARTUP BENCHMARK (before runApp)    ║');
-  debugPrint('╠══════════════════════════════════════════╣');
-  debugPrint('║ 1. Timezone init:          ${tzMs.toString().padLeft(6)}ms ║');
-  debugPrint(
-      '║ 2. Firebase.initializeApp: ${firebaseMs.toString().padLeft(6)}ms ║');
-  debugPrint(
-      '║ 3. NotificationService:    ${notifMs.toString().padLeft(6)}ms ║');
-  debugPrint(
-      '║ 4. SharedPreferences:      ${prefsMs.toString().padLeft(6)}ms ║');
-  debugPrint('║────────────────────────────────────────── ║');
-  debugPrint(
-      '║ TOTAL before runApp:       ${totalPreRunApp.toString().padLeft(6)}ms ║');
-  debugPrint('╚══════════════════════════════════════════╝');
-  debugPrint('');
-
-  debugPrint('🚩 [main.dart] About to runApp...');
-
   try {
+    final totalSw = Stopwatch()..start();
+    final phaseSw = Stopwatch();
+    WidgetsFlutterBinding.ensureInitialized();
+    await EasyLocalization.ensureInitialized();
+
+    // ── Phase 1: Timezone ──
+    phaseSw
+      ..reset()
+      ..start();
+    tz.initializeTimeZones();
+    phaseSw.stop();
+    final tzMs = phaseSw.elapsedMilliseconds;
+    debugPrint('⏱ [BENCHMARK] 1. Timezone init: ${tzMs}ms');
+
+    // ── Phase 2: Firebase ──
+    phaseSw
+      ..reset()
+      ..start();
+    await Firebase.initializeApp();
+    phaseSw.stop();
+    final firebaseMs = phaseSw.elapsedMilliseconds;
+    debugPrint('⏱ [BENCHMARK] 2. Firebase.initializeApp(): ${firebaseMs}ms');
+
+    // ── Phase 3: NotificationService ──
+    phaseSw
+      ..reset()
+      ..start();
+    await NotificationService().initializeLocal();
+    phaseSw.stop();
+    final notifMs = phaseSw.elapsedMilliseconds;
+    debugPrint(
+        '⏱ [BENCHMARK] 3. NotificationService.initializeLocal(): ${notifMs}ms');
+
+    // ── Phase 4: SharedPreferences ──
+    phaseSw
+      ..reset()
+      ..start();
+    final prefs = await SharedPreferences.getInstance();
+    final isLanguageSelected = prefs.getBool('is_language_selected') ?? false;
+    phaseSw.stop();
+    final prefsMs = phaseSw.elapsedMilliseconds;
+    debugPrint('⏱ [BENCHMARK] 4. SharedPreferences: ${prefsMs}ms');
+
+    totalSw.stop();
+    final totalPreRunApp = totalSw.elapsedMilliseconds;
+
+    debugPrint('');
+    debugPrint('╔══════════════════════════════════════════╗');
+    debugPrint('║     STARTUP BENCHMARK (before runApp)    ║');
+    debugPrint('╠══════════════════════════════════════════╣');
+    debugPrint(
+        '║ 1. Timezone init:          ${tzMs.toString().padLeft(6)}ms ║');
+    debugPrint(
+        '║ 2. Firebase.initializeApp: ${firebaseMs.toString().padLeft(6)}ms ║');
+    debugPrint(
+        '║ 3. NotificationService:    ${notifMs.toString().padLeft(6)}ms ║');
+    debugPrint(
+        '║ 4. SharedPreferences:      ${prefsMs.toString().padLeft(6)}ms ║');
+    debugPrint('║────────────────────────────────────────── ║');
+    debugPrint(
+        '║ TOTAL before runApp:       ${totalPreRunApp.toString().padLeft(6)}ms ║');
+    debugPrint('╚══════════════════════════════════════════╝');
+    debugPrint('');
+
+    debugPrint('🚩 [main.dart] About to runApp...');
+
     debugPrint('🚩 [main.dart] Before PROVIDER RUN');
     runApp(
       ProviderScope(
@@ -103,7 +105,25 @@ void main() async {
     );
     debugPrint('🚩 [main.dart] runApp completed');
   } catch (e, s) {
-    debugPrint('❌ [main.dart] runApp crashed: $e\nStack: $s');
+    debugPrint('❌ [main.dart] FATAL CRASH before runApp: $e\nStack: $s');
+    runApp(
+      MaterialApp(
+        home: Scaffold(
+          body: SingleChildScrollView(
+            child: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(
+                  'CRASH:\n$e\n\n$s',
+                  style: const TextStyle(color: Colors.red, fontSize: 12),
+                  textDirection: ui.TextDirection.ltr,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
 
