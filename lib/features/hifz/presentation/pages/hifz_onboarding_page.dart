@@ -495,8 +495,8 @@ class _TimeGoalScreen extends StatelessWidget {
               ),
               child: Text(
                 'next'.tr(),
-                style: AppFonts.cairo(
-                    fontSize: 14, fontWeight: FontWeight.w700),
+                style:
+                    AppFonts.cairo(fontSize: 14, fontWeight: FontWeight.w700),
               ),
             ),
           ),

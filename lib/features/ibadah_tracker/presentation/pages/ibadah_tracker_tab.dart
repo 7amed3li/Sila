@@ -287,8 +287,7 @@ class _IbadahTrackerTabState extends ConsumerState<IbadahTrackerTab> {
                 Navigator.pop(context);
               }
             },
-            child:
-                Text('add'.tr(), style: AppFonts.cairo(color: Colors.white)),
+            child: Text('add'.tr(), style: AppFonts.cairo(color: Colors.white)),
           ),
         ],
       ),
@@ -369,8 +368,7 @@ class _IbadahTrackerTabState extends ConsumerState<IbadahTrackerTab> {
                   children: [
                     const Text('✨', style: TextStyle(fontSize: 16)),
                     const SizedBox(width: 8),
-                    Text(name,
-                        style: AppFonts.getFont('Cairo', fontSize: 13)),
+                    Text(name, style: AppFonts.getFont('Cairo', fontSize: 13)),
                   ],
                 ),
               ),
@@ -414,8 +412,8 @@ class _IbadahTrackerTabState extends ConsumerState<IbadahTrackerTab> {
       builder: (context) => AlertDialog(
         title: Text('delete_custom_ibadah'.tr(),
             style: AppFonts.cairo(fontWeight: FontWeight.bold)),
-        content: Text('delete_custom_ibadah_confirm'.tr(),
-            style: AppFonts.cairo()),
+        content:
+            Text('delete_custom_ibadah_confirm'.tr(), style: AppFonts.cairo()),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
@@ -425,8 +423,8 @@ class _IbadahTrackerTabState extends ConsumerState<IbadahTrackerTab> {
             onPressed: () {
               Navigator.pop(context, true);
             },
-            child: Text('delete'.tr(),
-                style: AppFonts.cairo(color: Colors.red)),
+            child:
+                Text('delete'.tr(), style: AppFonts.cairo(color: Colors.red)),
           ),
         ],
       ),
@@ -507,8 +505,7 @@ class _IbadahTrackerTabState extends ConsumerState<IbadahTrackerTab> {
                   children: [
                     Text(icon, style: const TextStyle(fontSize: 16)),
                     const SizedBox(width: 8),
-                    Text(label,
-                        style: AppFonts.getFont('Cairo', fontSize: 13)),
+                    Text(label, style: AppFonts.getFont('Cairo', fontSize: 13)),
                   ],
                 ),
               ),
@@ -830,8 +827,8 @@ class MujahadahListSheet extends ConsumerWidget {
                         child: Text(
                           'أضف أول ذنب أو عادة سلبية ترغب في تركها..',
                           textAlign: TextAlign.center,
-                          style: AppFonts.cairo(
-                              color: Colors.grey, fontSize: 16),
+                          style:
+                              AppFonts.cairo(color: Colors.grey, fontSize: 16),
                         ),
                       );
                     }
@@ -1283,8 +1280,7 @@ class _GenderCard extends StatelessWidget {
             Text(icon, style: const TextStyle(fontSize: 26)),
             const SizedBox(height: 6),
             Text(label,
-                style:
-                    AppFonts.getFont('Cairo', fontWeight: FontWeight.w700)),
+                style: AppFonts.getFont('Cairo', fontWeight: FontWeight.w700)),
           ],
         ),
       ),

@@ -57,8 +57,7 @@ class _IbadahDetailSheet extends ConsumerWidget {
               SnackBar(
                 content: Text(
                   'tracker_statuses.saved_successfully'.tr(),
-                  style:
-                      AppFonts.getFont('Cairo', fontWeight: FontWeight.w700),
+                  style: AppFonts.getFont('Cairo', fontWeight: FontWeight.w700),
                 ),
                 duration: const Duration(milliseconds: 700),
                 behavior: SnackBarBehavior.floating,

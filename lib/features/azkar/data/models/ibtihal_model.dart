@@ -1,7 +1,6 @@
 import 'package:equatable/equatable.dart';
 
 class Ibtihal extends Equatable {
-
   const Ibtihal({
     required this.id,
     required this.title,

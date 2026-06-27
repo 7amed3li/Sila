@@ -55,10 +55,10 @@ class StreakTracker {
     if (!milestones.contains(days)) return;
     final lang = await _currentLanguage();
     final feature = _featureName(featureKey, lang);
-        final featureHash = featureKey
-          .toLowerCase()
-          .codeUnits
-          .fold<int>(0, (acc, unit) => (acc * 31 + unit) % 800);
+    final featureHash = featureKey
+        .toLowerCase()
+        .codeUnits
+        .fold<int>(0, (acc, unit) => (acc * 31 + unit) % 800);
     final notificationId =
         NotificationIds.streakMilestone + (days * 10) + featureHash;
 

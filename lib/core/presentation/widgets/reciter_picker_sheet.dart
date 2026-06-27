@@ -145,8 +145,7 @@ class _StyleBadge extends StatelessWidget {
       ),
       child: Text(
         style,
-        style:
-            AppFonts.getFont('Cairo', fontSize: 10, color: Colors.grey[700]),
+        style: AppFonts.getFont('Cairo', fontSize: 10, color: Colors.grey[700]),
       ),
     );
   }

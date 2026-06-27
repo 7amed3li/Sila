@@ -238,7 +238,8 @@ class _NotificationInboxCard extends ConsumerWidget {
             }
 
             if (notif.payload != null && notif.payload!.trim().isNotEmpty) {
-              await NotificationService().handleNotificationPayload(notif.payload);
+              await NotificationService()
+                  .handleNotificationPayload(notif.payload);
               if (!context.mounted) return;
               return;
             }

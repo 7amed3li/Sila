@@ -97,8 +97,8 @@ class WirdCard extends ConsumerWidget {
               ),
               child: Text(
                 'start_setup'.tr(),
-                style: AppFonts.cairo(
-                    fontWeight: FontWeight.bold, fontSize: 16),
+                style:
+                    AppFonts.cairo(fontWeight: FontWeight.bold, fontSize: 16),
               ),
             ),
           ),
@@ -619,8 +619,8 @@ class WirdCard extends ConsumerWidget {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('later'.tr(),
-                style: AppFonts.outfit(color: Colors.grey)),
+            child:
+                Text('later'.tr(), style: AppFonts.outfit(color: Colors.grey)),
           ),
           const SizedBox(width: 8),
           FilledButton(

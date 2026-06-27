@@ -1,5 +1,4 @@
 class ReviewSchedule {
-
   const ReviewSchedule({
     required this.nextIntervalDays,
     required this.newEasinessFactor,

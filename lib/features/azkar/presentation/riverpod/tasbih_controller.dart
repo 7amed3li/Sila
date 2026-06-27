@@ -1,7 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class TasbihState {
-
   TasbihState({
     required this.counts,
     required this.activeZikrKey,
@@ -25,7 +24,6 @@ class TasbihState {
 }
 
 class TasbihController extends StateNotifier<TasbihState> {
-
   TasbihController()
       : super(TasbihState(
           counts: {for (var key in availableAzkar) key: 0},

@@ -422,7 +422,8 @@ class InteractiveShadowController extends _$InteractiveShadowController {
               words[idx].copyWith(isHidden: false, revealedCorrectly: true);
           correct++;
         } else {
-          final wasAbsent = _isWordAbsentFromSpoken(hiddenWords[i], recitedText);
+          final wasAbsent =
+              _isWordAbsentFromSpoken(hiddenWords[i], recitedText);
           if (!wasAbsent) {
             // The user spoke it but incorrectly.
             wrong++;

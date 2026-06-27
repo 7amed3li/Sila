@@ -23,7 +23,6 @@ class PrayerRepositoryImpl extends PrayerRepository {
   static DateTime? _cachedPrayerTimesAt;
   static String? _cachedPrayerTimesKey;
 
-
   static Prayer? _cachedNextPrayer;
   static DateTime? _cachedNextPrayerAt;
 
@@ -94,7 +93,8 @@ class PrayerRepositoryImpl extends PrayerRepository {
     final isAuto = await prefs.isAutoLocation();
 
     // 1. FAST PATH: Check memory cache first
-    if (_cachedPrayerTimes != null && _isFresh(_cachedPrayerTimesAt, _prayerTimesTtl)) {
+    if (_cachedPrayerTimes != null &&
+        _isFresh(_cachedPrayerTimesAt, _prayerTimesTtl)) {
       debugPrint('⏱ [PRAYER-CACHE] Using IN-MEMORY cache (0ms)');
       if (isAuto) {
         unawaited(_refreshLocationInBackground(prefs, methodString));
@@ -110,12 +110,12 @@ class PrayerRepositoryImpl extends PrayerRepository {
       final long = stored['long'] as double;
       final city = stored['city'] as String;
       final countryCode = stored['countryCode'] as String? ?? 'TR';
-      
+
       final result = _calculatePrayerTimesLocally(
-        lat: lat, 
-        long: long, 
-        city: city, 
-        countryCode: countryCode, 
+        lat: lat,
+        long: long,
+        city: city,
+        countryCode: countryCode,
         method: methodString,
         isAuto: isAuto,
       );
@@ -129,8 +129,9 @@ class PrayerRepositoryImpl extends PrayerRepository {
     }
 
     // 3. FRESH INSTALL PATH (No stored location yet)
-    debugPrint('⏱ [PRAYER-CACHE] NO CACHE FOUND. Awaiting actual GPS location (Fresh Install)...');
-    
+    debugPrint(
+        '⏱ [PRAYER-CACHE] NO CACHE FOUND. Awaiting actual GPS location (Fresh Install)...');
+
     // We await the background refresh so the UI shows a loading spinner
     // instead of showing wrong default data.
     await _refreshLocationInBackground(prefs, methodString);
@@ -151,7 +152,8 @@ class PrayerRepositoryImpl extends PrayerRepository {
     );
   }
 
-  Future<void> _refreshLocationInBackground(PrefsService prefs, String methodString) async {
+  Future<void> _refreshLocationInBackground(
+      PrefsService prefs, String methodString) async {
     try {
       final locService = LocationService();
       final now = DateTime.now();
@@ -163,9 +165,10 @@ class PrayerRepositoryImpl extends PrayerRepository {
 
       // Add a 10-second timeout to prevent infinite hanging
       final position = await locService.determinePosition().timeout(
-        const Duration(seconds: 10),
-        onTimeout: () => throw TimeoutException('GPS request timed out after 10s'),
-      );
+            const Duration(seconds: 10),
+            onTimeout: () =>
+                throw TimeoutException('GPS request timed out after 10s'),
+          );
       final newLat = position.latitude;
       final newLong = position.longitude;
 
@@ -198,9 +201,10 @@ class PrayerRepositoryImpl extends PrayerRepository {
           methodString = autoMethod;
         }
 
-        await prefs.saveManualLocation(newLat, newLong, city, countryCode: countryCode);
+        await prefs.saveManualLocation(newLat, newLong, city,
+            countryCode: countryCode);
         await prefs.setAutoLocation(true);
-        
+
         _calculatePrayerTimesLocally(
           lat: newLat,
           long: newLong,
@@ -210,9 +214,8 @@ class PrayerRepositoryImpl extends PrayerRepository {
           isAuto: true,
         );
       }
-      
-      _lastAutoLocationFetchAt = now;
 
+      _lastAutoLocationFetchAt = now;
     } catch (e) {
       debugPrint('Background Location Error: $e');
       // If there's an error (like permission denied) and we have absolutely no cache,
@@ -275,7 +278,6 @@ class PrayerRepositoryImpl extends PrayerRepository {
     return result;
   }
 
-
   @override
   Future<Prayer> getNextPrayer() async {
     if (_cachedPrayerTimes != null &&
@@ -284,7 +286,8 @@ class PrayerRepositoryImpl extends PrayerRepository {
       return _resolveNextPrayer(_cachedPrayerTimes!);
     }
 
-    if (_cachedNextPrayer != null && _isFresh(_cachedNextPrayerAt, const Duration(minutes: 1))) {
+    if (_cachedNextPrayer != null &&
+        _isFresh(_cachedNextPrayerAt, const Duration(minutes: 1))) {
       return _cachedNextPrayer!;
     }
 

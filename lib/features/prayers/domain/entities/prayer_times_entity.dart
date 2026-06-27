@@ -29,7 +29,7 @@ class PrayerTimesEntity extends Equatable {
   final String countryCode; // e.g. "TR", "EG", "SA"
   final String calculationMethod;
   final DateTime lastUpdated;
-  
+
   // محسوبة: تعتبر المواقيت قديمة إذا مضى على آخر تحديث أكثر من 24 ساعة
   bool isStaleAt(DateTime now) => now.difference(lastUpdated).inHours >= 24;
 

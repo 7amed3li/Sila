@@ -435,7 +435,7 @@ class _SurahDetailPageState extends ConsumerState<SurahDetailPage> {
                     }
                   }),
           );
-                  return s;
+          return s;
         }).toList(),
       ),
     ];
@@ -708,7 +708,8 @@ class _SurahDetailPageState extends ConsumerState<SurahDetailPage> {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
           color: isSelected
-              ? QuranUIUtils.getAccentColor(settings.themeMode).withValues(alpha: 0.1)
+              ? QuranUIUtils.getAccentColor(settings.themeMode)
+                  .withValues(alpha: 0.1)
               : Colors.transparent,
           borderRadius: BorderRadius.circular(20),
           border: Border.all(

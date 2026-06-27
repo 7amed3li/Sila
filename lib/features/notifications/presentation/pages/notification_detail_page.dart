@@ -365,8 +365,7 @@ class _TafsirCardState extends State<_TafsirCard> {
           if (tafsir == null || tafsir.isEmpty) {
             return Text(
               'تعذر تحميل التفسير الآن. سيبقى النص القرآني متاحًا بالكامل دون إنترنت.',
-              style:
-                  AppFonts.getFont('Cairo', fontSize: 12, color: subtitle),
+              style: AppFonts.getFont('Cairo', fontSize: 12, color: subtitle),
             );
           }
 

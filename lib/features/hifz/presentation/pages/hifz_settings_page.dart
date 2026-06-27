@@ -86,8 +86,7 @@ class HifzSettingsPage extends ConsumerWidget {
               SwitchListTile.adaptive(
                 contentPadding: EdgeInsets.zero,
                 activeColor: AppTheme.primaryColor,
-                title:
-                    Text('ignore_diacritics'.tr(), style: AppFonts.cairo()),
+                title: Text('ignore_diacritics'.tr(), style: AppFonts.cairo()),
                 subtitle: Text(
                   'ignore_diacritics_subtitle'.tr(),
                   style: AppFonts.cairo(fontSize: 12),
@@ -118,8 +117,7 @@ class HifzSettingsPage extends ConsumerWidget {
               SwitchListTile.adaptive(
                 contentPadding: EdgeInsets.zero,
                 activeColor: AppTheme.primaryColor,
-                title:
-                    Text('smart_strictness'.tr(), style: AppFonts.cairo()),
+                title: Text('smart_strictness'.tr(), style: AppFonts.cairo()),
                 value: settings.smartStrictness,
                 onChanged: (v) => controller.updateSettings(smartStrictness: v),
               ),
@@ -176,8 +174,7 @@ class _StepperTile extends StatelessWidget {
     return Card(
       margin: const EdgeInsets.only(bottom: 8),
       child: ListTile(
-        title:
-            Text(title, style: AppFonts.cairo(fontWeight: FontWeight.w700)),
+        title: Text(title, style: AppFonts.cairo(fontWeight: FontWeight.w700)),
         subtitle: Text(subtitle, style: AppFonts.cairo(fontSize: 12)),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,

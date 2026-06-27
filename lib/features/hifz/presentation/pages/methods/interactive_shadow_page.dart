@@ -138,7 +138,8 @@ class _InteractiveShadowPageState extends ConsumerState<InteractiveShadowPage>
                     return;
                   }
                   setState(() {
-                    _showMiuiBatteryBannerFuture = _shouldShowMiuiBatteryBanner();
+                    _showMiuiBatteryBannerFuture =
+                        _shouldShowMiuiBatteryBanner();
                   });
                 },
                 child: Text(
@@ -157,8 +158,8 @@ class _InteractiveShadowPageState extends ConsumerState<InteractiveShadowPage>
     final controller = ref.read(interactiveShadowControllerProvider.notifier);
     RecitationCompletionMode selectedMode = RecitationCompletionMode.fullVerse;
     try {
-      selectedMode =
-          await _showCompletionModeDialog(context) ?? RecitationCompletionMode.fullVerse;
+      selectedMode = await _showCompletionModeDialog(context) ??
+          RecitationCompletionMode.fullVerse;
     } catch (e) {
       debugPrint('Recitation mode dialog failed: $e');
     }
@@ -469,8 +470,8 @@ class _InteractiveShadowPageState extends ConsumerState<InteractiveShadowPage>
                                           borderRadius:
                                               BorderRadius.circular(16),
                                           side: BorderSide(
-                                              color:
-                                                  textColor.withValues(alpha: 0.1))),
+                                              color: textColor.withValues(
+                                                  alpha: 0.1))),
                                       title: Text(
                                         'finish_session_title'.tr(),
                                         style: AppFonts.cairo(
@@ -481,7 +482,8 @@ class _InteractiveShadowPageState extends ConsumerState<InteractiveShadowPage>
                                       content: Text(
                                         'finish_session_desc'.tr(),
                                         style: AppFonts.cairo(
-                                            color: textColor.withValues(alpha: 0.7),
+                                            color: textColor.withValues(
+                                                alpha: 0.7),
                                             fontSize: 13),
                                         textAlign: TextAlign.center,
                                       ),
@@ -493,8 +495,8 @@ class _InteractiveShadowPageState extends ConsumerState<InteractiveShadowPage>
                                               Navigator.pop(ctx, false),
                                           child: Text('cancel'.tr(),
                                               style: AppFonts.cairo(
-                                                  color: textColor
-                                                      .withValues(alpha: 0.5))),
+                                                  color: textColor.withValues(
+                                                      alpha: 0.5))),
                                         ),
                                         ElevatedButton(
                                           onPressed: () =>
@@ -666,7 +668,8 @@ class _TopHeader extends ConsumerWidget {
                   decoration: BoxDecoration(
                     color: Colors.white.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
+                    border:
+                        Border.all(color: Colors.white.withValues(alpha: 0.2)),
                   ),
                   child: Row(
                     children: [
@@ -676,7 +679,8 @@ class _TopHeader extends ConsumerWidget {
                       Text(
                         reciterLabel,
                         style: AppFonts.cairo(
-                            fontSize: 10, color: Colors.white.withValues(alpha: 0.9)),
+                            fontSize: 10,
+                            color: Colors.white.withValues(alpha: 0.9)),
                       ),
                     ],
                   ),
@@ -691,7 +695,8 @@ class _TopHeader extends ConsumerWidget {
                   decoration: BoxDecoration(
                     color: Colors.white.withValues(alpha: 0.15),
                     shape: BoxShape.circle,
-                    border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
+                    border:
+                        Border.all(color: Colors.white.withValues(alpha: 0.2)),
                   ),
                   child: const Center(
                     child: Text('💎', style: TextStyle(fontSize: 14)),
@@ -729,7 +734,8 @@ class _StageBanner extends ConsumerWidget {
       decoration: BoxDecoration(
         color: bgColor,
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: accentColor.withValues(alpha: 0.2), width: 0.5),
+        border:
+            Border.all(color: accentColor.withValues(alpha: 0.2), width: 0.5),
       ),
       child: Center(
         child: Text(
@@ -829,40 +835,42 @@ class _StageContent extends ConsumerWidget {
                     runSpacing: 8,
                     alignment: WrapAlignment.center,
                     children: state.words.asMap().entries.map((entry) {
-                final index = entry.key;
-                final word = entry.value;
+                      final index = entry.key;
+                      final word = entry.value;
 
-                if (!word.isHidden ||
-                    word.isAyahMarker ||
-                    pageState == null) {
-                  return _WordChip(entry: word);
-                }
+                      if (!word.isHidden ||
+                          word.isAyahMarker ||
+                          pageState == null) {
+                        return _WordChip(entry: word);
+                      }
 
-                final textController = pageState._inlineControllers[index]!;
-                final focusNode = pageState._inlineFocusNodes[index]!;
-                final validation = controller.inlineWordValidation(index);
+                      final textController =
+                          pageState._inlineControllers[index]!;
+                      final focusNode = pageState._inlineFocusNodes[index]!;
+                      final validation = controller.inlineWordValidation(index);
 
-                return _InlineWordInput(
-                  index: index,
-                  hiddenWord: word.word,
-                  controller: textController,
-                  focusNode: focusNode,
-                  isCorrect: word.revealedCorrectly ? true : validation,
-                  onChanged: (value) async {
-                    await controller.onWordTyped(index, value);
-                    final updated =
-                        pageState.ref.read(interactiveShadowControllerProvider);
-                    final nextIndex =
-                        pageState._findNextHiddenIndex(updated.words, index);
-                    if (nextIndex != null &&
-                        controller.inlineWordValidation(index) == true &&
-                        pageState._inlineFocusNodes[nextIndex] != null) {
-                      pageState._inlineFocusNodes[nextIndex]!.requestFocus();
-                    }
-                  },
-                );
-              }).toList(),
-            ),
+                      return _InlineWordInput(
+                        index: index,
+                        hiddenWord: word.word,
+                        controller: textController,
+                        focusNode: focusNode,
+                        isCorrect: word.revealedCorrectly ? true : validation,
+                        onChanged: (value) async {
+                          await controller.onWordTyped(index, value);
+                          final updated = pageState.ref
+                              .read(interactiveShadowControllerProvider);
+                          final nextIndex = pageState._findNextHiddenIndex(
+                              updated.words, index);
+                          if (nextIndex != null &&
+                              controller.inlineWordValidation(index) == true &&
+                              pageState._inlineFocusNodes[nextIndex] != null) {
+                            pageState._inlineFocusNodes[nextIndex]!
+                                .requestFocus();
+                          }
+                        },
+                      );
+                    }).toList(),
+                  ),
                 ),
         );
       },
@@ -931,7 +939,8 @@ class _WordChip extends ConsumerWidget {
           color: const Color(0xFF10B981).withValues(alpha: 0.15),
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
-              color: const Color(0xFF10B981).withValues(alpha: 0.4), width: 0.5),
+              color: const Color(0xFF10B981).withValues(alpha: 0.4),
+              width: 0.5),
         ),
         child: Text(
           entry.word,
@@ -953,12 +962,15 @@ class _WordChip extends ConsumerWidget {
         color: textColor.withValues(alpha: 0.03),
         borderRadius: BorderRadius.circular(8),
         border: Border(
-            bottom: BorderSide(color: textColor.withValues(alpha: 0.2), width: 1.5)),
+            bottom: BorderSide(
+                color: textColor.withValues(alpha: 0.2), width: 1.5)),
       ),
       child: Text(
         '—' * dashCount,
         style: TextStyle(
-            fontSize: 16, color: textColor.withValues(alpha: 0.2), letterSpacing: 4),
+            fontSize: 16,
+            color: textColor.withValues(alpha: 0.2),
+            letterSpacing: 4),
       ),
     );
   }
@@ -995,7 +1007,8 @@ class _AudioBar extends ConsumerWidget {
       decoration: BoxDecoration(
         color: containerColor,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: accentColor.withValues(alpha: 0.1), width: 0.5),
+        border:
+            Border.all(color: accentColor.withValues(alpha: 0.1), width: 0.5),
       ),
       child: Row(
         children: [
@@ -1108,8 +1121,8 @@ class _InlineWordInput extends ConsumerWidget {
                 border: InputBorder.none,
                 contentPadding: const EdgeInsets.symmetric(horizontal: 8),
                 hintText: '...',
-                hintStyle:
-                    TextStyle(color: textColor.withValues(alpha: 0.2), fontSize: 18),
+                hintStyle: TextStyle(
+                    color: textColor.withValues(alpha: 0.2), fontSize: 18),
               ),
               onChanged: onChanged,
               textInputAction: TextInputAction.next,
@@ -1193,7 +1206,8 @@ class _WritingModeBar extends ConsumerWidget {
             decoration: BoxDecoration(
               color: textColor.withValues(alpha: 0.07),
               shape: BoxShape.circle,
-              border: Border.all(color: textColor.withValues(alpha: 0.2), width: 1.5),
+              border: Border.all(
+                  color: textColor.withValues(alpha: 0.2), width: 1.5),
             ),
             child: Icon(Icons.edit_note_rounded,
                 color: textColor.withValues(alpha: 0.7), size: 20),
@@ -1252,7 +1266,8 @@ class _InlineStatusMessage extends ConsumerWidget {
             .withOpacity(isDark ? 0.3 : 0.1);
     final borderColor = isError
         ? const Color(0xFFEF4444).withValues(alpha: 0.45)
-        : QuranUIUtils.getAccentColor(settings.themeMode).withValues(alpha: 0.4);
+        : QuranUIUtils.getAccentColor(settings.themeMode)
+            .withValues(alpha: 0.4);
     final textColor = isError
         ? (isDark ? const Color(0xFFFECACA) : const Color(0xFFB91C1C))
         : QuranUIUtils.getAccentColor(settings.themeMode);
@@ -1392,7 +1407,8 @@ class _MicBar extends ConsumerWidget {
                           ? 'speak_clearly'.tr()
                           : 'tap_to_start_mic'.tr(),
                       style: AppFonts.cairo(
-                          fontSize: 9.5, color: textColor.withValues(alpha: 0.4)),
+                          fontSize: 9.5,
+                          color: textColor.withValues(alpha: 0.4)),
                     ),
                     const SizedBox(height: 5),
                     ClipRRect(
@@ -1511,7 +1527,8 @@ class _InstructionCard extends ConsumerWidget {
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: accentColor.withValues(alpha: 0.08),
-        border: Border.all(color: accentColor.withValues(alpha: 0.25), width: 0.5),
+        border:
+            Border.all(color: accentColor.withValues(alpha: 0.25), width: 0.5),
         borderRadius: BorderRadius.circular(14),
       ),
       child: Column(
@@ -1803,8 +1820,7 @@ class _SessionResultsViewState extends ConsumerState<_SessionResultsView> {
                 if (shown.isEmpty) {
                   return Text(
                     'no_review_items'.tr(),
-                    style:
-                        AppFonts.cairo(fontSize: 12, color: onSurfaceMuted),
+                    style: AppFonts.cairo(fontSize: 12, color: onSurfaceMuted),
                   );
                 }
 
@@ -1906,8 +1922,8 @@ class _SessionResultsViewState extends ConsumerState<_SessionResultsView> {
                     children: [
                       Text(
                         'hasanat_earned_title'.tr(),
-                        style: AppFonts.cairo(
-                            fontSize: 12, color: onSurfaceMuted),
+                        style:
+                            AppFonts.cairo(fontSize: 12, color: onSurfaceMuted),
                       ),
                       Text(
                         _toArabicIndic(context, widget.state.sessionHashanat),
@@ -1919,8 +1935,8 @@ class _SessionResultsViewState extends ConsumerState<_SessionResultsView> {
                       ),
                       Text(
                         'inshaallah'.tr(),
-                        style: AppFonts.cairo(
-                            fontSize: 11, color: onSurfaceMuted),
+                        style:
+                            AppFonts.cairo(fontSize: 11, color: onSurfaceMuted),
                       ),
                     ],
                   ),
@@ -1936,8 +1952,8 @@ class _SessionResultsViewState extends ConsumerState<_SessionResultsView> {
               icon: const Text('💛', style: TextStyle(fontSize: 16)),
               label: Text(
                 'gift_thawab'.tr(),
-                style: AppFonts.cairo(
-                    fontSize: 15, fontWeight: FontWeight.w700),
+                style:
+                    AppFonts.cairo(fontSize: 15, fontWeight: FontWeight.w700),
               ),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppTheme.accentColor,
@@ -1964,8 +1980,8 @@ class _SessionResultsViewState extends ConsumerState<_SessionResultsView> {
                             widget.state.currentVerseIndex +
                             1)
                   ]),
-                  style: AppFonts.cairo(
-                      fontSize: 15, fontWeight: FontWeight.w700),
+                  style:
+                      AppFonts.cairo(fontSize: 15, fontWeight: FontWeight.w700),
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppTheme.primaryColor,
@@ -2125,8 +2141,8 @@ class _MomentCaptureSheetState extends ConsumerState<_MomentCaptureSheet> {
     Widget feelingChip(String emoji, String label) {
       final selected = _selectedFeeling == label;
       return ChoiceChip(
-        label: Text('$emoji ${label.tr()}',
-            style: AppFonts.cairo(fontSize: 11)),
+        label:
+            Text('$emoji ${label.tr()}', style: AppFonts.cairo(fontSize: 11)),
         selected: selected,
         showCheckmark: false,
         onSelected: (_) => setState(() => _selectedFeeling = label),
@@ -2177,7 +2193,9 @@ class _MomentCaptureSheetState extends ConsumerState<_MomentCaptureSheet> {
             child: Text(
               widget.verseText,
               style: AppFonts.amiri(
-                  fontSize: 14, color: textColor.withValues(alpha: 0.8), height: 2.0),
+                  fontSize: 14,
+                  color: textColor.withValues(alpha: 0.8),
+                  height: 2.0),
               textAlign: TextAlign.center,
             ),
           ),
@@ -2246,7 +2264,8 @@ class _MomentCaptureSheetState extends ConsumerState<_MomentCaptureSheet> {
                   ),
                   child: Text('skip'.tr(),
                       style: AppFonts.cairo(
-                          fontSize: 12, color: textColor.withValues(alpha: 0.5))),
+                          fontSize: 12,
+                          color: textColor.withValues(alpha: 0.5))),
                 ),
               ),
               const SizedBox(width: 10),

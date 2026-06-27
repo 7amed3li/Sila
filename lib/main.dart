@@ -24,28 +24,37 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // ── Phase 1: Timezone ──
-  phaseSw..reset()..start();
+  phaseSw
+    ..reset()
+    ..start();
   tz.initializeTimeZones();
   phaseSw.stop();
   final tzMs = phaseSw.elapsedMilliseconds;
   debugPrint('⏱ [BENCHMARK] 1. Timezone init: ${tzMs}ms');
 
   // ── Phase 2: Firebase ──
-  phaseSw..reset()..start();
+  phaseSw
+    ..reset()
+    ..start();
   await Firebase.initializeApp();
   phaseSw.stop();
   final firebaseMs = phaseSw.elapsedMilliseconds;
   debugPrint('⏱ [BENCHMARK] 2. Firebase.initializeApp(): ${firebaseMs}ms');
 
   // ── Phase 3: NotificationService ──
-  phaseSw..reset()..start();
+  phaseSw
+    ..reset()
+    ..start();
   await NotificationService().initializeLocal();
   phaseSw.stop();
   final notifMs = phaseSw.elapsedMilliseconds;
-  debugPrint('⏱ [BENCHMARK] 3. NotificationService.initializeLocal(): ${notifMs}ms');
+  debugPrint(
+      '⏱ [BENCHMARK] 3. NotificationService.initializeLocal(): ${notifMs}ms');
 
   // ── Phase 4: SharedPreferences ──
-  phaseSw..reset()..start();
+  phaseSw
+    ..reset()
+    ..start();
   final prefs = await SharedPreferences.getInstance();
   final isLanguageSelected = prefs.getBool('is_language_selected') ?? false;
   phaseSw.stop();
@@ -60,19 +69,23 @@ void main() async {
   debugPrint('║     STARTUP BENCHMARK (before runApp)    ║');
   debugPrint('╠══════════════════════════════════════════╣');
   debugPrint('║ 1. Timezone init:          ${tzMs.toString().padLeft(6)}ms ║');
-  debugPrint('║ 2. Firebase.initializeApp: ${firebaseMs.toString().padLeft(6)}ms ║');
-  debugPrint('║ 3. NotificationService:    ${notifMs.toString().padLeft(6)}ms ║');
-  debugPrint('║ 4. SharedPreferences:      ${prefsMs.toString().padLeft(6)}ms ║');
+  debugPrint(
+      '║ 2. Firebase.initializeApp: ${firebaseMs.toString().padLeft(6)}ms ║');
+  debugPrint(
+      '║ 3. NotificationService:    ${notifMs.toString().padLeft(6)}ms ║');
+  debugPrint(
+      '║ 4. SharedPreferences:      ${prefsMs.toString().padLeft(6)}ms ║');
   debugPrint('║────────────────────────────────────────── ║');
-  debugPrint('║ TOTAL before runApp:       ${totalPreRunApp.toString().padLeft(6)}ms ║');
+  debugPrint(
+      '║ TOTAL before runApp:       ${totalPreRunApp.toString().padLeft(6)}ms ║');
   debugPrint('╚══════════════════════════════════════════╝');
   debugPrint('');
 
   debugPrint('🚩 [main.dart] About to runApp...');
 
-   try {
-     debugPrint('🚩 [main.dart] Before PROVIDER RUN');
-     runApp(
+  try {
+    debugPrint('🚩 [main.dart] Before PROVIDER RUN');
+    runApp(
       ProviderScope(
         child: EasyLocalization(
           supportedLocales: const [
@@ -89,24 +102,27 @@ void main() async {
       ),
     );
     debugPrint('🚩 [main.dart] runApp completed');
-   } catch (e, s) {
+  } catch (e, s) {
     debugPrint('❌ [main.dart] runApp crashed: $e\nStack: $s');
-   }
-
+  }
 }
 
 Future<void> _initBackgroundServices() async {
   final bgServicesStart = DateTime.now();
   try {
-    debugPrint('[${DateTime.now().toIso8601String()}][BG] Fetching prayer times...');
+    debugPrint(
+        '[${DateTime.now().toIso8601String()}][BG] Fetching prayer times...');
     final prayerRepo = PrayerRepositoryImpl();
     final prayerTimes = await prayerRepo.getPrayerTimes();
-    debugPrint('[${DateTime.now().toIso8601String()}][BG] Got prayerTimes. Scheduling...');
+    debugPrint(
+        '[${DateTime.now().toIso8601String()}][BG] Got prayerTimes. Scheduling...');
     final adhanScheduler = AdhanSchedulerService();
     await adhanScheduler.scheduleAllPrayers(prayerTimes);
-    debugPrint('[${DateTime.now().toIso8601String()}][BG] ScheduleAllPrayers done');
+    debugPrint(
+        '[${DateTime.now().toIso8601String()}][BG] ScheduleAllPrayers done');
     final done = DateTime.now();
-    debugPrint('[${done.toIso8601String()}][BG] Background services TOTAL: ${done.difference(bgServicesStart).inMilliseconds} ms');
+    debugPrint(
+        '[${done.toIso8601String()}][BG] Background services TOTAL: ${done.difference(bgServicesStart).inMilliseconds} ms');
   } catch (e) {
     debugPrint('❌ Background init failed: $e');
   }
@@ -132,18 +148,22 @@ class _SilaAppState extends State<SilaApp> with WidgetsBindingObserver {
       // ── Remote BG Notification Setup ──
       unawaited(NotificationService().initializeRemote());
 
-      debugPrint('[${DateTime.now().toIso8601String()}][SilaApp] Setting Notification NavigatorKey...');
+      debugPrint(
+          '[${DateTime.now().toIso8601String()}][SilaApp] Setting Notification NavigatorKey...');
       try {
         await NotificationService().setNavigatorKey(appNavigatorKey);
-        debugPrint('[${DateTime.now().toIso8601String()}][SilaApp] Notification NavigatorKey set');
+        debugPrint(
+            '[${DateTime.now().toIso8601String()}][SilaApp] Notification NavigatorKey set');
       } catch (e) {
         debugPrint('Failed to set notification navigator key: $e');
       }
 
-      debugPrint('[${DateTime.now().toIso8601String()}][SilaApp] Initializing Background Services...');
+      debugPrint(
+          '[${DateTime.now().toIso8601String()}][SilaApp] Initializing Background Services...');
       try {
         await _initBackgroundServices();
-        debugPrint('[${DateTime.now().toIso8601String()}][SilaApp] Background Services Initialized');
+        debugPrint(
+            '[${DateTime.now().toIso8601String()}][SilaApp] Background Services Initialized');
       } catch (e) {
         debugPrint('Background service bootstrap failed: $e');
       }

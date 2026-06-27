@@ -70,7 +70,8 @@ class NotificationService {
   static const int _scheduleVersion = 5;
   static const int _customReminderIdStart = 30000;
   static const String _customReminderCounterKey = 'custom_reminder_id_counter';
-  static const String _customReminderBySettingPrefix = 'custom_reminder_id_for_setting_';
+  static const String _customReminderBySettingPrefix =
+      'custom_reminder_id_for_setting_';
   static const _notificationTexts = {
     'ar': {
       'prayer_title': '🕌 حان وقت {}',
@@ -82,7 +83,8 @@ class NotificationService {
       'fallback_tasbih_title': 'لحظة للذكر والتسبيح ✦',
       'fallback_tasbih_body': 'اجعل لسانك رطبا بذكر الله.',
       'fallback_report_title': 'تقريرك اليومي جاهز 📋',
-      'fallback_report_body': 'بعد المغرب: افتح متابعتي وراجع يومك بصدق وطمأنينة.',
+      'fallback_report_body':
+          'بعد المغرب: افتح متابعتي وراجع يومك بصدق وطمأنينة.',
       'adhan_playing_title': 'الأذان يعمل الآن',
       'adhan_playing_body': 'اضغط لإيقاف الأذان',
       'adhan_stop_action': 'إيقاف الأذان',
@@ -101,18 +103,22 @@ class NotificationService {
       'fallback_azkar_title': 'Morning Azkar 🌅',
       'fallback_azkar_body': 'Start your day with remembrance of Allah.',
       'fallback_tasbih_title': 'A moment for dhikr and tasbih ✦',
-      'fallback_tasbih_body': 'Keep your tongue moist with remembrance of Allah.',
+      'fallback_tasbih_body':
+          'Keep your tongue moist with remembrance of Allah.',
       'fallback_report_title': 'Your Daily Report Is Ready 📋',
-      'fallback_report_body': 'After Maghrib: open My Tracking and review your day mindfully.',
+      'fallback_report_body':
+          'After Maghrib: open My Tracking and review your day mindfully.',
       'adhan_playing_title': 'Adhan Is Playing Now',
       'adhan_playing_body': 'Tap to stop the adhan',
       'adhan_stop_action': 'Stop Adhan',
       'debug_now_title': 'Instant Test',
       'debug_now_body': 'If this appears now, basic permission is working.',
       'debug_scheduled_title': 'Notification Test ✅',
-      'debug_scheduled_body': 'If this appears, the notification system works correctly.',
+      'debug_scheduled_body':
+          'If this appears, the notification system works correctly.',
       'test_title': 'Sila - Notification Test 🕌',
-      'test_body': 'If you received this notification, the system is working correctly',
+      'test_body':
+          'If you received this notification, the system is working correctly',
     },
     'tr': {
       'prayer_title': '🕌 {} vakti geldi',
@@ -124,7 +130,8 @@ class NotificationService {
       'fallback_tasbih_title': 'Zikir ve tesbih icin bir an ✦',
       'fallback_tasbih_body': 'Dilini Allah i anmakla mesgul tut.',
       'fallback_report_title': 'Gunluk raporun hazir 📋',
-      'fallback_report_body': 'Aksamdan sonra: Takibim i ac ve gununu huzurla degerlendir.',
+      'fallback_report_body':
+          'Aksamdan sonra: Takibim i ac ve gununu huzurla degerlendir.',
       'adhan_playing_title': 'Ezan simdi caliyor',
       'adhan_playing_body': 'Ezani durdurmak icin dokun',
       'adhan_stop_action': 'Ezani durdur',
@@ -139,36 +146,45 @@ class NotificationService {
       'prayer_title': '🕌 C est l heure de {}',
       'prayer_body': 'Heure de priere - {}',
       'fallback_wird_title': 'Il est temps pour votre wird coranique 📖',
-      'fallback_wird_body': 'Consacrez quelques minutes a votre wird quotidien.',
+      'fallback_wird_body':
+          'Consacrez quelques minutes a votre wird quotidien.',
       'fallback_azkar_title': 'Invocations du matin 🌅',
       'fallback_azkar_body': 'Commencez votre journee par le rappel d Allah.',
       'fallback_tasbih_title': 'Un moment pour le dhikr et le tasbih ✦',
-      'fallback_tasbih_body': 'Gardez votre langue humide par le rappel d Allah.',
+      'fallback_tasbih_body':
+          'Gardez votre langue humide par le rappel d Allah.',
       'fallback_report_title': 'Votre rapport quotidien est pret 📋',
-      'fallback_report_body': 'Apres le Maghrib: ouvrez Mon Suivi et revoyez votre journee sereinement.',
+      'fallback_report_body':
+          'Apres le Maghrib: ouvrez Mon Suivi et revoyez votre journee sereinement.',
       'adhan_playing_title': 'L adhan est en cours',
       'adhan_playing_body': 'Touchez pour arreter l adhan',
       'adhan_stop_action': 'Arreter l adhan',
       'debug_now_title': 'Test instantane',
-      'debug_now_body': 'Si ceci apparait immediatement, l autorisation de base fonctionne.',
+      'debug_now_body':
+          'Si ceci apparait immediatement, l autorisation de base fonctionne.',
       'debug_scheduled_title': 'Test de notification ✅',
-      'debug_scheduled_body': 'Si ceci apparait, le systeme de notification fonctionne correctement.',
+      'debug_scheduled_body':
+          'Si ceci apparait, le systeme de notification fonctionne correctement.',
       'test_title': 'Sila - Test de notification 🕌',
-      'test_body': 'Si vous recevez cette notification, le systeme fonctionne correctement',
+      'test_body':
+          'Si vous recevez cette notification, le systeme fonctionne correctement',
     },
   };
 
   Future<void> initializeLocal() async {
     final notifyInitStart = DateTime.now();
-    debugPrint('[${notifyInitStart.toIso8601String()}][NotificationService] initializeLocal() START');
+    debugPrint(
+        '[${notifyInitStart.toIso8601String()}][NotificationService] initializeLocal() START');
     if (_initialized) {
-      debugPrint('[${DateTime.now().toIso8601String()}][NotificationService] Already initialized, SKIP');
+      debugPrint(
+          '[${DateTime.now().toIso8601String()}][NotificationService] Already initialized, SKIP');
       return;
     }
 
     final inFlight = _initializationFuture;
     if (inFlight != null) {
-      debugPrint('[${DateTime.now().toIso8601String()}][NotificationService] Initialization already in-flight, await...');
+      debugPrint(
+          '[${DateTime.now().toIso8601String()}][NotificationService] Initialization already in-flight, await...');
       return await inFlight;
     }
 
@@ -178,7 +194,8 @@ class NotificationService {
     try {
       await initFuture;
       final end = DateTime.now();
-      debugPrint('[${end.toIso8601String()}][NotificationService] initializeLocal() END, duration: ${end.difference(notifyInitStart).inMilliseconds} ms');
+      debugPrint(
+          '[${end.toIso8601String()}][NotificationService] initializeLocal() END, duration: ${end.difference(notifyInitStart).inMilliseconds} ms');
     } finally {
       if (identical(_initializationFuture, initFuture)) {
         _initializationFuture = null;
@@ -189,9 +206,11 @@ class NotificationService {
   Future<void> _doInitializeLocal() async {
     final doInitStart = DateTime.now();
     _initializing = true;
-    debugPrint('[${doInitStart.toIso8601String()}][NotificationService] _doInitializeLocal START');
+    debugPrint(
+        '[${doInitStart.toIso8601String()}][NotificationService] _doInitializeLocal START');
     try {
-      debugPrint('[${DateTime.now().toIso8601String()}][NotificationService] FlutterLocalNotificationsPlugin.initialize...');
+      debugPrint(
+          '[${DateTime.now().toIso8601String()}][NotificationService] FlutterLocalNotificationsPlugin.initialize...');
       const androidSettings =
           AndroidInitializationSettings('@mipmap/ic_launcher');
       const iosSettings = DarwinInitializationSettings(
@@ -209,34 +228,43 @@ class NotificationService {
         onDidReceiveNotificationResponse: _onNotificationTap,
         onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
       );
-      debugPrint('[${DateTime.now().toIso8601String()}][NotificationService] FlutterLocalNotificationsPlugin.initialize DONE');
+      debugPrint(
+          '[${DateTime.now().toIso8601String()}][NotificationService] FlutterLocalNotificationsPlugin.initialize DONE');
 
-      debugPrint('[${DateTime.now().toIso8601String()}][NotificationService] Creating notification channels...');
+      debugPrint(
+          '[${DateTime.now().toIso8601String()}][NotificationService] Creating notification channels...');
       await _createNotificationChannel();
-      debugPrint('[${DateTime.now().toIso8601String()}][NotificationService] Notification channels created');
+      debugPrint(
+          '[${DateTime.now().toIso8601String()}][NotificationService] Notification channels created');
 
-      debugPrint('[${DateTime.now().toIso8601String()}][NotificationService] Migrating and rescheduling if needed...');
+      debugPrint(
+          '[${DateTime.now().toIso8601String()}][NotificationService] Migrating and rescheduling if needed...');
       await _migrateChannelsIfNeeded();
       await _rescheduleAfterMigration();
-      debugPrint('[${DateTime.now().toIso8601String()}][NotificationService] Migration/reschedule done');
+      debugPrint(
+          '[${DateTime.now().toIso8601String()}][NotificationService] Migration/reschedule done');
 
       final launchDetails =
           await _notifications.getNotificationAppLaunchDetails();
       final launchResponse = launchDetails?.notificationResponse;
       if (launchResponse != null) {
-        debugPrint('[${DateTime.now().toIso8601String()}][NotificationService] Handling launch payload...');
+        debugPrint(
+            '[${DateTime.now().toIso8601String()}][NotificationService] Handling launch payload...');
         await _handleNotificationTap(launchResponse);
       }
 
       _initialized = true;
-      debugPrint('[${DateTime.now().toIso8601String()}][NotificationService] Initialized');
+      debugPrint(
+          '[${DateTime.now().toIso8601String()}][NotificationService] Initialized');
     } catch (e, st) {
-      debugPrint('[${DateTime.now().toIso8601String()}][NotificationService] initialization ERROR: $e');
+      debugPrint(
+          '[${DateTime.now().toIso8601String()}][NotificationService] initialization ERROR: $e');
       _initialized = false;
       Error.throwWithStackTrace(e, st);
     } finally {
       _initializing = false;
-      debugPrint('[${DateTime.now().toIso8601String()}][NotificationService] _doInitializeLocal END (duration: ${DateTime.now().difference(doInitStart).inMilliseconds} ms)');
+      debugPrint(
+          '[${DateTime.now().toIso8601String()}][NotificationService] _doInitializeLocal END (duration: ${DateTime.now().difference(doInitStart).inMilliseconds} ms)');
     }
   }
 
@@ -250,13 +278,16 @@ class NotificationService {
 
     for (var attempt = 0; attempt < _maxFcmRetries; attempt++) {
       try {
-        await FirebaseMessaging.instance.requestPermission()
+        await FirebaseMessaging.instance
+            .requestPermission()
             .timeout(const Duration(seconds: 5));
 
         if (!alreadySubscribed) {
-          await FirebaseMessaging.instance.subscribeToTopic('all_users')
+          await FirebaseMessaging.instance
+              .subscribeToTopic('all_users')
               .timeout(const Duration(seconds: 3));
-          await FirebaseMessaging.instance.subscribeToTopic('updates')
+          await FirebaseMessaging.instance
+              .subscribeToTopic('updates')
               .timeout(const Duration(seconds: 3));
           await prefs.setBool(_fcmSubscribedKey, true);
         }
@@ -274,10 +305,12 @@ class NotificationService {
         });
 
         fcmSw.stop();
-        debugPrint('⏱ [BG-BENCH] ✅ FCM setup complete (attempt ${attempt + 1}) in ${fcmSw.elapsedMilliseconds}ms');
+        debugPrint(
+            '⏱ [BG-BENCH] ✅ FCM setup complete (attempt ${attempt + 1}) in ${fcmSw.elapsedMilliseconds}ms');
         return;
       } catch (e) {
-        debugPrint('⏱ [BG-BENCH] ⚠️ FCM setup attempt ${attempt + 1} failed: $e (after ${fcmSw.elapsedMilliseconds}ms)');
+        debugPrint(
+            '⏱ [BG-BENCH] ⚠️ FCM setup attempt ${attempt + 1} failed: $e (after ${fcmSw.elapsedMilliseconds}ms)');
         if (attempt < _maxFcmRetries - 1) {
           await Future.delayed(Duration(seconds: 2 * (attempt + 1)));
         }
@@ -285,9 +318,9 @@ class NotificationService {
     }
 
     fcmSw.stop();
-    debugPrint('⏱ [BG-BENCH] ❌ FCM setup failed after $_maxFcmRetries attempts, will retry next launch. Total time: ${fcmSw.elapsedMilliseconds}ms');
+    debugPrint(
+        '⏱ [BG-BENCH] ❌ FCM setup failed after $_maxFcmRetries attempts, will retry next launch. Total time: ${fcmSw.elapsedMilliseconds}ms');
   }
-
 
   Future<void> dispose() async {
     await _audioPlayer.dispose();
@@ -296,8 +329,9 @@ class NotificationService {
   Future<void> setNavigatorKey(GlobalKey<NavigatorState> navigatorKey) async {
     _navigatorKey = navigatorKey;
     final prefs = await SharedPreferences.getInstance();
-    final payload = prefs.getString('pending_notification_payload') ?? _deferredPayload;
-    
+    final payload =
+        prefs.getString('pending_notification_payload') ?? _deferredPayload;
+
     if (payload != null) {
       _deferredPayload = null;
       await prefs.remove('pending_notification_payload');
@@ -377,15 +411,16 @@ class NotificationService {
 
       if (savedVersion >= _channelVersion) return; // مفيش migration مطلوبة
 
-      debugPrint('🔄 Migrating notification channels from v$savedVersion to v$_channelVersion');
+      debugPrint(
+          '🔄 Migrating notification channels from v$savedVersion to v$_channelVersion');
 
-      final android = _notifications
-          .resolvePlatformSpecificImplementation<
-              AndroidFlutterLocalNotificationsPlugin>();
+      final android = _notifications.resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>();
 
       if (android != null) {
         final existingChannels = await android.getNotificationChannels();
-        debugPrint('🔍 Found ${existingChannels?.length ?? 0} existing channels to review');
+        debugPrint(
+            '🔍 Found ${existingChannels?.length ?? 0} existing channels to review');
 
         // احذف الـ channels القديمة عشان تتعمل من جديد بالإعدادات الصح
         await android.deleteNotificationChannel('adhan_channel');
@@ -476,8 +511,7 @@ class NotificationService {
 
     // ✅ ADD — Step 3: Battery Optimization Exemption
     try {
-      final batteryStatus =
-          await Permission.ignoreBatteryOptimizations.status;
+      final batteryStatus = await Permission.ignoreBatteryOptimizations.status;
       if (!batteryStatus.isGranted) {
         await Permission.ignoreBatteryOptimizations.request();
         debugPrint('🔋 Battery optimization exemption requested');
@@ -527,8 +561,7 @@ class NotificationService {
       priority: Priority.high,
       icon: '@mipmap/ic_launcher',
       playSound: !useSilent,
-      sound:
-          useSilent ? null : RawResourceAndroidNotificationSound(soundName!),
+      sound: useSilent ? null : RawResourceAndroidNotificationSound(soundName!),
       enableVibration: !useSilent,
       fullScreenIntent: !useSilent,
     );
@@ -599,12 +632,14 @@ class NotificationService {
     try {
       location = tz.local;
     } catch (e) {
-      debugPrint('Timezone local lookup failed in scheduleDaily, trying initializeTimeZones: $e');
+      debugPrint(
+          'Timezone local lookup failed in scheduleDaily, trying initializeTimeZones: $e');
       try {
         tzdata.initializeTimeZones();
         location = tz.local;
       } catch (initError) {
-        debugPrint('Timezone initialization failed in scheduleDaily, falling back to UTC: $initError');
+        debugPrint(
+            'Timezone initialization failed in scheduleDaily, falling back to UTC: $initError');
         location = tz.UTC;
       }
     }
@@ -1017,7 +1052,7 @@ class NotificationService {
       presentSound: false,
     );
     final details =
-      NotificationDetails(android: androidDetails, iOS: iosDetails);
+        NotificationDetails(android: androidDetails, iOS: iosDetails);
     await _notifications.show(id, title, body, details,
         payload: 'download_waiting');
   }
@@ -1138,7 +1173,8 @@ class NotificationService {
     final existing = prefs.getInt(mappingKey);
     if (existing != null) return existing;
 
-    final lastCounter = prefs.getInt(_customReminderCounterKey) ?? _customReminderIdStart;
+    final lastCounter =
+        prefs.getInt(_customReminderCounterKey) ?? _customReminderIdStart;
     final next = lastCounter + 1;
     await prefs.setInt(_customReminderCounterKey, next);
     await prefs.setInt(mappingKey, next);
@@ -1248,7 +1284,7 @@ class NotificationService {
     );
 
     final details =
-      NotificationDetails(android: androidDetails, iOS: iosDetails);
+        NotificationDetails(android: androidDetails, iOS: iosDetails);
     await _notifications.show(
       _adhanPlaybackNotificationId,
       _nt('adhan_playing_title', locale),
@@ -1269,9 +1305,8 @@ class NotificationService {
   static List<int> prayerNotificationIds() {
     const prayerKeys = ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha'];
     final mainIds = prayerKeys.map(getNotificationId).toList();
-    final reminderIds = mainIds
-        .map((id) => id + NotificationIds.prayerReminderOffset)
-        .toList();
+    final reminderIds =
+        mainIds.map((id) => id + NotificationIds.prayerReminderOffset).toList();
 
     return <int>[
       ...mainIds,
@@ -1314,7 +1349,8 @@ class NotificationService {
 
     final permissionGranted = await requestPermissions();
     if (!permissionGranted) {
-      debugPrint('❌ Debug notification aborted: notification permission denied');
+      debugPrint(
+          '❌ Debug notification aborted: notification permission denied');
       return;
     }
 
@@ -1340,7 +1376,8 @@ class NotificationService {
     );
 
     final pending = await getPendingNotifications();
-    debugPrint('🧪 Debug test scheduled. Pending notifications count: ${pending.length}');
+    debugPrint(
+        '🧪 Debug test scheduled. Pending notifications count: ${pending.length}');
   }
 
   Future<void> showTestNotification() async {
@@ -1509,7 +1546,8 @@ class NotificationService {
 
       // حساب متوسط وقت الاستجابة
       if (settings.lastShownAt != null) {
-        final delay = DateTime.now().difference(settings.lastShownAt!).inMinutes;
+        final delay =
+            DateTime.now().difference(settings.lastShownAt!).inMinutes;
         if (settings.avgResponseMinutes == -1) {
           settings.avgResponseMinutes = delay;
         } else {

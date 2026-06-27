@@ -31,11 +31,12 @@ class _PrayersPageState extends ConsumerState<PrayersPage> {
     if (entity.lastUpdated.millisecondsSinceEpoch == 0) {
       return Padding(
         padding: const EdgeInsets.only(top: 6.0),
-        child: Row(children:[
+        child: Row(children: [
           const Icon(Icons.sync_rounded, color: Colors.amber, size: 17),
           const SizedBox(width: 6),
           Expanded(
-            child: Text('loading_prayer_times'.tr(), style: const TextStyle(color: Colors.amber, fontSize: 13)),
+            child: Text('loading_prayer_times'.tr(),
+                style: const TextStyle(color: Colors.amber, fontSize: 13)),
           ),
         ]),
       );
@@ -52,11 +53,13 @@ class _PrayersPageState extends ConsumerState<PrayersPage> {
       }
       return Padding(
         padding: const EdgeInsets.only(top: 6.0),
-        child: Row(children:[
-          const Icon(Icons.info_outline_rounded, color: Colors.orange, size: 17),
+        child: Row(children: [
+          const Icon(Icons.info_outline_rounded,
+              color: Colors.orange, size: 17),
           const SizedBox(width: 6),
           Expanded(
-            child: Text('stale_prayer_times'.tr(args: [ago]), style: const TextStyle(color: Colors.orange, fontSize: 13)),
+            child: Text('stale_prayer_times'.tr(args: [ago]),
+                style: const TextStyle(color: Colors.orange, fontSize: 13)),
           ),
         ]),
       );
@@ -176,8 +179,7 @@ class _PrayersPageState extends ConsumerState<PrayersPage> {
               Tab(text: 'prayer_times'.tr()),
               Tab(text: 'my_tracking'.tr()),
             ],
-            labelStyle:
-                AppFonts.getFont('Cairo', fontWeight: FontWeight.w700),
+            labelStyle: AppFonts.getFont('Cairo', fontWeight: FontWeight.w700),
             indicatorColor: const Color(0xFFD97706),
             labelColor: const Color(0xFF064E3B),
             unselectedLabelColor: txtS,
@@ -355,7 +357,8 @@ class _PrayersPageState extends ConsumerState<PrayersPage> {
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 14, vertical: 8),
                                     decoration: BoxDecoration(
-                                      color: Colors.white.withValues(alpha: 0.12),
+                                      color:
+                                          Colors.white.withValues(alpha: 0.12),
                                       borderRadius: BorderRadius.circular(12),
                                     ),
                                     child: Row(
@@ -434,7 +437,8 @@ class _PrayersPageState extends ConsumerState<PrayersPage> {
                                         decoration: BoxDecoration(
                                           color: isNext
                                               ? primaryColor
-                                              : primaryColor.withValues(alpha: 0.08),
+                                              : primaryColor.withValues(
+                                                  alpha: 0.08),
                                           shape: BoxShape.circle,
                                         ),
                                         child: Icon(
@@ -544,7 +548,8 @@ class _PrayersPageState extends ConsumerState<PrayersPage> {
                                     width: 44,
                                     height: 44,
                                     decoration: BoxDecoration(
-                                      color: primaryColor.withValues(alpha: 0.1),
+                                      color:
+                                          primaryColor.withValues(alpha: 0.1),
                                       shape: BoxShape.circle,
                                     ),
                                     child: const Icon(Icons.explore_rounded,

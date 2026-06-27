@@ -687,9 +687,9 @@ class TasmiSpeechService {
     }
 
     if (_isActive &&
-      !_isManuallyStopped &&
-      !_isPausedForTts &&
-      !_wordController.isClosed) {
+        !_isManuallyStopped &&
+        !_isPausedForTts &&
+        !_wordController.isClosed) {
       await _requestAudioFocusPermanent();
       _lastRecognizedWords = '';
       _lastWordReceivedAt = DateTime.now();

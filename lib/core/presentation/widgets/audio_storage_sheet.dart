@@ -86,8 +86,7 @@ class _AudioStorageSheetState extends ConsumerState<_AudioStorageSheet> {
                   const SizedBox(height: 6),
                   Text(
                     'الإجمالي: ${_fmt(_stats!.totalBytes)} - ملفات: ${_stats!.totalFiles}',
-                    style:
-                        AppFonts.cairo(color: Colors.white60, fontSize: 12),
+                    style: AppFonts.cairo(color: Colors.white60, fontSize: 12),
                   ),
                   const SizedBox(height: 12),
                   SizedBox(

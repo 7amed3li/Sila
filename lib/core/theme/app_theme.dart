@@ -46,12 +46,11 @@ class AppTheme {
         background: backgroundColor,
       ),
       scaffoldBackgroundColor: backgroundColor,
-      textTheme:
-          AppFonts.outfitTextTheme(ThemeData.light().textTheme).copyWith(
-        displayLarge: AppFonts.outfit(
-            fontWeight: FontWeight.bold, color: primaryColor),
-        titleLarge: AppFonts.outfit(
-            fontWeight: FontWeight.w600, color: primaryColor),
+      textTheme: AppFonts.outfitTextTheme(ThemeData.light().textTheme).copyWith(
+        displayLarge:
+            AppFonts.outfit(fontWeight: FontWeight.bold, color: primaryColor),
+        titleLarge:
+            AppFonts.outfit(fontWeight: FontWeight.w600, color: primaryColor),
       ),
       appBarTheme: const AppBarTheme(
         backgroundColor: Colors.transparent,

@@ -25,10 +25,25 @@ class AppFonts {
   }) {
     return _copyWithParams(
       const TextStyle(fontFamily: 'Cairo'),
-      textStyle, color, backgroundColor, fontSize, fontWeight, fontStyle,
-      letterSpacing, wordSpacing, textBaseline, height, locale, foreground,
-      background, shadows, fontFeatures, decoration, decorationColor,
-      decorationStyle, decorationThickness,
+      textStyle,
+      color,
+      backgroundColor,
+      fontSize,
+      fontWeight,
+      fontStyle,
+      letterSpacing,
+      wordSpacing,
+      textBaseline,
+      height,
+      locale,
+      foreground,
+      background,
+      shadows,
+      fontFeatures,
+      decoration,
+      decorationColor,
+      decorationStyle,
+      decorationThickness,
     );
   }
 
@@ -55,10 +70,25 @@ class AppFonts {
   }) {
     return _copyWithParams(
       const TextStyle(fontFamily: 'Outfit'),
-      textStyle, color, backgroundColor, fontSize, fontWeight, fontStyle,
-      letterSpacing, wordSpacing, textBaseline, height, locale, foreground,
-      background, shadows, fontFeatures, decoration, decorationColor,
-      decorationStyle, decorationThickness,
+      textStyle,
+      color,
+      backgroundColor,
+      fontSize,
+      fontWeight,
+      fontStyle,
+      letterSpacing,
+      wordSpacing,
+      textBaseline,
+      height,
+      locale,
+      foreground,
+      background,
+      shadows,
+      fontFeatures,
+      decoration,
+      decorationColor,
+      decorationStyle,
+      decorationThickness,
     );
   }
 
@@ -106,10 +136,25 @@ class AppFonts {
   }) {
     return _copyWithParams(
       const TextStyle(fontFamily: 'Amiri'),
-      textStyle, color, backgroundColor, fontSize, fontWeight, fontStyle,
-      letterSpacing, wordSpacing, textBaseline, height, locale, foreground,
-      background, shadows, fontFeatures, decoration, decorationColor,
-      decorationStyle, decorationThickness,
+      textStyle,
+      color,
+      backgroundColor,
+      fontSize,
+      fontWeight,
+      fontStyle,
+      letterSpacing,
+      wordSpacing,
+      textBaseline,
+      height,
+      locale,
+      foreground,
+      background,
+      shadows,
+      fontFeatures,
+      decoration,
+      decorationColor,
+      decorationStyle,
+      decorationThickness,
     );
   }
 
@@ -136,10 +181,25 @@ class AppFonts {
   }) {
     return _copyWithParams(
       const TextStyle(fontFamily: 'ScheherazadeNew'),
-      textStyle, color, backgroundColor, fontSize, fontWeight, fontStyle,
-      letterSpacing, wordSpacing, textBaseline, height, locale, foreground,
-      background, shadows, fontFeatures, decoration, decorationColor,
-      decorationStyle, decorationThickness,
+      textStyle,
+      color,
+      backgroundColor,
+      fontSize,
+      fontWeight,
+      fontStyle,
+      letterSpacing,
+      wordSpacing,
+      textBaseline,
+      height,
+      locale,
+      foreground,
+      background,
+      shadows,
+      fontFeatures,
+      decoration,
+      decorationColor,
+      decorationStyle,
+      decorationThickness,
     );
   }
 
@@ -166,10 +226,25 @@ class AppFonts {
   }) {
     return _copyWithParams(
       const TextStyle(fontFamily: 'NotoNaskhArabic'),
-      textStyle, color, backgroundColor, fontSize, fontWeight, fontStyle,
-      letterSpacing, wordSpacing, textBaseline, height, locale, foreground,
-      background, shadows, fontFeatures, decoration, decorationColor,
-      decorationStyle, decorationThickness,
+      textStyle,
+      color,
+      backgroundColor,
+      fontSize,
+      fontWeight,
+      fontStyle,
+      letterSpacing,
+      wordSpacing,
+      textBaseline,
+      height,
+      locale,
+      foreground,
+      background,
+      shadows,
+      fontFeatures,
+      decoration,
+      decorationColor,
+      decorationStyle,
+      decorationThickness,
     );
   }
 
@@ -196,10 +271,25 @@ class AppFonts {
   }) {
     return _copyWithParams(
       const TextStyle(fontFamily: 'NotoKufiArabic'),
-      textStyle, color, backgroundColor, fontSize, fontWeight, fontStyle,
-      letterSpacing, wordSpacing, textBaseline, height, locale, foreground,
-      background, shadows, fontFeatures, decoration, decorationColor,
-      decorationStyle, decorationThickness,
+      textStyle,
+      color,
+      backgroundColor,
+      fontSize,
+      fontWeight,
+      fontStyle,
+      letterSpacing,
+      wordSpacing,
+      textBaseline,
+      height,
+      locale,
+      foreground,
+      background,
+      shadows,
+      fontFeatures,
+      decoration,
+      decorationColor,
+      decorationStyle,
+      decorationThickness,
     );
   }
 
@@ -226,18 +316,38 @@ class AppFonts {
     double? decorationThickness,
   }) {
     const supportedFonts = [
-      'Cairo', 'Outfit', 'Amiri', 'ScheherazadeNew', 
-      'NotoNaskhArabic', 'NotoKufiArabic', 'KFGQPCUthmanicScript'
+      'Cairo',
+      'Outfit',
+      'Amiri',
+      'ScheherazadeNew',
+      'NotoNaskhArabic',
+      'NotoKufiArabic',
+      'KFGQPCUthmanicScript'
     ];
     if (!supportedFonts.contains(fontName)) {
       fontName = 'Cairo'; // Fallback للمستخدمين القدامى أو القيم غير المعروفة
     }
     return _copyWithParams(
       TextStyle(fontFamily: fontName),
-      textStyle, color, backgroundColor, fontSize, fontWeight, fontStyle,
-      letterSpacing, wordSpacing, textBaseline, height, locale, foreground,
-      background, shadows, fontFeatures, decoration, decorationColor,
-      decorationStyle, decorationThickness,
+      textStyle,
+      color,
+      backgroundColor,
+      fontSize,
+      fontWeight,
+      fontStyle,
+      letterSpacing,
+      wordSpacing,
+      textBaseline,
+      height,
+      locale,
+      foreground,
+      background,
+      shadows,
+      fontFeatures,
+      decoration,
+      decorationColor,
+      decorationStyle,
+      decorationThickness,
     );
   }
 

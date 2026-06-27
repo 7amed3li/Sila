@@ -108,4 +108,4 @@ class NotificationPermissionHelper {
       debugPrint('✅ Notification channels created/verified');
     }
   }
-} 
+}

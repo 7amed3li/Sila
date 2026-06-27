@@ -188,8 +188,9 @@ class _AyahRangeBottomSheetState extends State<AyahRangeBottomSheet> {
                 margin: const EdgeInsets.only(top: 16),
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color:
-                      isDark ? Colors.white.withValues(alpha: 0.05) : Colors.grey[50],
+                  color: isDark
+                      ? Colors.white.withValues(alpha: 0.05)
+                      : Colors.grey[50],
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(
                       color: isDark
@@ -358,7 +359,9 @@ class _AyahRangeBottomSheetState extends State<AyahRangeBottomSheet> {
           border: Border.all(
             color: isSelected
                 ? primaryColor
-                : (isDark ? Colors.white10 : Colors.black.withValues(alpha: 0.05)),
+                : (isDark
+                    ? Colors.white10
+                    : Colors.black.withValues(alpha: 0.05)),
             width: isSelected ? 2 : 1,
           ),
         ),

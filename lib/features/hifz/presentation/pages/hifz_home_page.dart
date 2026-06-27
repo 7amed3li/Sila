@@ -79,8 +79,7 @@ class _HifzHomePageState extends ConsumerState<HifzHomePage> {
                         : 'hifz_start'.tr(),
                     recommended: true,
                     onTap: () {
-                      Navigator.pop(
-                          sheetContext, _HifzSelectionMode.dailyPlan);
+                      Navigator.pop(sheetContext, _HifzSelectionMode.dailyPlan);
                     },
                   ),
                   const SizedBox(height: 10),
@@ -89,8 +88,7 @@ class _HifzHomePageState extends ConsumerState<HifzHomePage> {
                     title: 'complete_surah'.tr(),
                     subtitle: 'complete_surah_subtitle'.tr(),
                     onTap: () {
-                      Navigator.pop(
-                          sheetContext, _HifzSelectionMode.fullSurah);
+                      Navigator.pop(sheetContext, _HifzSelectionMode.fullSurah);
                     },
                   ),
                   const SizedBox(height: 10),
@@ -99,8 +97,7 @@ class _HifzHomePageState extends ConsumerState<HifzHomePage> {
                     title: 'verse_range'.tr(),
                     subtitle: 'verse_range_subtitle'.tr(args: ['X', 'Y']),
                     onTap: () {
-                      Navigator.pop(
-                          sheetContext, _HifzSelectionMode.ayahRange);
+                      Navigator.pop(sheetContext, _HifzSelectionMode.ayahRange);
                     },
                   ),
                 ],
@@ -324,7 +321,8 @@ class _HifzHomePageState extends ConsumerState<HifzHomePage> {
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 10, vertical: 4),
                                   decoration: BoxDecoration(
-                                    color: AppTheme.goldLight.withValues(alpha: 0.2),
+                                    color: AppTheme.goldLight
+                                        .withValues(alpha: 0.2),
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   child: Text(
@@ -367,7 +365,8 @@ class _HifzHomePageState extends ConsumerState<HifzHomePage> {
                               shape: BoxShape.circle,
                               boxShadow: [
                                 BoxShadow(
-                                  color: AppTheme.accentColor.withValues(alpha: 0.3),
+                                  color: AppTheme.accentColor
+                                      .withValues(alpha: 0.3),
                                   blurRadius: 10,
                                   offset: const Offset(0, 4),
                                 ),

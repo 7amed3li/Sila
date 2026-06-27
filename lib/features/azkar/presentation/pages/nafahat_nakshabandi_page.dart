@@ -17,8 +17,9 @@ class NafahatNakshabandiPage extends ConsumerWidget {
         isDark ? const Color(0xFF10B981) : AppTheme.primaryColor;
     final bgColor =
         isDark ? AppTheme.darkBackgroundColor : const Color(0xFFF1F5F9);
-    final cardColor =
-        isDark ? AppTheme.darkSurfaceColor.withValues(alpha: 0.8) : Colors.white;
+    final cardColor = isDark
+        ? AppTheme.darkSurfaceColor.withValues(alpha: 0.8)
+        : Colors.white;
 
     final currentIbtihal = audioState.currentIbtihal;
 
@@ -177,7 +178,9 @@ class NafahatNakshabandiPage extends ConsumerWidget {
             aspectRatio: 16 / 9,
             child: Container(
               decoration: BoxDecoration(
-                color: isDark ? Colors.white10 : Colors.black.withValues(alpha: 0.05),
+                color: isDark
+                    ? Colors.white10
+                    : Colors.black.withValues(alpha: 0.05),
                 image: DecorationImage(
                   image: NetworkImage(
                     current?.id.startsWith('T') == true
@@ -192,7 +195,10 @@ class NafahatNakshabandiPage extends ConsumerWidget {
                   gradient: LinearGradient(
                     begin: Alignment.bottomCenter,
                     end: Alignment.topCenter,
-                    colors: [Colors.black.withValues(alpha: 0.8), Colors.transparent],
+                    colors: [
+                      Colors.black.withValues(alpha: 0.8),
+                      Colors.transparent
+                    ],
                   ),
                 ),
                 padding: const EdgeInsets.all(20),
@@ -320,7 +326,9 @@ class NafahatNakshabandiPage extends ConsumerWidget {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 4),
       decoration: BoxDecoration(
-        color: isSelected ? primaryColor.withValues(alpha: 0.1) : Colors.transparent,
+        color: isSelected
+            ? primaryColor.withValues(alpha: 0.1)
+            : Colors.transparent,
         borderRadius: BorderRadius.circular(16),
       ),
       child: ListTile(
@@ -331,7 +339,9 @@ class NafahatNakshabandiPage extends ConsumerWidget {
           decoration: BoxDecoration(
             color: isSelected
                 ? primaryColor
-                : (isDark ? Colors.white10 : Colors.black.withValues(alpha: 0.05)),
+                : (isDark
+                    ? Colors.white10
+                    : Colors.black.withValues(alpha: 0.05)),
             borderRadius: BorderRadius.circular(12),
           ),
           child: Center(

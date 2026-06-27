@@ -145,7 +145,8 @@ class _WirdSetupPageState extends ConsumerState<WirdSetupPage> {
                         borderRadius: BorderRadius.circular(16),
                       ),
                       elevation: 8,
-                      shadowColor: const Color(0xFFD97706).withValues(alpha: 0.5),
+                      shadowColor:
+                          const Color(0xFFD97706).withValues(alpha: 0.5),
                     ),
                     child: Text(
                       'ابدأ الورد الآن',

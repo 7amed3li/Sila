@@ -364,8 +364,8 @@ class _WirdReaderPageState extends ConsumerState<WirdReaderPage> {
                       style: TextStyle(
                         fontFamily: settings.fontFamily,
                         fontSize: 14,
-                        color:
-                            _getTextColor(settings.themeMode).withValues(alpha: 0.7),
+                        color: _getTextColor(settings.themeMode)
+                            .withValues(alpha: 0.7),
                         letterSpacing: 2,
                         fontWeight: FontWeight.bold,
                       ),
@@ -422,7 +422,7 @@ class _WirdReaderPageState extends ConsumerState<WirdReaderPage> {
                     : s.style?.backgroundColor),
             recognizer: recognizer,
           );
-                  return s;
+          return s;
         }).toList(),
       ));
 
@@ -755,8 +755,7 @@ class _WirdReaderPageState extends ConsumerState<WirdReaderPage> {
                           ? _getAccentColor(settings.themeMode)
                           : Colors.grey))),
           Text(label,
-              style:
-                  AppFonts.cairo(color: _getTextColor(settings.themeMode)))
+              style: AppFonts.cairo(color: _getTextColor(settings.themeMode)))
         ]));
   }
 
@@ -837,8 +836,8 @@ class _WirdReaderPageState extends ConsumerState<WirdReaderPage> {
                     verseEndSymbol: false)));
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text('verse_copied_success'.tr(),
-                    style: AppFonts.cairo()),
+                content:
+                    Text('verse_copied_success'.tr(), style: AppFonts.cairo()),
                 behavior: SnackBarBehavior.floating,
                 duration: const Duration(seconds: 1),
               ),

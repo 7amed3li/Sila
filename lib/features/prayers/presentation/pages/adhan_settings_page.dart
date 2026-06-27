@@ -120,8 +120,8 @@ class _AdhanSettingsPageState extends ConsumerState<AdhanSettingsPage> {
     if (!mounted) return;
     setState(() => _prayerSettings[key] = v);
     _snack(v
-      ? 'adhan_prayer_enabled'.tr(args: [_arabicName(key)])
-      : 'adhan_prayer_disabled'.tr(args: [_arabicName(key)]));
+        ? 'adhan_prayer_enabled'.tr(args: [_arabicName(key)])
+        : 'adhan_prayer_disabled'.tr(args: [_arabicName(key)]));
   }
 
   Future<void> _changeSound(String f) async {
@@ -189,8 +189,7 @@ class _AdhanSettingsPageState extends ConsumerState<AdhanSettingsPage> {
                       fontWeight: FontWeight.w700,
                       fontSize: 16)),
               subtitle: Text('adhan_notifications_enabled'.tr(),
-                  style:
-                      AppFonts.cairo(color: Colors.white38, fontSize: 12)),
+                  style: AppFonts.cairo(color: Colors.white38, fontSize: 12)),
               value: _adhanEnabled,
               onChanged: _toggleGlobal,
               activeColor: const Color(0xFF43A047),
@@ -216,8 +215,7 @@ class _AdhanSettingsPageState extends ConsumerState<AdhanSettingsPage> {
                   style: AppFonts.cairo(
                       color: Colors.white, fontWeight: FontWeight.w600)),
               subtitle: Text(_sounds[_selectedSound]?.tr() ?? _selectedSound,
-                  style:
-                      AppFonts.cairo(color: Colors.white38, fontSize: 12)),
+                  style: AppFonts.cairo(color: Colors.white38, fontSize: 12)),
               trailing: const Icon(Icons.chevron_right_rounded,
                   color: Colors.white38),
               onTap: _showSoundDialog,
@@ -386,8 +384,7 @@ class _AdhanSettingsPageState extends ConsumerState<AdhanSettingsPage> {
                 Expanded(
                   child: Text(
                     'adhan_auto_play_info'.tr(),
-                    style:
-                        AppFonts.cairo(color: Colors.white54, fontSize: 12),
+                    style: AppFonts.cairo(color: Colors.white54, fontSize: 12),
                   ),
                 ),
               ],

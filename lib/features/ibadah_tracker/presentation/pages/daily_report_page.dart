@@ -863,7 +863,7 @@ List<_IbadahItem> _completedItems(IbadahRecord r,
             out.add(_IbadahItem(key: 'custom_$name', label: name));
           }
         }
-            }
+      }
 
       if (map.containsKey('mujahadah') && map['mujahadah'] is Map) {
         final mujahadahMap = map['mujahadah'] as Map<String, dynamic>;
@@ -964,7 +964,7 @@ List<_IbadahItem> _incompleteItems(IbadahRecord r,
           out.add(_IbadahItem(key: 'custom_$name', label: name));
         }
       }
-    
+
       if (map.containsKey('mujahadah') && map['mujahadah'] is Map) {
         final mujahadahMap = map['mujahadah'] as Map<String, dynamic>;
         for (final entry in mujahadahMap.entries) {

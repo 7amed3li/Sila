@@ -203,7 +203,8 @@ class _TasbihPageState extends ConsumerState<TasbihPage>
                 decoration: BoxDecoration(
                   color: primaryColor.withValues(alpha: 0.05),
                   borderRadius: BorderRadius.circular(25),
-                  border: Border.all(color: primaryColor.withValues(alpha: 0.1)),
+                  border:
+                      Border.all(color: primaryColor.withValues(alpha: 0.1)),
                 ),
                 child: Text(
                   tasbihState.activeZikrKey.tr(),

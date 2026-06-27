@@ -76,7 +76,8 @@ class _QuranDetailsSheetState extends ConsumerState<QuranDetailsSheet> {
                   const BorderRadius.vertical(top: Radius.circular(40)),
               boxShadow: [
                 BoxShadow(
-                  color: _getAccentColor(settings.themeMode).withValues(alpha: 0.15),
+                  color: _getAccentColor(settings.themeMode)
+                      .withValues(alpha: 0.15),
                   blurRadius: 30,
                   spreadRadius: 5,
                 )
@@ -175,8 +176,8 @@ class _QuranDetailsSheetState extends ConsumerState<QuranDetailsSheet> {
                   Container(
                     padding: const EdgeInsets.all(24),
                     decoration: BoxDecoration(
-                      color:
-                          _getAccentColor(settings.themeMode).withValues(alpha: 0.05),
+                      color: _getAccentColor(settings.themeMode)
+                          .withValues(alpha: 0.05),
                       borderRadius: BorderRadius.circular(24),
                       border: Border.all(
                           color: _getAccentColor(settings.themeMode)
@@ -262,7 +263,8 @@ class _QuranDetailsSheetState extends ConsumerState<QuranDetailsSheet> {
                           widget.showTafsir ? settings.fontFamily : 'Roboto',
                       fontSize: settings.fontSize * 0.9,
                       height: widget.showTafsir ? 2.2 : 1.6,
-                      color: _getTextColor(settings.themeMode).withValues(alpha: 0.9),
+                      color: _getTextColor(settings.themeMode)
+                          .withValues(alpha: 0.9),
                     ),
                   ),
 

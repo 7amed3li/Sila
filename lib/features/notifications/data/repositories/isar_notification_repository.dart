@@ -32,8 +32,8 @@ extension IsarNotificationRepositoryTracking on IsarNotificationRepository {
 }
 
 class IsarNotificationRepository implements INotificationRepository {
-
   IsarNotificationRepository(this._isar);
+
   /// Returns a list of DateTime objects representing recent completion times for a feature.
   Future<List<DateTime>> getRecentCompletionTimes(String featureKey,
       {int days = 7}) async {
@@ -49,10 +49,8 @@ class IsarNotificationRepository implements INotificationRepository {
 
   /// Returns the last time the app was opened by the user.
   Future<DateTime?> getLastAppOpen() async {
-    final lastLog = await _isar.userActivityLogs
-        .where()
-        .sortByLastOpenedDesc()
-        .findFirst();
+    final lastLog =
+        await _isar.userActivityLogs.where().sortByLastOpenedDesc().findFirst();
     return lastLog?.lastOpened;
   }
 

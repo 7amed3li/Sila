@@ -149,8 +149,7 @@ class VefaPage extends ConsumerWidget {
                 );
               },
               error: (err, stack) => Center(
-                  child:
-                      Text('Database Error: $err', style: AppFonts.cairo())),
+                  child: Text('Database Error: $err', style: AppFonts.cairo())),
               loading: () => const Center(child: CircularProgressIndicator()),
             ),
           ),
